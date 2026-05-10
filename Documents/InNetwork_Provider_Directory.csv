@@ -1,0 +1,501 @@
+npi,provider_first_name,provider_last_name,credential,specialty,group_practice,street_address,city,state,zip,phone,accepting_new_patients,plan_tiers_accepted,telehealth_available,languages_spoken,hospital_affiliation
+1786579303,Linda,Johnson,MD,Neurology,Great Lakes Health System,2386 Oak Ave,Champaign,IL,61820,(289) 804-7912,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Midwest Regional Medical Center
+1642621108,Omar,Johnson,PA-C,Dermatology,University Health Associates,3711 University Ave,Decatur,IL,62521,(484) 206-3615,No,Gold,No,"English,Spanish",Midwest Regional Medical Center
+1919795579,Margaret,Miller,DO,Endocrinology,Midwest Health Partners,5981 Medical Center Dr,Decatur,IL,62521,(470) 244-8527,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1990566476,Yuki,Hall,MD,Dermatology,Midwest Health Partners,850 Park Blvd,Aurora,IL,60505,(281) 438-2654,No,Gold,Yes,"English,French",Prairie Community Hospital
+1274648506,Sandra,Walker,MD,Urgent Care,Heartland Medical Associates,1269 Center Rd,Naperville,IL,60540,(746) 946-5010,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1838908273,Maria,Harris,DO,Plastic Surgery,SilverShield Medical Group,3852 Main St,Joliet,IL,60431,(610) 474-2084,Yes,"Bronze,Silver,Gold",No,"English,Spanish",N/A (outpatient only)
+1636045484,Ashley,Chen,MD,Gastroenterology,Prairie Regional Medical,4140 Commerce St,Champaign,IL,61820,(469) 964-8019,No,Gold,Yes,"English,Spanish",University Medical Center
+1629908599,Jennifer,Brown,DO,Cardiology,Prairie Regional Medical,7016 Center Rd,Chicago,IL,60601,(594) 590-8668,Yes,"Bronze,Silver,Gold",Yes,"English,French",N/A (outpatient only)
+1222998994,Wei,Moore,DO,OB/GYN,Heartland Medical Associates,7223 Maple Dr,Peoria,IL,61602,(203) 939-5315,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",N/A (outpatient only)
+1420452650,Aisha,Nelson,MD,Cardiology,Independent Practice,2746 Commerce St,Champaign,IL,61820,(200) 813-6310,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",Prairie Community Hospital
+1357109965,Patricia,Martin,MD,Pediatrics,Midwest Health Partners,8062 Oak Ave,Champaign,IL,61820,(984) 328-3103,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",University Medical Center
+1751325257,Dorothy,White,PA-C,Speech Therapy,Great Lakes Health System,5207 Health Plaza,Joliet,IL,60431,(648) 729-8397,Yes,"Silver,Gold",Yes,English,Prairie Community Hospital
+1122585366,Fatima,Perez,MD,Infectious Disease,Great Lakes Health System,217 Oak Ave,Springfield,IL,62701,(434) 269-1514,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1621209849,Karen,Gonzalez,MD,Occupational Therapy,Community Care Clinic,4081 University Ave,Evanston,IL,60201,(394) 296-2588,No,Gold,Yes,English,Lake Shore Medical Center
+1882839238,Patricia,Miller,MD,Endocrinology,Independent Practice,1890 Park Blvd,Rockford,IL,61101,(394) 749-8350,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1368227631,John,Kim,PA-C,OB/GYN,SilverShield Medical Group,8956 Main St,Chicago,IL,60601,(971) 442-3724,No,"Bronze,Silver,Gold",Yes,"English,Spanish",Lake Shore Medical Center
+1162959284,David,King,MD,Endocrinology,Heartland Medical Associates,7554 Lake Shore Dr,Evanston,IL,60201,(913) 948-8973,Yes,"Silver,Gold",No,"English,Spanish",Springfield General Hospital
+1721890096,Wei,Brown,DO,Internal Medicine,SilverShield Medical Group,9671 University Ave,Champaign,IL,61820,(743) 361-1931,Yes,"Silver,Gold",Yes,"English,Hindi",Springfield General Hospital
+1825003955,Lisa,Patel,DO,Vascular Surgery,Great Lakes Health System,9585 Center Rd,Springfield,IL,62701,(834) 283-7868,Yes,Gold,Yes,"English,French",N/A (outpatient only)
+1437352358,Lisa,Thompson,MD,Cardiology,Heartland Medical Associates,7591 Medical Center Dr,Chicago,IL,60601,(209) 669-2638,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1242224154,Matthew,Jones,MD,Radiology,Heartland Medical Associates,2684 University Ave,Champaign,IL,61820,(920) 509-9666,Yes,"Bronze,Silver,Gold",No,"English,French",Springfield General Hospital
+1244193987,Thomas,Davis,DO,Occupational Therapy,Prairie Regional Medical,4562 Lake Shore Dr,Decatur,IL,62521,(415) 934-6617,Yes,Gold,Yes,"English,Mandarin",Springfield General Hospital
+1199104722,Dorothy,Moore,MD,Family Medicine,Independent Practice,2243 Lake Shore Dr,Naperville,IL,60540,(959) 652-8007,Yes,"Bronze,Silver,Gold",Yes,"English,French",Midwest Regional Medical Center
+1685823118,Robert,Hall,MD,Nephrology,Prairie Regional Medical,7141 Maple Dr,Springfield,IL,62701,(515) 573-1653,Yes,"Silver,Gold",Yes,"English,French",Springfield General Hospital
+1479759538,Maria,Gupta,MD,Occupational Therapy,Prairie Regional Medical,3978 Maple Dr,Naperville,IL,60540,(622) 225-3938,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Midwest Regional Medical Center
+1945436943,Michael,King,MD,General Surgery,Community Care Clinic,3744 Park Blvd,Peoria,IL,61602,(558) 512-4728,Yes,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1399147754,John,Moore,DO,Emergency Medicine,University Health Associates,8885 Medical Center Dr,Springfield,IL,62701,(318) 467-3925,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Lake Shore Medical Center
+1471178705,Daniel,Nguyen,MD,Urology,Midwest Health Partners,6411 Center Rd,Rockford,IL,61101,(460) 245-8144,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1175133802,Margaret,Carter,DO,Urgent Care,Midwest Health Partners,5020 Commerce St,Aurora,IL,60505,(882) 618-6344,No,Gold,Yes,"English,Spanish",Lake Shore Medical Center
+1813962536,Anthony,Thomas,MD,Infectious Disease,Heartland Medical Associates,6753 Commerce St,Springfield,IL,62701,(511) 493-4443,No,"Bronze,Silver,Gold",No,English,Lake Shore Medical Center
+1574765466,Karen,Hernandez,NP,Allergy & Immunology,Prairie Regional Medical,1489 Lake Shore Dr,Champaign,IL,61820,(879) 848-6491,Yes,"Silver,Gold",No,"English,Spanish",Midwest Regional Medical Center
+1258220114,Mary,Williams,MD,Ophthalmology,Midwest Health Partners,7561 Health Plaza,Decatur,IL,62521,(399) 935-7291,No,"Bronze,Silver,Gold",Yes,"English,Spanish",N/A (outpatient only)
+1838328947,James,Miller,MD,Neurology,Prairie Regional Medical,8586 University Ave,Springfield,IL,62701,(770) 455-2988,No,"Silver,Gold",Yes,"English,French",University Medical Center
+1700141462,Omar,Clark,NP,Hematology,University Health Associates,9076 University Ave,Naperville,IL,60540,(961) 686-8373,Yes,"Silver,Gold",No,"English,Spanish,Portuguese",University Medical Center
+1620332086,Lisa,Moore,NP,Pediatrics,Heartland Medical Associates,3941 Lake Shore Dr,Joliet,IL,60431,(527) 753-2320,Yes,"Silver,Gold",Yes,English,N/A (outpatient only)
+1264073400,Karen,Jones,MD,Pulmonology,Independent Practice,8990 University Ave,Evanston,IL,60201,(263) 411-7883,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",University Medical Center
+1508431021,Priya,Smith,DO,Psychiatry,University Health Associates,6965 Commerce St,Champaign,IL,61820,(817) 425-8999,Yes,Gold,Yes,English,Springfield General Hospital
+1517532243,Margaret,Patel,MD,Plastic Surgery,Community Care Clinic,2191 Center Rd,Champaign,IL,61820,(227) 603-1444,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1295130056,Patricia,Thompson,MD,Oncology,Great Lakes Health System,7549 Medical Center Dr,Joliet,IL,60431,(979) 588-5558,No,Gold,Yes,English,Springfield General Hospital
+1904258674,Wei,Brown,DO,Neurology,Midwest Health Partners,759 Main St,Rockford,IL,61101,(404) 220-3496,Yes,"Silver,Gold",Yes,"English,French",Springfield General Hospital
+1705557720,Karen,Chen,MD,Speech Therapy,Independent Practice,2849 Center Rd,Decatur,IL,62521,(965) 935-2876,Yes,Gold,Yes,"English,Hindi",Springfield General Hospital
+1434961542,Carlos,King,MD,Physical Therapy,Great Lakes Health System,1345 Center Rd,Rockford,IL,61101,(304) 913-5941,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",University Medical Center
+1559967386,Sandra,Jones,PA-C,Emergency Medicine,Independent Practice,307 Health Plaza,Peoria,IL,61602,(308) 643-6934,No,"Silver,Gold",Yes,"English,Spanish",N/A (outpatient only)
+1660221300,Nancy,Carter,PA-C,Speech Therapy,Community Care Clinic,7716 Health Plaza,Decatur,IL,62521,(474) 530-5022,Yes,Gold,Yes,"English,Spanish",Lake Shore Medical Center
+1711871397,Yuki,King,DO,Family Medicine,Community Care Clinic,5425 Maple Dr,Peoria,IL,61602,(417) 563-5232,Yes,Gold,No,"English,Hindi",Springfield General Hospital
+1654724287,Richard,Garcia,MD,Occupational Therapy,University Health Associates,8104 Commerce St,Rockford,IL,61101,(907) 687-9041,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",Midwest Regional Medical Center
+1534222401,Lisa,Allen,MD,Radiology,Community Care Clinic,9168 Commerce St,Joliet,IL,60431,(635) 963-6419,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Prairie Community Hospital
+1347538338,Linda,Jackson,DO,OB/GYN,Prairie Regional Medical,3238 Park Blvd,Peoria,IL,61602,(483) 941-9595,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Midwest Regional Medical Center
+1487493096,Susan,Allen,MD,Physical Therapy,Prairie Regional Medical,4594 Main St,Springfield,IL,62701,(766) 499-3068,No,"Bronze,Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1604011128,Priya,Kim,DO,Orthopedics,SilverShield Medical Group,4236 University Ave,Chicago,IL,60601,(266) 610-9056,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Midwest Regional Medical Center
+1970957171,Carlos,Allen,DO,Neurology,Midwest Health Partners,9243 Health Plaza,Decatur,IL,62521,(810) 833-4697,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",University Medical Center
+1560452529,Betty,Wilson,MD,Internal Medicine,Midwest Health Partners,3504 Park Blvd,Aurora,IL,60505,(876) 283-3573,Yes,"Silver,Gold",Yes,"English,Spanish",Springfield General Hospital
+1538642403,Donald,Nelson,NP,Psychiatry,SilverShield Medical Group,3892 Lake Shore Dr,Aurora,IL,60505,(919) 664-2166,Yes,Gold,Yes,English,Springfield General Hospital
+1684719405,Joseph,Taylor,MD,Plastic Surgery,Prairie Regional Medical,1269 Main St,Naperville,IL,60540,(514) 809-5728,No,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1851333320,Ashley,Moore,PA-C,Nephrology,Community Care Clinic,7272 Oak Ave,Decatur,IL,62521,(240) 642-6280,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",N/A (outpatient only)
+1997603725,Carlos,Scott,MD,Speech Therapy,Heartland Medical Associates,9541 Main St,Naperville,IL,60540,(681) 731-8245,Yes,"Silver,Gold",Yes,"English,French",Lake Shore Medical Center
+1197970787,Priya,Walker,MD,Oncology,Independent Practice,1813 Maple Dr,Joliet,IL,60431,(621) 910-9117,Yes,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1437710224,Thomas,Clark,DO,Speech Therapy,University Health Associates,8531 Main St,Champaign,IL,61820,(673) 623-1888,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Lake Shore Medical Center
+1771527524,Donald,Brown,MD,Gastroenterology,Prairie Regional Medical,4819 University Ave,Peoria,IL,61602,(324) 229-4920,Yes,Gold,Yes,"English,Hindi",Lake Shore Medical Center
+1200082623,Joseph,Davis,NP,OB/GYN,Prairie Regional Medical,8265 Lake Shore Dr,Champaign,IL,61820,(922) 479-7807,No,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1255308128,Anthony,Jackson,MD,Urology,Prairie Regional Medical,1243 Lake Shore Dr,Evanston,IL,60201,(548) 719-5377,Yes,Gold,No,"English,Spanish,Portuguese",University Medical Center
+1722687986,Rahul,Taylor,NP,Nephrology,Community Care Clinic,5754 Medical Center Dr,Champaign,IL,61820,(981) 756-7180,No,Gold,Yes,"English,French",Midwest Regional Medical Center
+1713963047,Anthony,Harris,MD,Internal Medicine,Independent Practice,7849 Health Plaza,Evanston,IL,60201,(879) 867-3492,No,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1456476596,Michael,Kim,DO,Urology,Community Care Clinic,351 Maple Dr,Evanston,IL,60201,(870) 358-2225,No,Gold,No,"English,Hindi",N/A (outpatient only)
+1526794469,Jennifer,Lewis,PA-C,Endocrinology,Independent Practice,8094 Commerce St,Springfield,IL,62701,(832) 270-4846,Yes,"Silver,Gold",Yes,English,Springfield General Hospital
+1916440738,Michael,Kim,MD,Physical Therapy,Heartland Medical Associates,574 Main St,Joliet,IL,60431,(257) 500-6873,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1542437192,Carlos,Thomas,MD,Orthopedics,Midwest Health Partners,6367 Center Rd,Rockford,IL,61101,(709) 797-3344,Yes,"Bronze,Silver,Gold",No,English,Prairie Community Hospital
+1816014770,James,Chen,MD,Urgent Care,Prairie Regional Medical,1310 University Ave,Joliet,IL,60431,(801) 506-7951,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Lake Shore Medical Center
+1618840705,Michael,Martin,MD,Infectious Disease,Independent Practice,9517 Lake Shore Dr,Aurora,IL,60505,(222) 874-7484,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1633356861,Charles,Harris,MD,Allergy & Immunology,Independent Practice,3688 Park Blvd,Decatur,IL,62521,(456) 894-3240,Yes,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",Lake Shore Medical Center
+1135824891,Fatima,Hall,MD,Pediatrics,Heartland Medical Associates,5452 Health Plaza,Naperville,IL,60540,(405) 335-9837,Yes,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1375919523,Priya,Young,DO,Allergy & Immunology,Midwest Health Partners,7773 Oak Ave,Naperville,IL,60540,(972) 431-7511,Yes,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1676140134,Linda,Chen,DO,Urgent Care,Heartland Medical Associates,9677 Health Plaza,Joliet,IL,60431,(310) 891-4830,No,"Bronze,Silver,Gold",No,"English,Hindi",Midwest Regional Medical Center
+1795411453,John,Chen,MD,Emergency Medicine,University Health Associates,2011 Maple Dr,Springfield,IL,62701,(238) 511-9071,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1517305280,Emily,Hall,PA-C,Pulmonology,Prairie Regional Medical,6897 Oak Ave,Peoria,IL,61602,(830) 617-5583,Yes,Gold,Yes,English,Lake Shore Medical Center
+1353524015,Sandra,Miller,DO,Nephrology,Independent Practice,1092 Health Plaza,Aurora,IL,60505,(394) 325-8450,Yes,"Silver,Gold",Yes,English,Prairie Community Hospital
+1361530104,William,Wilson,MD,Pediatrics,Great Lakes Health System,9707 Park Blvd,Rockford,IL,61101,(536) 992-3417,Yes,Gold,Yes,"English,Spanish",University Medical Center
+1369137895,Susan,Davis,MD,Cardiology,SilverShield Medical Group,5969 Park Blvd,Decatur,IL,62521,(531) 216-3854,Yes,"Bronze,Silver,Gold",Yes,"English,French",Lake Shore Medical Center
+1664880035,Linda,Jones,NP,Rheumatology,Independent Practice,8508 Center Rd,Chicago,IL,60601,(662) 715-4629,Yes,"Bronze,Silver,Gold",No,English,N/A (outpatient only)
+1133447745,Patricia,Rodriguez,MD,Pulmonology,Midwest Health Partners,8132 University Ave,Chicago,IL,60601,(282) 529-3430,Yes,"Silver,Gold",No,"English,Hindi",N/A (outpatient only)
+1728530544,Maria,Clark,MD,Hematology,Heartland Medical Associates,7533 Commerce St,Decatur,IL,62521,(640) 301-2874,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Lake Shore Medical Center
+1463925049,Emily,Patel,MD,Occupational Therapy,Midwest Health Partners,5220 Health Plaza,Joliet,IL,60431,(881) 461-7132,Yes,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1200105056,Dorothy,Miller,DO,Allergy & Immunology,Prairie Regional Medical,9215 Main St,Decatur,IL,62521,(775) 775-6400,Yes,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",N/A (outpatient only)
+1905611583,Dorothy,Brown,MD,Hematology,Heartland Medical Associates,5861 Oak Ave,Decatur,IL,62521,(719) 417-3535,No,"Silver,Gold",Yes,"English,Mandarin",University Medical Center
+1494665673,Linda,Moore,MD,Neurology,University Health Associates,9290 Center Rd,Decatur,IL,62521,(891) 858-1430,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1918630985,Betty,Lewis,DO,Family Medicine,Prairie Regional Medical,2447 Center Rd,Evanston,IL,60201,(271) 345-1502,Yes,"Bronze,Silver,Gold",Yes,English,Lake Shore Medical Center
+1587098457,Margaret,Anderson,DO,Psychiatry,Independent Practice,9399 Center Rd,Chicago,IL,60601,(253) 359-3579,Yes,"Bronze,Silver,Gold",No,English,N/A (outpatient only)
+1555282394,Rahul,Nelson,NP,Pulmonology,Heartland Medical Associates,3631 Commerce St,Chicago,IL,60601,(553) 640-2816,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1431162800,Robert,Harris,MD,Hematology,SilverShield Medical Group,225 Park Blvd,Aurora,IL,60505,(416) 985-3248,Yes,Gold,No,English,Springfield General Hospital
+1634063428,Dorothy,Thomas,MD,Endocrinology,Great Lakes Health System,8296 Commerce St,Joliet,IL,60431,(273) 606-1693,No,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1718216692,Dorothy,Wilson,MD,Physical Therapy,University Health Associates,4843 Oak Ave,Evanston,IL,60201,(221) 532-3815,No,Gold,Yes,English,Springfield General Hospital
+1361259074,Dorothy,Scott,MD,Urology,Midwest Health Partners,6584 Lake Shore Dr,Joliet,IL,60431,(426) 541-3754,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1308202515,Matthew,Walker,MD,Neurology,Midwest Health Partners,2499 Lake Shore Dr,Rockford,IL,61101,(377) 816-3504,Yes,"Silver,Gold",Yes,English,University Medical Center
+1915911873,Fatima,Kim,MD,Emergency Medicine,Independent Practice,5279 Maple Dr,Peoria,IL,61602,(269) 680-8245,Yes,Gold,Yes,"English,Mandarin",University Medical Center
+1179661615,Betty,Chen,NP,Internal Medicine,SilverShield Medical Group,6141 Lake Shore Dr,Chicago,IL,60601,(860) 292-9307,No,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1799905142,Richard,Clark,MD,Ophthalmology,Prairie Regional Medical,1113 University Ave,Chicago,IL,60601,(551) 931-2381,Yes,"Bronze,Silver,Gold",Yes,"English,French",Lake Shore Medical Center
+1571825556,Chen,Lopez,MD,Orthopedics,Independent Practice,6208 Lake Shore Dr,Evanston,IL,60201,(618) 993-6543,Yes,Gold,Yes,"English,Mandarin",Springfield General Hospital
+1699108439,Anthony,Young,MD,Occupational Therapy,Prairie Regional Medical,5561 Oak Ave,Decatur,IL,62521,(879) 344-6731,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1190966348,Betty,Perez,MD,Emergency Medicine,Independent Practice,2193 Commerce St,Chicago,IL,60601,(861) 886-7937,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Midwest Regional Medical Center
+1329987621,Margaret,Martinez,MD,Neurology,Prairie Regional Medical,2638 Oak Ave,Aurora,IL,60505,(303) 719-9843,Yes,Gold,Yes,"English,Hindi",Lake Shore Medical Center
+1265627642,David,Thomas,MD,Allergy & Immunology,Prairie Regional Medical,7270 Main St,Evanston,IL,60201,(573) 892-4891,No,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",N/A (outpatient only)
+1941599226,Donald,Harris,PA-C,Neurology,Heartland Medical Associates,7784 Park Blvd,Joliet,IL,60431,(894) 784-8218,No,Gold,Yes,"English,Hindi",University Medical Center
+1549533634,David,Jackson,MD,Cardiology,Heartland Medical Associates,954 University Ave,Joliet,IL,60431,(767) 305-9452,Yes,Gold,Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1392907427,Donald,Hernandez,MD,Plastic Surgery,University Health Associates,1602 Park Blvd,Peoria,IL,61602,(557) 227-7797,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Lake Shore Medical Center
+1187623171,Sandra,Harris,MD,Oncology,Midwest Health Partners,5593 Maple Dr,Naperville,IL,60540,(239) 493-8740,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Springfield General Hospital
+1185068029,Mary,Thompson,MD,Plastic Surgery,Prairie Regional Medical,9091 Center Rd,Champaign,IL,61820,(633) 313-5720,Yes,Gold,Yes,English,Midwest Regional Medical Center
+1550784243,Yuki,Chen,DO,OB/GYN,Community Care Clinic,9876 Commerce St,Springfield,IL,62701,(847) 727-4963,Yes,Gold,Yes,English,University Medical Center
+1478833337,Lisa,Wilson,MD,Orthopedics,Midwest Health Partners,8676 Medical Center Dr,Chicago,IL,60601,(738) 757-9312,Yes,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1515410649,Sandra,Thompson,MD,Radiology,Midwest Health Partners,5749 Park Blvd,Chicago,IL,60601,(990) 795-6447,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Prairie Community Hospital
+1973498494,Susan,Chen,NP,Emergency Medicine,Prairie Regional Medical,2309 Oak Ave,Peoria,IL,61602,(237) 500-4302,Yes,"Silver,Gold",Yes,"English,Mandarin",Prairie Community Hospital
+1653388913,Ashley,Gonzalez,NP,Gastroenterology,SilverShield Medical Group,3231 Lake Shore Dr,Joliet,IL,60431,(999) 248-6438,Yes,"Bronze,Silver,Gold",No,English,Lake Shore Medical Center
+1898120571,Donald,King,DO,Orthopedics,Community Care Clinic,8251 Medical Center Dr,Champaign,IL,61820,(473) 284-7955,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1444898148,Michael,Garcia,DO,Urgent Care,Heartland Medical Associates,5121 University Ave,Decatur,IL,62521,(934) 636-3730,No,Gold,Yes,English,N/A (outpatient only)
+1478557676,Yuki,Nguyen,MD,Emergency Medicine,SilverShield Medical Group,1329 Health Plaza,Joliet,IL,60431,(725) 967-3621,Yes,"Silver,Gold",Yes,English,Midwest Regional Medical Center
+1172191273,Lisa,Hall,DO,Endocrinology,SilverShield Medical Group,2613 University Ave,Joliet,IL,60431,(580) 654-2259,Yes,"Bronze,Silver,Gold",No,English,Prairie Community Hospital
+1797460535,Nancy,Martin,DO,Family Medicine,Prairie Regional Medical,8276 Commerce St,Evanston,IL,60201,(775) 320-5288,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1845156039,Rahul,Jackson,DO,Cardiology,Midwest Health Partners,7506 Maple Dr,Peoria,IL,61602,(289) 898-6236,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Midwest Regional Medical Center
+1864299201,Susan,Hall,PA-C,Neurology,Midwest Health Partners,3392 Maple Dr,Rockford,IL,61101,(705) 226-6912,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Springfield General Hospital
+1170596494,Betty,Patel,NP,Urology,University Health Associates,6808 Center Rd,Chicago,IL,60601,(328) 524-2215,No,"Bronze,Silver,Gold",No,"English,Spanish",University Medical Center
+1786973497,Fatima,Thomas,MD,Pulmonology,SilverShield Medical Group,2134 Commerce St,Naperville,IL,60540,(511) 368-3653,Yes,"Silver,Gold",No,"English,Hindi",Prairie Community Hospital
+1184675178,Thomas,Jackson,PA-C,Gastroenterology,Prairie Regional Medical,5061 Center Rd,Champaign,IL,61820,(295) 714-3762,Yes,"Silver,Gold",No,"English,Spanish,Portuguese",University Medical Center
+1144232045,Mary,Garcia,MD,Emergency Medicine,Heartland Medical Associates,3553 Center Rd,Evanston,IL,60201,(832) 854-1496,No,"Bronze,Silver,Gold",No,"English,French",Prairie Community Hospital
+1618558050,Lisa,Patel,MD,Rheumatology,Midwest Health Partners,1081 Maple Dr,Peoria,IL,61602,(625) 695-8609,Yes,Gold,Yes,"English,Mandarin",N/A (outpatient only)
+1442863363,Matthew,Patel,MD,Speech Therapy,Independent Practice,8537 Commerce St,Chicago,IL,60601,(526) 447-8642,Yes,Gold,Yes,"English,Spanish",Midwest Regional Medical Center
+1203950725,Patricia,Young,MD,General Surgery,University Health Associates,4167 Maple Dr,Joliet,IL,60431,(791) 938-6123,Yes,"Silver,Gold",Yes,"English,Hindi",Lake Shore Medical Center
+1635539154,Betty,Martinez,MD,Pediatrics,University Health Associates,8381 University Ave,Rockford,IL,61101,(420) 797-6781,Yes,"Bronze,Silver,Gold",No,English,University Medical Center
+1802506364,Priya,Young,PA-C,Family Medicine,Midwest Health Partners,7160 Maple Dr,Aurora,IL,60505,(944) 574-7606,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1703246271,Richard,Hall,PA-C,Psychiatry,Midwest Health Partners,6429 Commerce St,Peoria,IL,61602,(982) 763-5582,Yes,"Silver,Gold",Yes,English,Prairie Community Hospital
+1953514394,Margaret,Perez,DO,Speech Therapy,Prairie Regional Medical,3361 Center Rd,Champaign,IL,61820,(611) 712-1659,Yes,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1963251765,Priya,Lopez,NP,Cardiology,Prairie Regional Medical,5473 Center Rd,Joliet,IL,60431,(366) 602-5902,Yes,"Bronze,Silver,Gold",Yes,"English,French",University Medical Center
+1421897671,Priya,Johnson,DO,Oncology,Midwest Health Partners,6924 Center Rd,Aurora,IL,60505,(942) 904-1436,No,Gold,Yes,"English,French",Springfield General Hospital
+1726553348,Priya,Anderson,PA-C,Emergency Medicine,University Health Associates,2521 Park Blvd,Springfield,IL,62701,(786) 917-2800,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1262598077,Mark,White,MD,Urology,Community Care Clinic,1120 Maple Dr,Champaign,IL,61820,(412) 774-6325,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",Midwest Regional Medical Center
+1593559955,Wei,Lewis,PA-C,Radiology,Heartland Medical Associates,8032 Park Blvd,Rockford,IL,61101,(485) 771-5890,Yes,Gold,No,"English,French",Midwest Regional Medical Center
+1841139461,Rahul,Clark,NP,Radiology,Heartland Medical Associates,4815 Oak Ave,Decatur,IL,62521,(892) 756-7220,No,Gold,Yes,"English,Mandarin",Springfield General Hospital
+1408840720,Jennifer,Walker,NP,Emergency Medicine,Heartland Medical Associates,7949 Park Blvd,Rockford,IL,61101,(751) 477-5450,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Springfield General Hospital
+1819228743,Chen,Harris,MD,Internal Medicine,Midwest Health Partners,6871 Medical Center Dr,Peoria,IL,61602,(302) 897-3252,Yes,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1610778600,Priya,Jackson,MD,Oncology,Heartland Medical Associates,1069 Oak Ave,Decatur,IL,62521,(437) 747-1611,Yes,"Bronze,Silver,Gold",Yes,English,Lake Shore Medical Center
+1946066287,Rahul,Thomas,MD,Vascular Surgery,SilverShield Medical Group,251 Lake Shore Dr,Decatur,IL,62521,(817) 309-6489,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1602533479,Nancy,Jackson,DO,Oncology,Prairie Regional Medical,7618 Lake Shore Dr,Naperville,IL,60540,(214) 954-6523,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1785826598,Ashley,Nguyen,PA-C,Oncology,Midwest Health Partners,6667 Oak Ave,Naperville,IL,60540,(343) 688-6301,Yes,"Bronze,Silver,Gold",No,English,Midwest Regional Medical Center
+1579678614,Nancy,Lewis,MD,Infectious Disease,SilverShield Medical Group,4385 Medical Center Dr,Rockford,IL,61101,(263) 883-2936,No,Gold,Yes,English,N/A (outpatient only)
+1639577241,Betty,Davis,MD,Radiology,Great Lakes Health System,3690 Maple Dr,Peoria,IL,61602,(356) 665-7121,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",University Medical Center
+1961135562,Karen,Martin,MD,General Surgery,Midwest Health Partners,8709 University Ave,Champaign,IL,61820,(920) 570-2279,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1260902774,David,Clark,PA-C,Rheumatology,Midwest Health Partners,3465 Center Rd,Peoria,IL,61602,(293) 722-8298,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Lake Shore Medical Center
+1590483627,Carlos,Brown,PA-C,Rheumatology,Heartland Medical Associates,456 Health Plaza,Aurora,IL,60505,(203) 963-4570,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1168461684,Wei,Brown,DO,Pain Management,Community Care Clinic,619 Lake Shore Dr,Evanston,IL,60201,(384) 987-3218,No,Gold,Yes,English,Lake Shore Medical Center
+1503346325,Jennifer,Gonzalez,MD,Emergency Medicine,Independent Practice,2043 Maple Dr,Champaign,IL,61820,(602) 741-3086,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1823164961,Wei,Nguyen,PA-C,Endocrinology,Great Lakes Health System,4155 University Ave,Joliet,IL,60431,(358) 482-4088,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Springfield General Hospital
+1358413465,Karen,Jones,DO,Hematology,SilverShield Medical Group,7414 Center Rd,Springfield,IL,62701,(450) 958-1724,No,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1910015485,Patricia,Wilson,PA-C,Psychiatry,Great Lakes Health System,9538 Medical Center Dr,Decatur,IL,62521,(812) 991-6253,Yes,Gold,Yes,"English,French",University Medical Center
+1337342839,Mark,Allen,MD,Internal Medicine,Prairie Regional Medical,7099 Commerce St,Peoria,IL,61602,(248) 552-7244,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Prairie Community Hospital
+1504221050,Susan,Gonzalez,NP,Neurology,Great Lakes Health System,5027 Maple Dr,Peoria,IL,61602,(259) 775-7761,No,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1373799489,Karen,Lewis,DO,Pain Management,Community Care Clinic,6179 Oak Ave,Champaign,IL,61820,(941) 395-1844,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Springfield General Hospital
+1302038796,Fatima,Perez,MD,Ophthalmology,Great Lakes Health System,5555 Lake Shore Dr,Springfield,IL,62701,(416) 394-2922,No,"Silver,Gold",Yes,English,Midwest Regional Medical Center
+1692790631,Daniel,Young,MD,Rheumatology,Independent Practice,5153 Lake Shore Dr,Joliet,IL,60431,(725) 709-8635,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Prairie Community Hospital
+1435997460,Mark,Williams,MD,General Surgery,Great Lakes Health System,2490 Main St,Aurora,IL,60505,(766) 798-7841,Yes,"Silver,Gold",Yes,"English,Mandarin",Midwest Regional Medical Center
+1507849850,Carlos,Martin,NP,Nephrology,Independent Practice,4316 University Ave,Peoria,IL,61602,(671) 372-6770,Yes,"Silver,Gold",Yes,"English,Spanish",University Medical Center
+1789137659,Patricia,Lopez,MD,Plastic Surgery,Midwest Health Partners,894 Main St,Evanston,IL,60201,(340) 845-4791,Yes,"Silver,Gold",Yes,"English,Spanish",University Medical Center
+1589636644,Sandra,Brown,MD,Emergency Medicine,Community Care Clinic,8093 Main St,Springfield,IL,62701,(744) 764-7739,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Prairie Community Hospital
+1118406723,Aisha,Nguyen,MD,OB/GYN,Midwest Health Partners,8691 Maple Dr,Rockford,IL,61101,(396) 834-9625,Yes,Gold,No,"English,Spanish,Portuguese",Lake Shore Medical Center
+1184846271,Sandra,Patel,NP,Infectious Disease,Great Lakes Health System,3800 Lake Shore Dr,Chicago,IL,60601,(869) 865-1519,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1611106584,Patricia,Smith,MD,Pediatrics,Community Care Clinic,7209 Medical Center Dr,Decatur,IL,62521,(297) 740-1697,Yes,"Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1179830621,Nancy,Gonzalez,MD,Urgent Care,SilverShield Medical Group,3038 Medical Center Dr,Springfield,IL,62701,(412) 801-3362,No,"Bronze,Silver,Gold",No,"English,Spanish",University Medical Center
+1358205053,Carlos,King,PA-C,Oncology,University Health Associates,2392 Oak Ave,Champaign,IL,61820,(963) 554-1879,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Springfield General Hospital
+1465708674,Omar,Carter,MD,Endocrinology,Independent Practice,585 Lake Shore Dr,Peoria,IL,61602,(702) 433-6829,No,"Bronze,Silver,Gold",Yes,"English,French",University Medical Center
+1809391059,Anthony,Garcia,MD,Psychiatry,Great Lakes Health System,1304 Oak Ave,Aurora,IL,60505,(357) 589-3527,No,Gold,No,English,Springfield General Hospital
+1105578324,Betty,Kim,DO,Speech Therapy,Heartland Medical Associates,1774 Maple Dr,Chicago,IL,60601,(391) 641-8353,No,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1695088987,Jennifer,Nelson,MD,Allergy & Immunology,Independent Practice,6411 Main St,Aurora,IL,60505,(623) 597-2387,Yes,"Bronze,Silver,Gold",Yes,"English,French",Lake Shore Medical Center
+1282001119,William,Moore,MD,Gastroenterology,Community Care Clinic,2490 Oak Ave,Naperville,IL,60540,(645) 482-7899,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Prairie Community Hospital
+1364774064,Rahul,Nelson,MD,Dermatology,Community Care Clinic,1852 Maple Dr,Aurora,IL,60505,(206) 605-6443,No,Gold,Yes,"English,Mandarin",Lake Shore Medical Center
+1975610118,Omar,Wilson,MD,Oncology,Great Lakes Health System,7948 Medical Center Dr,Naperville,IL,60540,(607) 526-5775,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1400969989,Ashley,Hall,DO,Pain Management,Great Lakes Health System,9803 Commerce St,Naperville,IL,60540,(898) 986-1440,No,"Silver,Gold",Yes,"English,Spanish,Portuguese",Prairie Community Hospital
+1992582047,John,Gupta,NP,Cardiology,Heartland Medical Associates,4065 Lake Shore Dr,Naperville,IL,60540,(932) 633-7176,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Lake Shore Medical Center
+1673772626,Aisha,Gupta,PA-C,Internal Medicine,Independent Practice,8896 Center Rd,Chicago,IL,60601,(311) 987-5067,Yes,"Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1827429909,Ashley,Lewis,MD,OB/GYN,SilverShield Medical Group,1715 Lake Shore Dr,Rockford,IL,61101,(722) 964-9499,Yes,"Bronze,Silver,Gold",No,English,Lake Shore Medical Center
+1929296154,Fatima,Hernandez,MD,Radiology,SilverShield Medical Group,8009 Oak Ave,Aurora,IL,60505,(625) 287-2901,Yes,Gold,No,"English,Mandarin",Lake Shore Medical Center
+1942103498,Karen,Lopez,NP,Radiology,Community Care Clinic,1699 University Ave,Peoria,IL,61602,(526) 268-5919,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Prairie Community Hospital
+1795752405,Michael,Anderson,MD,Urology,Prairie Regional Medical,9142 Maple Dr,Joliet,IL,60431,(773) 636-8570,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",N/A (outpatient only)
+1805778992,Dorothy,Patel,MD,Occupational Therapy,Great Lakes Health System,7465 Center Rd,Evanston,IL,60201,(598) 204-4519,Yes,Gold,Yes,"English,Hindi",Springfield General Hospital
+1958459117,Wei,Thomas,DO,Oncology,Great Lakes Health System,7596 Oak Ave,Aurora,IL,60505,(886) 701-9646,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Lake Shore Medical Center
+1730291513,Linda,Walker,DO,General Surgery,Community Care Clinic,2926 Lake Shore Dr,Decatur,IL,62521,(804) 286-3194,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1296542559,Sandra,Taylor,PA-C,Endocrinology,University Health Associates,9871 Maple Dr,Decatur,IL,62521,(592) 633-4043,No,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1625749126,Charles,Wilson,MD,Oncology,Community Care Clinic,978 Medical Center Dr,Springfield,IL,62701,(696) 339-4196,No,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1627986647,Mark,Kim,NP,Orthopedics,Midwest Health Partners,9363 Main St,Rockford,IL,61101,(499) 233-5503,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Lake Shore Medical Center
+1707362554,Rahul,Perez,PA-C,OB/GYN,Midwest Health Partners,4489 Commerce St,Joliet,IL,60431,(755) 974-1681,No,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1890261845,Lisa,Allen,MD,Rheumatology,Heartland Medical Associates,5811 Oak Ave,Peoria,IL,61602,(320) 994-4882,Yes,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",N/A (outpatient only)
+1755263618,Dorothy,Anderson,MD,Cardiology,Great Lakes Health System,3490 Main St,Decatur,IL,62521,(559) 745-5605,Yes,Gold,No,"English,Mandarin",University Medical Center
+1387057426,Aisha,Miller,MD,Speech Therapy,University Health Associates,1071 Lake Shore Dr,Naperville,IL,60540,(918) 335-5090,Yes,Gold,Yes,"English,Spanish,Portuguese",N/A (outpatient only)
+1521659217,Rahul,Taylor,MD,Emergency Medicine,Heartland Medical Associates,6886 Health Plaza,Peoria,IL,61602,(277) 848-2525,No,"Bronze,Silver,Gold",No,"English,French",Prairie Community Hospital
+1588225728,Rahul,Clark,MD,Family Medicine,Midwest Health Partners,7611 Medical Center Dr,Chicago,IL,60601,(747) 607-4568,No,"Silver,Gold",Yes,"English,Mandarin",Prairie Community Hospital
+1989427187,Charles,Lewis,PA-C,Infectious Disease,Prairie Regional Medical,9375 University Ave,Joliet,IL,60431,(898) 980-1793,Yes,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1269633510,Donald,Chen,MD,Pulmonology,Great Lakes Health System,2261 Lake Shore Dr,Naperville,IL,60540,(480) 295-6905,Yes,"Bronze,Silver,Gold",No,"English,French",N/A (outpatient only)
+1277731206,Patricia,Patel,MD,Occupational Therapy,Great Lakes Health System,7132 Oak Ave,Chicago,IL,60601,(201) 418-8812,Yes,"Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1577886922,James,Smith,DO,Plastic Surgery,Midwest Health Partners,7019 Maple Dr,Peoria,IL,61602,(272) 434-7276,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Prairie Community Hospital
+1421322967,William,King,MD,Emergency Medicine,Prairie Regional Medical,1220 Commerce St,Decatur,IL,62521,(208) 824-3688,No,Gold,Yes,"English,French",N/A (outpatient only)
+1262536735,Mark,Carter,NP,General Surgery,Great Lakes Health System,1520 Oak Ave,Naperville,IL,60540,(970) 326-7291,Yes,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1366058599,Nancy,Garcia,MD,Nephrology,Heartland Medical Associates,539 Lake Shore Dr,Rockford,IL,61101,(730) 821-9348,Yes,"Bronze,Silver,Gold",No,"English,French",Springfield General Hospital
+1941600554,Lisa,Martinez,MD,OB/GYN,Great Lakes Health System,8285 Center Rd,Chicago,IL,60601,(740) 212-6916,Yes,"Silver,Gold",Yes,"English,Spanish,Portuguese",University Medical Center
+1551898779,Sandra,Gonzalez,MD,Speech Therapy,Community Care Clinic,1295 Main St,Decatur,IL,62521,(269) 214-5295,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1643968992,Charles,Hernandez,MD,Pulmonology,University Health Associates,1450 Commerce St,Champaign,IL,61820,(830) 356-5546,Yes,Gold,Yes,"English,Hindi",Midwest Regional Medical Center
+1967647911,Barbara,Gonzalez,DO,Endocrinology,Midwest Health Partners,5181 Health Plaza,Rockford,IL,61101,(259) 450-2412,No,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1159086532,Betty,Thomas,DO,Family Medicine,Prairie Regional Medical,285 Maple Dr,Peoria,IL,61602,(555) 735-9474,Yes,"Silver,Gold",No,"English,Spanish",N/A (outpatient only)
+1938725480,Nancy,Davis,MD,Oncology,University Health Associates,4556 Commerce St,Chicago,IL,60601,(469) 929-2262,No,"Bronze,Silver,Gold",No,English,Lake Shore Medical Center
+1708689346,David,Hall,MD,Gastroenterology,Midwest Health Partners,9502 Oak Ave,Rockford,IL,61101,(958) 721-1042,Yes,"Bronze,Silver,Gold",Yes,English,Lake Shore Medical Center
+1490816787,Anthony,Taylor,MD,Pain Management,SilverShield Medical Group,9158 Health Plaza,Rockford,IL,61101,(529) 454-7819,Yes,Gold,Yes,"English,Hindi",Prairie Community Hospital
+1228205773,Aisha,Brown,MD,Neurology,SilverShield Medical Group,6668 Oak Ave,Peoria,IL,61602,(489) 992-6090,Yes,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1315469014,Charles,Wilson,MD,Occupational Therapy,Great Lakes Health System,7700 Medical Center Dr,Decatur,IL,62521,(705) 991-4201,Yes,"Silver,Gold",Yes,English,Springfield General Hospital
+1350179421,Wei,Walker,MD,Oncology,SilverShield Medical Group,6264 Lake Shore Dr,Chicago,IL,60601,(410) 742-4902,No,"Bronze,Silver,Gold",Yes,"English,Spanish",N/A (outpatient only)
+1400460098,Jennifer,Williams,MD,Vascular Surgery,University Health Associates,6202 University Ave,Chicago,IL,60601,(794) 297-9280,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1166875719,Dorothy,Wilson,MD,Psychiatry,Heartland Medical Associates,5261 Health Plaza,Joliet,IL,60431,(525) 663-5455,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1217008688,Barbara,Miller,MD,Rheumatology,Community Care Clinic,5245 Health Plaza,Chicago,IL,60601,(748) 566-4401,No,Gold,Yes,"English,Mandarin",Springfield General Hospital
+1197088689,David,Allen,MD,Internal Medicine,Great Lakes Health System,5470 Maple Dr,Chicago,IL,60601,(928) 454-6828,No,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1379351967,Susan,Johnson,MD,General Surgery,Community Care Clinic,9208 Commerce St,Rockford,IL,61101,(296) 673-2669,Yes,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1240354421,Richard,Patel,DO,Urgent Care,Midwest Health Partners,9640 Center Rd,Aurora,IL,60505,(276) 222-2056,Yes,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1231563076,Robert,Chen,MD,Orthopedics,University Health Associates,6571 University Ave,Springfield,IL,62701,(591) 899-7990,Yes,Gold,Yes,"English,Spanish",Prairie Community Hospital
+1400491536,Donald,Taylor,MD,Hematology,Great Lakes Health System,4935 University Ave,Evanston,IL,60201,(763) 690-1999,Yes,Gold,Yes,"English,Spanish",Lake Shore Medical Center
+1314166184,Chen,Martin,PA-C,Allergy & Immunology,SilverShield Medical Group,6366 Medical Center Dr,Peoria,IL,61602,(757) 696-6636,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Springfield General Hospital
+1442392183,Omar,Harris,MD,Vascular Surgery,Heartland Medical Associates,1059 University Ave,Champaign,IL,61820,(566) 985-4813,Yes,"Bronze,Silver,Gold",Yes,"English,French",Midwest Regional Medical Center
+1386181187,Wei,Brown,MD,Infectious Disease,University Health Associates,5913 Maple Dr,Naperville,IL,60540,(442) 806-6210,Yes,"Bronze,Silver,Gold",Yes,"English,French",N/A (outpatient only)
+1477615830,Carlos,Wilson,MD,Infectious Disease,Great Lakes Health System,8164 Commerce St,Aurora,IL,60505,(379) 702-1621,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1121397518,Chen,Rodriguez,MD,Oncology,Great Lakes Health System,2237 Medical Center Dr,Naperville,IL,60540,(531) 260-1359,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Springfield General Hospital
+1665104817,Sandra,Jones,DO,Physical Therapy,University Health Associates,9701 Oak Ave,Joliet,IL,60431,(509) 530-3235,Yes,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1287048690,Maria,Carter,DO,Neurology,Prairie Regional Medical,6299 Lake Shore Dr,Aurora,IL,60505,(330) 381-1029,No,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1441682804,Yuki,Harris,MD,OB/GYN,Community Care Clinic,2404 Medical Center Dr,Chicago,IL,60601,(443) 555-6234,Yes,"Bronze,Silver,Gold",No,English,Springfield General Hospital
+1384769690,Karen,Martin,DO,Radiology,Heartland Medical Associates,1870 Main St,Springfield,IL,62701,(595) 648-7875,Yes,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1686288768,Anthony,Miller,NP,Allergy & Immunology,Great Lakes Health System,2764 University Ave,Chicago,IL,60601,(234) 501-1328,Yes,Gold,Yes,English,Prairie Community Hospital
+1282649071,Anthony,Anderson,DO,Nephrology,Midwest Health Partners,5636 Center Rd,Decatur,IL,62521,(694) 921-1507,No,"Silver,Gold",Yes,"English,Spanish",Springfield General Hospital
+1208724746,Margaret,White,MD,Pulmonology,Heartland Medical Associates,4712 Lake Shore Dr,Rockford,IL,61101,(298) 250-7437,No,"Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1559138405,Jennifer,Young,MD,Ophthalmology,Great Lakes Health System,1689 Main St,Rockford,IL,61101,(374) 853-5781,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1605672755,Rahul,Thompson,DO,Emergency Medicine,University Health Associates,3129 Medical Center Dr,Evanston,IL,60201,(578) 391-8303,Yes,Gold,Yes,English,Prairie Community Hospital
+1342925794,Nancy,Wilson,MD,Cardiology,Midwest Health Partners,1504 Medical Center Dr,Champaign,IL,61820,(623) 974-4727,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1609838807,Carlos,Martin,NP,Psychiatry,Midwest Health Partners,6568 Main St,Champaign,IL,61820,(784) 729-3415,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Midwest Regional Medical Center
+1968078090,Richard,Wilson,MD,Pulmonology,Midwest Health Partners,7233 Park Blvd,Naperville,IL,60540,(809) 464-6238,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Lake Shore Medical Center
+1692763677,Daniel,Moore,PA-C,Rheumatology,SilverShield Medical Group,9726 Commerce St,Evanston,IL,60201,(315) 624-3451,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1937029745,Michael,Young,PA-C,Vascular Surgery,Independent Practice,6832 Lake Shore Dr,Evanston,IL,60201,(870) 697-8750,Yes,"Silver,Gold",No,English,Midwest Regional Medical Center
+1763834967,Omar,Patel,MD,Endocrinology,Independent Practice,3992 Main St,Peoria,IL,61602,(475) 581-1331,Yes,Gold,No,"English,Mandarin",Lake Shore Medical Center
+1847520637,Michael,Harris,MD,Psychiatry,Community Care Clinic,5357 Lake Shore Dr,Evanston,IL,60201,(819) 861-2462,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1895583423,Rahul,Lopez,DO,Plastic Surgery,SilverShield Medical Group,8542 Maple Dr,Chicago,IL,60601,(518) 926-9303,No,"Silver,Gold",Yes,"English,Spanish",Midwest Regional Medical Center
+1994351711,Richard,Brown,MD,Internal Medicine,Community Care Clinic,928 Medical Center Dr,Rockford,IL,61101,(480) 577-8605,No,"Bronze,Silver,Gold",Yes,"English,Spanish",Prairie Community Hospital
+1624830763,Omar,Kim,MD,General Surgery,Community Care Clinic,9715 Commerce St,Joliet,IL,60431,(552) 367-5237,Yes,Gold,Yes,English,Springfield General Hospital
+1274920492,Carlos,White,MD,Emergency Medicine,Great Lakes Health System,3487 Lake Shore Dr,Evanston,IL,60201,(725) 220-1145,No,"Silver,Gold",Yes,"English,Hindi",Springfield General Hospital
+1340271240,Thomas,Nelson,MD,Physical Therapy,Heartland Medical Associates,7043 Health Plaza,Joliet,IL,60431,(670) 458-4575,No,Gold,Yes,"English,Hindi",Springfield General Hospital
+1107889398,Aisha,Hall,PA-C,Emergency Medicine,Heartland Medical Associates,4990 Oak Ave,Peoria,IL,61602,(265) 544-5529,Yes,Gold,No,"English,French",N/A (outpatient only)
+1799506796,Betty,Jackson,MD,Urology,Great Lakes Health System,1030 Center Rd,Evanston,IL,60201,(876) 527-3292,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Lake Shore Medical Center
+1534434754,Anthony,Williams,MD,Physical Therapy,Great Lakes Health System,5722 Park Blvd,Champaign,IL,61820,(853) 687-6873,Yes,"Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1605497119,William,Thompson,PA-C,Speech Therapy,Prairie Regional Medical,5599 Oak Ave,Rockford,IL,61101,(563) 428-6031,No,Gold,No,"English,Mandarin",University Medical Center
+1415734988,Emily,Davis,NP,Internal Medicine,Midwest Health Partners,7836 Park Blvd,Champaign,IL,61820,(322) 897-7253,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1247494816,Richard,Lewis,MD,Infectious Disease,Community Care Clinic,2446 Medical Center Dr,Naperville,IL,60540,(997) 282-8988,Yes,"Silver,Gold",No,"English,French",Springfield General Hospital
+1105061082,Donald,Moore,MD,Speech Therapy,Prairie Regional Medical,9541 Maple Dr,Peoria,IL,61602,(981) 998-2442,Yes,"Bronze,Silver,Gold",Yes,"English,French",Lake Shore Medical Center
+1533140455,Dorothy,Rodriguez,MD,Family Medicine,SilverShield Medical Group,8845 Park Blvd,Joliet,IL,60431,(214) 529-9700,Yes,"Bronze,Silver,Gold",Yes,"English,French",N/A (outpatient only)
+1367171793,Joseph,Walker,MD,Cardiology,Midwest Health Partners,6384 Commerce St,Decatur,IL,62521,(513) 371-2069,Yes,Gold,No,English,N/A (outpatient only)
+1658655427,Omar,Lopez,DO,Pulmonology,Prairie Regional Medical,5715 University Ave,Joliet,IL,60431,(968) 392-3701,No,"Bronze,Silver,Gold",Yes,"English,Spanish",N/A (outpatient only)
+1240881133,Karen,Johnson,MD,Urology,Prairie Regional Medical,2117 Medical Center Dr,Springfield,IL,62701,(584) 855-5190,Yes,"Bronze,Silver,Gold",Yes,"English,French",Springfield General Hospital
+1801762883,Mary,Brown,DO,Pulmonology,Community Care Clinic,6330 Oak Ave,Champaign,IL,61820,(458) 685-3508,Yes,"Bronze,Silver,Gold",No,English,N/A (outpatient only)
+1208426285,Chen,Moore,MD,Hematology,Prairie Regional Medical,6962 Oak Ave,Champaign,IL,61820,(936) 832-2928,Yes,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1753910715,Richard,Thompson,PA-C,Dermatology,Independent Practice,6813 Lake Shore Dr,Naperville,IL,60540,(240) 761-9132,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Springfield General Hospital
+1113689561,Jennifer,Davis,MD,Urgent Care,Community Care Clinic,2543 Oak Ave,Champaign,IL,61820,(276) 940-2659,Yes,"Silver,Gold",Yes,"English,Mandarin",Prairie Community Hospital
+1598514021,Patricia,Miller,MD,General Surgery,SilverShield Medical Group,4860 Medical Center Dr,Joliet,IL,60431,(636) 956-2898,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1812272035,David,Lewis,DO,Vascular Surgery,Community Care Clinic,4495 Oak Ave,Joliet,IL,60431,(550) 387-2865,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1840777094,Priya,Gupta,MD,OB/GYN,Prairie Regional Medical,1060 Maple Dr,Chicago,IL,60601,(626) 804-8908,No,"Silver,Gold",Yes,"English,Spanish,Portuguese",Prairie Community Hospital
+1756441105,Mary,Wilson,NP,Pain Management,Community Care Clinic,1950 Health Plaza,Peoria,IL,61602,(247) 264-5286,Yes,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1657379037,Chen,Carter,DO,Pulmonology,Great Lakes Health System,7995 Medical Center Dr,Evanston,IL,60201,(352) 771-1894,Yes,"Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1277601056,John,Martinez,DO,Neurology,Independent Practice,4657 Main St,Champaign,IL,61820,(428) 763-7203,No,"Silver,Gold",Yes,English,Lake Shore Medical Center
+1960347752,Carlos,Kim,DO,General Surgery,Community Care Clinic,7424 Medical Center Dr,Chicago,IL,60601,(709) 963-1291,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1689590340,James,Garcia,MD,Hematology,Heartland Medical Associates,8428 Commerce St,Rockford,IL,61101,(870) 887-8474,Yes,Gold,Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1587972689,Margaret,Perez,MD,Hematology,Community Care Clinic,6052 University Ave,Chicago,IL,60601,(299) 977-4633,Yes,Gold,No,"English,Spanish,Portuguese",N/A (outpatient only)
+1958899743,Charles,Perez,PA-C,Radiology,Midwest Health Partners,850 Maple Dr,Peoria,IL,61602,(343) 934-7704,Yes,Gold,Yes,"English,Spanish",Springfield General Hospital
+1521869399,Karen,Chen,MD,Physical Therapy,Independent Practice,1865 Health Plaza,Springfield,IL,62701,(848) 888-3018,No,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1669474377,Patricia,Perez,MD,Plastic Surgery,Community Care Clinic,8428 Maple Dr,Decatur,IL,62521,(377) 948-3103,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Lake Shore Medical Center
+1549537843,Omar,Martin,MD,Endocrinology,Independent Practice,4919 University Ave,Naperville,IL,60540,(341) 622-9393,Yes,"Bronze,Silver,Gold",No,"English,French",N/A (outpatient only)
+1694403676,Karen,Jackson,MD,Hematology,Heartland Medical Associates,5757 Maple Dr,Naperville,IL,60540,(715) 755-6281,Yes,Gold,Yes,"English,Hindi",University Medical Center
+1816354624,Mark,Gonzalez,MD,Vascular Surgery,University Health Associates,309 Commerce St,Chicago,IL,60601,(225) 590-3381,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Midwest Regional Medical Center
+1407751103,Thomas,Taylor,MD,Physical Therapy,Heartland Medical Associates,3442 Commerce St,Springfield,IL,62701,(567) 663-2679,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1942143413,Charles,Brown,MD,Endocrinology,University Health Associates,5222 Commerce St,Springfield,IL,62701,(213) 961-5117,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1780525215,Sandra,Scott,PA-C,Occupational Therapy,Great Lakes Health System,3270 Lake Shore Dr,Peoria,IL,61602,(381) 899-2220,Yes,"Silver,Gold",Yes,English,Springfield General Hospital
+1560106760,Nancy,Perez,MD,Cardiology,Prairie Regional Medical,9668 Lake Shore Dr,Springfield,IL,62701,(538) 677-3536,Yes,"Silver,Gold",No,"English,Hindi",Springfield General Hospital
+1930712117,Yuki,Allen,NP,Allergy & Immunology,Independent Practice,1294 Medical Center Dr,Champaign,IL,61820,(425) 388-9529,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1676637967,Ashley,Garcia,DO,Neurology,Great Lakes Health System,5537 Medical Center Dr,Joliet,IL,60431,(500) 423-9691,No,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1471522500,Donald,Martin,MD,Pain Management,Great Lakes Health System,753 Medical Center Dr,Evanston,IL,60201,(316) 595-5203,Yes,"Bronze,Silver,Gold",No,"English,Hindi",University Medical Center
+1578413078,Rahul,Williams,MD,Vascular Surgery,Great Lakes Health System,5348 Commerce St,Chicago,IL,60601,(298) 371-9814,Yes,"Bronze,Silver,Gold",Yes,"English,French",N/A (outpatient only)
+1930627638,Karen,Nguyen,DO,Dermatology,University Health Associates,1281 Maple Dr,Springfield,IL,62701,(670) 934-6434,Yes,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1952781636,Thomas,Perez,DO,Infectious Disease,Great Lakes Health System,4337 Health Plaza,Evanston,IL,60201,(661) 845-7626,No,Gold,Yes,English,N/A (outpatient only)
+1227029844,Wei,Smith,MD,Pediatrics,SilverShield Medical Group,1289 Medical Center Dr,Champaign,IL,61820,(308) 496-5937,Yes,Gold,Yes,English,Lake Shore Medical Center
+1982747173,Mary,Rodriguez,MD,Nephrology,Great Lakes Health System,2334 Health Plaza,Champaign,IL,61820,(502) 849-3360,Yes,Gold,Yes,"English,Hindi",University Medical Center
+1251799039,Linda,Williams,MD,Infectious Disease,University Health Associates,8900 Commerce St,Chicago,IL,60601,(512) 415-6633,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Midwest Regional Medical Center
+1337069279,Yuki,Thompson,MD,OB/GYN,Prairie Regional Medical,9394 Main St,Champaign,IL,61820,(672) 860-2198,Yes,"Bronze,Silver,Gold",No,English,Midwest Regional Medical Center
+1879095530,Fatima,Martinez,DO,Radiology,Prairie Regional Medical,3942 Oak Ave,Aurora,IL,60505,(834) 271-4170,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",University Medical Center
+1808049250,Betty,Scott,MD,Infectious Disease,Independent Practice,5282 Health Plaza,Naperville,IL,60540,(204) 520-5033,Yes,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",Prairie Community Hospital
+1244209787,Margaret,Rodriguez,NP,Rheumatology,Independent Practice,5104 University Ave,Champaign,IL,61820,(311) 379-2343,Yes,"Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1772826911,John,Jones,MD,General Surgery,SilverShield Medical Group,9633 Center Rd,Evanston,IL,60201,(987) 804-4485,Yes,"Bronze,Silver,Gold",No,"English,Hindi",University Medical Center
+1606917752,Barbara,Hall,MD,Neurology,Heartland Medical Associates,2293 University Ave,Champaign,IL,61820,(722) 292-7500,Yes,"Bronze,Silver,Gold",Yes,"English,French",Midwest Regional Medical Center
+1966015789,Yuki,Anderson,PA-C,Cardiology,Community Care Clinic,2708 Maple Dr,Decatur,IL,62521,(779) 875-3395,No,Gold,Yes,"English,Spanish",Lake Shore Medical Center
+1348839570,John,Thompson,DO,Neurology,SilverShield Medical Group,3487 Commerce St,Joliet,IL,60431,(597) 680-8448,Yes,"Bronze,Silver,Gold",No,English,N/A (outpatient only)
+1659819889,Nancy,Thompson,MD,Nephrology,Prairie Regional Medical,6271 Health Plaza,Joliet,IL,60431,(801) 869-2275,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Lake Shore Medical Center
+1478921345,Matthew,Martinez,NP,Vascular Surgery,SilverShield Medical Group,8322 Maple Dr,Peoria,IL,61602,(369) 435-2263,Yes,"Silver,Gold",Yes,"English,Spanish",Midwest Regional Medical Center
+1488933925,Omar,Davis,MD,Pulmonology,Independent Practice,1956 University Ave,Peoria,IL,61602,(690) 415-3641,No,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1715776454,Fatima,Anderson,MD,Emergency Medicine,SilverShield Medical Group,9476 Maple Dr,Springfield,IL,62701,(370) 464-3949,No,"Bronze,Silver,Gold",Yes,"English,French",N/A (outpatient only)
+1810543344,Charles,Garcia,MD,Rheumatology,Community Care Clinic,7991 Maple Dr,Rockford,IL,61101,(620) 815-3338,Yes,"Bronze,Silver,Gold",No,"English,Spanish",N/A (outpatient only)
+1836147907,Margaret,Chen,MD,Infectious Disease,Midwest Health Partners,3865 Health Plaza,Evanston,IL,60201,(335) 311-1271,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1750162509,Michael,Thomas,NP,Vascular Surgery,SilverShield Medical Group,8806 Commerce St,Chicago,IL,60601,(295) 693-3135,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1849088260,Chen,Nguyen,MD,Allergy & Immunology,Community Care Clinic,6346 Medical Center Dr,Decatur,IL,62521,(959) 979-2600,No,"Silver,Gold",No,English,Midwest Regional Medical Center
+1189998443,Charles,Nelson,PA-C,Pulmonology,Heartland Medical Associates,3196 Main St,Springfield,IL,62701,(791) 735-2930,Yes,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1538994061,Sandra,Miller,MD,Pulmonology,Heartland Medical Associates,4381 Commerce St,Evanston,IL,60201,(778) 574-5514,No,"Silver,Gold",Yes,"English,Hindi",University Medical Center
+1618045811,Susan,Hall,PA-C,Nephrology,Community Care Clinic,4257 Lake Shore Dr,Decatur,IL,62521,(552) 992-7522,Yes,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1273726191,Michael,White,PA-C,Endocrinology,Independent Practice,9120 Center Rd,Springfield,IL,62701,(364) 598-1086,Yes,"Silver,Gold",Yes,"English,Hindi",Lake Shore Medical Center
+1194640346,John,Thompson,MD,Radiology,Midwest Health Partners,718 Health Plaza,Evanston,IL,60201,(828) 871-9536,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1787507560,Rahul,Kim,MD,Dermatology,Heartland Medical Associates,3290 Main St,Decatur,IL,62521,(722) 728-4795,Yes,"Bronze,Silver,Gold",No,"English,Spanish",N/A (outpatient only)
+1100308454,David,Garcia,MD,Speech Therapy,University Health Associates,5885 Health Plaza,Evanston,IL,60201,(800) 405-9482,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1879685499,Maria,Scott,DO,Radiology,Heartland Medical Associates,3807 Center Rd,Rockford,IL,61101,(665) 613-1076,Yes,"Silver,Gold",Yes,"English,Hindi",Springfield General Hospital
+1699825163,John,Hernandez,MD,Oncology,Midwest Health Partners,8509 Lake Shore Dr,Champaign,IL,61820,(788) 456-8254,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1913330750,Margaret,Chen,NP,Vascular Surgery,SilverShield Medical Group,7996 Oak Ave,Aurora,IL,60505,(269) 591-4610,Yes,Gold,Yes,"English,Mandarin",University Medical Center
+1675151857,James,Thompson,MD,Psychiatry,Midwest Health Partners,6636 Medical Center Dr,Chicago,IL,60601,(767) 382-8807,Yes,Gold,Yes,"English,Hindi",Prairie Community Hospital
+1296263306,Richard,Martinez,MD,Neurology,Great Lakes Health System,4448 Park Blvd,Rockford,IL,61101,(407) 455-6833,Yes,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1812346179,Rahul,Carter,MD,Speech Therapy,SilverShield Medical Group,8001 Medical Center Dr,Decatur,IL,62521,(522) 704-5501,No,"Silver,Gold",No,English,Midwest Regional Medical Center
+1905488247,Carlos,Wilson,MD,Urology,University Health Associates,7936 Commerce St,Springfield,IL,62701,(714) 555-7450,Yes,"Bronze,Silver,Gold",Yes,"English,French",University Medical Center
+1593997037,Daniel,Smith,MD,Urgent Care,Great Lakes Health System,6316 Center Rd,Chicago,IL,60601,(533) 570-5254,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Prairie Community Hospital
+1606103226,Yuki,Lewis,DO,Orthopedics,Community Care Clinic,7045 Park Blvd,Evanston,IL,60201,(917) 970-7099,Yes,"Bronze,Silver,Gold",No,English,Midwest Regional Medical Center
+1713546516,William,Wilson,MD,Plastic Surgery,Midwest Health Partners,4522 Park Blvd,Champaign,IL,61820,(642) 590-4212,Yes,"Silver,Gold",Yes,"English,Spanish,Portuguese",Springfield General Hospital
+1289630619,Mark,Martinez,MD,Vascular Surgery,Independent Practice,8072 Lake Shore Dr,Aurora,IL,60505,(775) 781-1781,No,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1973830502,Thomas,Rodriguez,DO,Rheumatology,Independent Practice,4356 Medical Center Dr,Joliet,IL,60431,(773) 770-5222,Yes,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1829699746,Omar,Jackson,MD,Infectious Disease,Prairie Regional Medical,4763 Medical Center Dr,Joliet,IL,60431,(889) 722-8987,No,"Bronze,Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1597950004,Barbara,Anderson,DO,Pulmonology,University Health Associates,1268 Oak Ave,Naperville,IL,60540,(551) 433-6136,Yes,Gold,No,"English,Hindi",N/A (outpatient only)
+1524616925,Nancy,Kim,DO,Occupational Therapy,Community Care Clinic,6882 Maple Dr,Naperville,IL,60540,(223) 328-4844,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Lake Shore Medical Center
+1210605413,Michael,Jones,NP,Nephrology,SilverShield Medical Group,531 Health Plaza,Champaign,IL,61820,(983) 285-2702,Yes,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1518594177,Betty,Harris,MD,Occupational Therapy,Heartland Medical Associates,7360 Maple Dr,Naperville,IL,60540,(739) 374-1468,Yes,Gold,No,"English,Spanish,Portuguese",Lake Shore Medical Center
+1601645174,Wei,Moore,PA-C,Rheumatology,Prairie Regional Medical,8935 Maple Dr,Decatur,IL,62521,(811) 667-8126,Yes,Gold,Yes,"English,Hindi",Midwest Regional Medical Center
+1964048388,Jennifer,Kim,MD,Radiology,University Health Associates,4356 Maple Dr,Aurora,IL,60505,(210) 200-9574,Yes,Gold,No,English,University Medical Center
+1108930425,Rahul,Rodriguez,MD,Family Medicine,University Health Associates,4899 Center Rd,Rockford,IL,61101,(207) 761-7121,Yes,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1275309282,Anthony,King,MD,Gastroenterology,Midwest Health Partners,7017 Park Blvd,Champaign,IL,61820,(982) 827-5454,Yes,"Bronze,Silver,Gold",No,English,Midwest Regional Medical Center
+1173512612,Susan,Wilson,MD,OB/GYN,Community Care Clinic,7518 Lake Shore Dr,Decatur,IL,62521,(703) 392-6253,Yes,"Silver,Gold",Yes,"English,Hindi",Springfield General Hospital
+1299648970,Michael,Young,MD,Cardiology,Community Care Clinic,234 Park Blvd,Chicago,IL,60601,(354) 215-9086,Yes,Gold,Yes,"English,Mandarin",Lake Shore Medical Center
+1498784578,Emily,Williams,DO,Pediatrics,Prairie Regional Medical,1018 Lake Shore Dr,Evanston,IL,60201,(273) 756-8702,Yes,"Silver,Gold",No,"English,Spanish,Portuguese",Lake Shore Medical Center
+1989328868,James,Davis,MD,Endocrinology,Community Care Clinic,4149 Main St,Rockford,IL,61101,(671) 952-2539,Yes,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1446886458,David,Williams,PA-C,Urology,Midwest Health Partners,4250 University Ave,Aurora,IL,60505,(403) 569-1853,Yes,"Bronze,Silver,Gold",Yes,"English,French",Lake Shore Medical Center
+1448443704,James,Anderson,MD,Infectious Disease,Midwest Health Partners,6584 Park Blvd,Springfield,IL,62701,(243) 795-8786,Yes,Gold,Yes,"English,Spanish",Midwest Regional Medical Center
+1636784164,Jennifer,Carter,DO,Pain Management,SilverShield Medical Group,1079 Medical Center Dr,Naperville,IL,60540,(918) 749-2759,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",University Medical Center
+1946711815,Matthew,Kim,MD,Family Medicine,University Health Associates,5968 Maple Dr,Aurora,IL,60505,(240) 696-8168,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1300388921,Wei,Walker,DO,Occupational Therapy,Community Care Clinic,4610 Center Rd,Champaign,IL,61820,(364) 270-9702,Yes,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",Prairie Community Hospital
+1681544961,Sandra,Chen,MD,Speech Therapy,University Health Associates,3139 Main St,Decatur,IL,62521,(572) 994-4912,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1833606377,Rahul,Perez,MD,Hematology,Heartland Medical Associates,5385 Health Plaza,Joliet,IL,60431,(313) 298-9572,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Springfield General Hospital
+1316980704,Michael,Martinez,MD,OB/GYN,SilverShield Medical Group,9455 Health Plaza,Peoria,IL,61602,(738) 838-5193,Yes,Gold,Yes,"English,Hindi",N/A (outpatient only)
+1176100340,James,White,NP,Pain Management,Midwest Health Partners,7768 Main St,Joliet,IL,60431,(771) 961-7814,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Springfield General Hospital
+1888448988,John,Allen,DO,Dermatology,Midwest Health Partners,1758 Park Blvd,Champaign,IL,61820,(594) 394-4164,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1699299989,Mark,Miller,MD,Radiology,Community Care Clinic,7097 Oak Ave,Naperville,IL,60540,(384) 763-7579,Yes,"Silver,Gold",Yes,"English,Mandarin",Prairie Community Hospital
+1690645339,Daniel,Hall,MD,Speech Therapy,University Health Associates,5399 Center Rd,Rockford,IL,61101,(776) 758-4504,No,"Bronze,Silver,Gold",No,"English,Mandarin",Lake Shore Medical Center
+1580499237,Ashley,Smith,MD,Psychiatry,SilverShield Medical Group,8580 Maple Dr,Aurora,IL,60505,(206) 507-4635,Yes,Gold,Yes,"English,Spanish,Portuguese",N/A (outpatient only)
+1982978122,Nancy,Perez,PA-C,Nephrology,Prairie Regional Medical,1644 Main St,Peoria,IL,61602,(564) 359-3267,Yes,Gold,Yes,"English,Spanish",Prairie Community Hospital
+1970884334,Betty,Garcia,MD,Endocrinology,Great Lakes Health System,1364 Medical Center Dr,Peoria,IL,61602,(377) 699-2562,Yes,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1927749187,Margaret,Walker,MD,Pulmonology,Midwest Health Partners,3814 Center Rd,Springfield,IL,62701,(849) 996-7266,Yes,Gold,Yes,"English,Mandarin",University Medical Center
+1706570606,Barbara,Clark,PA-C,Physical Therapy,Great Lakes Health System,2609 Main St,Evanston,IL,60201,(656) 970-9269,Yes,"Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1258927104,William,Lewis,DO,Ophthalmology,SilverShield Medical Group,9080 Health Plaza,Aurora,IL,60505,(287) 608-9221,No,"Silver,Gold",Yes,English,University Medical Center
+1312717408,Rahul,Patel,MD,Dermatology,Great Lakes Health System,4070 Oak Ave,Aurora,IL,60505,(995) 640-6298,Yes,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1473992719,Richard,Clark,DO,Hematology,SilverShield Medical Group,5094 Maple Dr,Joliet,IL,60431,(831) 652-3389,No,"Bronze,Silver,Gold",Yes,"English,Spanish",N/A (outpatient only)
+1501387022,Barbara,Garcia,DO,Occupational Therapy,SilverShield Medical Group,4082 Center Rd,Naperville,IL,60540,(494) 214-6624,Yes,Gold,Yes,English,Springfield General Hospital
+1456349916,Karen,Gonzalez,MD,Dermatology,Heartland Medical Associates,9091 University Ave,Decatur,IL,62521,(947) 344-1301,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",Midwest Regional Medical Center
+1164542674,Charles,Jackson,MD,Gastroenterology,SilverShield Medical Group,7717 Main St,Chicago,IL,60601,(597) 876-5445,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1515026155,Joseph,King,PA-C,Physical Therapy,Midwest Health Partners,5268 University Ave,Decatur,IL,62521,(744) 290-4054,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1123073060,Robert,Martin,PA-C,Psychiatry,Independent Practice,8127 Health Plaza,Naperville,IL,60540,(218) 555-6765,Yes,Gold,Yes,"English,Hindi",Prairie Community Hospital
+1971763327,Patricia,Thompson,MD,Vascular Surgery,SilverShield Medical Group,9192 Lake Shore Dr,Rockford,IL,61101,(355) 549-7436,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1757611451,Joseph,Gupta,MD,Infectious Disease,Prairie Regional Medical,7087 Lake Shore Dr,Decatur,IL,62521,(537) 659-9883,Yes,"Silver,Gold",Yes,"English,Hindi",University Medical Center
+1834491630,Richard,Wilson,MD,Physical Therapy,Prairie Regional Medical,7146 Maple Dr,Decatur,IL,62521,(361) 525-2111,Yes,"Silver,Gold",No,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1880695706,Mary,Clark,MD,Pulmonology,Heartland Medical Associates,7358 Lake Shore Dr,Naperville,IL,60540,(997) 392-2749,Yes,"Silver,Gold",Yes,"English,Spanish,Portuguese",University Medical Center
+1762441268,Nancy,Nelson,MD,Hematology,Great Lakes Health System,9870 Park Blvd,Rockford,IL,61101,(903) 226-6886,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1603330974,Sandra,Thomas,MD,Ophthalmology,Community Care Clinic,2353 Maple Dr,Rockford,IL,61101,(431) 233-7694,Yes,Gold,Yes,"English,Spanish",N/A (outpatient only)
+1820844854,Richard,White,DO,Orthopedics,Community Care Clinic,8127 Medical Center Dr,Peoria,IL,61602,(452) 637-7633,Yes,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1523216102,Yuki,Wilson,MD,Nephrology,SilverShield Medical Group,8630 Oak Ave,Peoria,IL,61602,(667) 243-5025,No,"Bronze,Silver,Gold",Yes,"English,Hindi",N/A (outpatient only)
+1152930584,Richard,Young,NP,Endocrinology,Heartland Medical Associates,4784 University Ave,Naperville,IL,60540,(632) 501-1893,Yes,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1637577213,Linda,Thomas,MD,Vascular Surgery,Prairie Regional Medical,6540 Health Plaza,Joliet,IL,60431,(661) 225-3930,No,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1368523822,Daniel,Anderson,DO,Pediatrics,Midwest Health Partners,7462 Medical Center Dr,Chicago,IL,60601,(736) 924-7292,Yes,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1459910894,Carlos,Taylor,MD,General Surgery,Prairie Regional Medical,3030 Main St,Evanston,IL,60201,(515) 516-8311,Yes,"Silver,Gold",Yes,"English,Spanish",Midwest Regional Medical Center
+1103793417,Yuki,Thompson,MD,Rheumatology,Community Care Clinic,8269 Commerce St,Springfield,IL,62701,(822) 705-4897,Yes,"Bronze,Silver,Gold",Yes,English,Lake Shore Medical Center
+1574460059,Jennifer,Nelson,MD,Family Medicine,Great Lakes Health System,9067 Lake Shore Dr,Decatur,IL,62521,(843) 770-4401,Yes,"Silver,Gold",Yes,English,N/A (outpatient only)
+1474757193,Robert,Taylor,MD,Urgent Care,Heartland Medical Associates,5524 Oak Ave,Springfield,IL,62701,(311) 626-3920,Yes,Gold,Yes,English,N/A (outpatient only)
+1721660320,Sandra,Williams,DO,Speech Therapy,Heartland Medical Associates,5389 Medical Center Dr,Evanston,IL,60201,(269) 976-8001,Yes,Gold,Yes,"English,Spanish",Springfield General Hospital
+1845841941,Nancy,Lewis,PA-C,Pulmonology,Great Lakes Health System,3525 Center Rd,Springfield,IL,62701,(311) 785-9666,Yes,"Bronze,Silver,Gold",No,English,University Medical Center
+1439827006,Thomas,Lopez,MD,Hematology,Independent Practice,2225 Center Rd,Decatur,IL,62521,(708) 732-9154,No,"Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1307828574,James,Davis,MD,Rheumatology,Midwest Health Partners,3496 Center Rd,Evanston,IL,60201,(623) 246-6468,Yes,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1316023047,Charles,Thompson,DO,Psychiatry,Heartland Medical Associates,8401 Commerce St,Joliet,IL,60431,(985) 206-2865,Yes,Gold,Yes,"English,French",University Medical Center
+1761417815,Mary,Thomas,MD,Oncology,Independent Practice,7949 University Ave,Springfield,IL,62701,(861) 339-8888,Yes,"Bronze,Silver,Gold",No,English,Lake Shore Medical Center
+1897344195,Patricia,Lopez,MD,Infectious Disease,Independent Practice,9196 Commerce St,Springfield,IL,62701,(413) 791-6434,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1464162131,Anthony,Gonzalez,MD,Infectious Disease,University Health Associates,3170 Center Rd,Chicago,IL,60601,(969) 515-6152,Yes,Gold,Yes,English,Lake Shore Medical Center
+1355166423,Sandra,Kim,MD,Dermatology,Heartland Medical Associates,2967 Oak Ave,Joliet,IL,60431,(238) 996-4311,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1636929225,Barbara,Jackson,DO,Pain Management,Community Care Clinic,8679 Lake Shore Dr,Joliet,IL,60431,(346) 987-2609,Yes,"Silver,Gold",Yes,English,Lake Shore Medical Center
+1866305263,Chen,Davis,MD,Psychiatry,SilverShield Medical Group,9836 Oak Ave,Joliet,IL,60431,(678) 247-2689,Yes,"Bronze,Silver,Gold",No,"English,French",Midwest Regional Medical Center
+1444542674,Richard,Jackson,MD,Gastroenterology,Independent Practice,7327 Oak Ave,Aurora,IL,60505,(352) 361-5483,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1476151232,Maria,Clark,MD,Cardiology,Heartland Medical Associates,9505 Park Blvd,Naperville,IL,60540,(272) 518-6549,No,"Bronze,Silver,Gold",Yes,English,Lake Shore Medical Center
+1825308245,Patricia,Miller,MD,Internal Medicine,Midwest Health Partners,7087 Health Plaza,Naperville,IL,60540,(921) 810-8304,Yes,Gold,No,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1865469134,Wei,Garcia,NP,Infectious Disease,Prairie Regional Medical,1622 University Ave,Chicago,IL,60601,(666) 517-8625,No,"Silver,Gold",Yes,"English,Spanish",University Medical Center
+1377082043,Sandra,Patel,MD,Physical Therapy,Independent Practice,5420 University Ave,Peoria,IL,61602,(230) 266-8787,Yes,Gold,Yes,English,Midwest Regional Medical Center
+1403071541,Matthew,Nelson,MD,Cardiology,Midwest Health Partners,6746 Oak Ave,Joliet,IL,60431,(769) 865-2162,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1543929865,Lisa,Carter,MD,Nephrology,Prairie Regional Medical,8003 Health Plaza,Chicago,IL,60601,(548) 413-8063,No,"Bronze,Silver,Gold",No,"English,Hindi",N/A (outpatient only)
+1353568773,Susan,Jones,MD,Plastic Surgery,Community Care Clinic,1973 Center Rd,Decatur,IL,62521,(674) 533-2599,No,"Silver,Gold",No,English,Springfield General Hospital
+1742375910,Michael,Nelson,MD,Oncology,Community Care Clinic,1107 Oak Ave,Rockford,IL,61101,(342) 794-1003,Yes,"Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1518740692,Yuki,Wilson,NP,Dermatology,Great Lakes Health System,5287 Lake Shore Dr,Decatur,IL,62521,(895) 511-8122,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1534003670,William,Young,MD,Radiology,SilverShield Medical Group,113 Commerce St,Joliet,IL,60431,(312) 488-1510,Yes,"Bronze,Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1864261139,Anthony,Patel,MD,Pulmonology,Great Lakes Health System,2941 University Ave,Naperville,IL,60540,(392) 768-7301,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1234807378,William,Smith,DO,Emergency Medicine,SilverShield Medical Group,2459 University Ave,Evanston,IL,60201,(339) 286-3248,No,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1587902225,Aisha,Nguyen,PA-C,Plastic Surgery,Community Care Clinic,6403 Medical Center Dr,Rockford,IL,61101,(390) 634-1121,No,"Silver,Gold",No,English,University Medical Center
+1718853630,Sandra,Williams,MD,Infectious Disease,Community Care Clinic,6138 Oak Ave,Decatur,IL,62521,(693) 907-2311,Yes,"Bronze,Silver,Gold",No,English,University Medical Center
+1184003766,Chen,Carter,DO,Neurology,Community Care Clinic,1379 Commerce St,Decatur,IL,62521,(519) 827-1864,Yes,"Bronze,Silver,Gold",Yes,English,Lake Shore Medical Center
+1650467819,Priya,Wilson,DO,Pulmonology,Independent Practice,4927 Lake Shore Dr,Naperville,IL,60540,(236) 911-5981,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1715103737,Patricia,Young,MD,Family Medicine,Heartland Medical Associates,8042 Oak Ave,Naperville,IL,60540,(717) 278-5552,Yes,"Silver,Gold",No,"English,Mandarin",Prairie Community Hospital
+1115250362,Linda,Nelson,MD,Pain Management,Prairie Regional Medical,7417 Medical Center Dr,Naperville,IL,60540,(467) 917-4869,No,"Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1255767997,Omar,Taylor,NP,Speech Therapy,University Health Associates,6377 Park Blvd,Peoria,IL,61602,(943) 852-3740,Yes,"Bronze,Silver,Gold",No,English,N/A (outpatient only)
+1383892497,Linda,Brown,MD,Rheumatology,University Health Associates,7902 Lake Shore Dr,Peoria,IL,61602,(964) 970-9724,Yes,"Bronze,Silver,Gold",Yes,English,Prairie Community Hospital
+1255853446,Chen,Nguyen,MD,Psychiatry,Community Care Clinic,6358 Medical Center Dr,Champaign,IL,61820,(899) 242-2595,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Prairie Community Hospital
+1386783352,Michael,Thompson,MD,Endocrinology,Community Care Clinic,4061 Center Rd,Rockford,IL,61101,(732) 545-3947,Yes,"Bronze,Silver,Gold",Yes,"English,French",Springfield General Hospital
+1993019801,John,Smith,MD,OB/GYN,Midwest Health Partners,7406 Medical Center Dr,Rockford,IL,61101,(942) 490-5127,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Springfield General Hospital
+1161076482,Omar,White,MD,Emergency Medicine,Midwest Health Partners,2065 Oak Ave,Decatur,IL,62521,(333) 584-4027,Yes,"Silver,Gold",No,"English,Mandarin",Lake Shore Medical Center
+1809182681,John,Chen,MD,Speech Therapy,University Health Associates,5398 Lake Shore Dr,Naperville,IL,60540,(999) 275-5543,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1377281586,Thomas,Thomas,NP,Pediatrics,Community Care Clinic,3387 Center Rd,Evanston,IL,60201,(382) 860-9061,Yes,"Silver,Gold",Yes,"English,Spanish",University Medical Center
+1790779098,Michael,Kim,MD,OB/GYN,SilverShield Medical Group,1294 Oak Ave,Decatur,IL,62521,(945) 456-8305,Yes,"Bronze,Silver,Gold",Yes,"English,French",N/A (outpatient only)
+1100931617,Robert,King,MD,Cardiology,Independent Practice,6511 Center Rd,Springfield,IL,62701,(727) 924-9039,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",N/A (outpatient only)
+1938524752,John,Gonzalez,MD,Family Medicine,University Health Associates,7998 Oak Ave,Decatur,IL,62521,(748) 567-6463,Yes,"Bronze,Silver,Gold",Yes,"English,French",N/A (outpatient only)
+1197352922,Sandra,Gonzalez,DO,Pediatrics,Community Care Clinic,4850 Park Blvd,Naperville,IL,60540,(767) 240-7294,Yes,Gold,Yes,English,N/A (outpatient only)
+1839639093,Matthew,Martinez,DO,Vascular Surgery,Community Care Clinic,3204 Maple Dr,Springfield,IL,62701,(397) 225-4907,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",University Medical Center
+1790853694,Betty,Martinez,PA-C,Plastic Surgery,Community Care Clinic,368 Main St,Joliet,IL,60431,(257) 545-1701,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",N/A (outpatient only)
+1816525550,Chen,Chen,PA-C,Cardiology,Great Lakes Health System,1280 Main St,Naperville,IL,60540,(700) 869-1312,No,"Bronze,Silver,Gold",Yes,"English,Spanish",N/A (outpatient only)
+1796629113,William,Smith,MD,Emergency Medicine,SilverShield Medical Group,5135 Oak Ave,Peoria,IL,61602,(825) 374-2047,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1336837948,John,Jackson,MD,Oncology,University Health Associates,5412 Oak Ave,Decatur,IL,62521,(758) 340-6268,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Springfield General Hospital
+1229649486,Nancy,Taylor,MD,Orthopedics,Independent Practice,9167 Maple Dr,Peoria,IL,61602,(449) 795-1666,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1116782928,Rahul,Garcia,MD,Family Medicine,Prairie Regional Medical,1560 Center Rd,Aurora,IL,60505,(626) 910-8798,Yes,"Silver,Gold",Yes,"English,French",Prairie Community Hospital
+1661660243,Donald,Gupta,MD,Orthopedics,SilverShield Medical Group,9869 Maple Dr,Peoria,IL,61602,(826) 290-5934,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1306054135,Linda,Lopez,DO,Hematology,Independent Practice,8942 Commerce St,Rockford,IL,61101,(675) 988-4409,Yes,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1835774878,Priya,Martinez,MD,Orthopedics,SilverShield Medical Group,985 Medical Center Dr,Aurora,IL,60505,(414) 645-5118,Yes,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1895016576,Patricia,Gonzalez,MD,Orthopedics,SilverShield Medical Group,8047 Commerce St,Chicago,IL,60601,(272) 440-8287,Yes,"Bronze,Silver,Gold",Yes,"English,French",N/A (outpatient only)
+1449701561,Joseph,Davis,DO,Neurology,Midwest Health Partners,3984 Health Plaza,Rockford,IL,61101,(584) 425-2204,No,"Bronze,Silver,Gold",Yes,English,Lake Shore Medical Center
+1255629507,Karen,Carter,NP,Orthopedics,University Health Associates,6219 Maple Dr,Peoria,IL,61602,(937) 398-6875,Yes,"Silver,Gold",No,"English,Spanish",Springfield General Hospital
+1843255395,Carlos,Brown,MD,Cardiology,Midwest Health Partners,7727 University Ave,Evanston,IL,60201,(375) 978-6629,Yes,Gold,Yes,"English,Spanish,Portuguese",N/A (outpatient only)
+1756623287,David,Wilson,PA-C,General Surgery,Great Lakes Health System,1516 Health Plaza,Champaign,IL,61820,(700) 421-8757,No,Gold,Yes,"English,French",Lake Shore Medical Center
+1890466024,Lisa,Martin,DO,Pulmonology,Great Lakes Health System,9795 Maple Dr,Decatur,IL,62521,(205) 627-1724,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1523398047,Priya,Miller,NP,Ophthalmology,Great Lakes Health System,1461 Commerce St,Springfield,IL,62701,(909) 949-7662,Yes,"Silver,Gold",No,"English,Mandarin",Midwest Regional Medical Center
+1795398363,Jennifer,Johnson,NP,Urgent Care,Heartland Medical Associates,2750 University Ave,Decatur,IL,62521,(965) 797-1399,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",N/A (outpatient only)
+1535252390,Susan,Hall,NP,Physical Therapy,SilverShield Medical Group,1258 Health Plaza,Joliet,IL,60431,(743) 233-5859,No,Gold,Yes,"English,Spanish,Portuguese",N/A (outpatient only)
+1186929107,Yuki,Lewis,MD,Urology,Independent Practice,944 Oak Ave,Evanston,IL,60201,(574) 676-1669,Yes,Gold,Yes,"English,French",University Medical Center
+1856852333,John,Perez,MD,Cardiology,Independent Practice,4009 Commerce St,Chicago,IL,60601,(864) 689-4437,Yes,Gold,No,"English,Mandarin",University Medical Center
+1830387900,Dorothy,Moore,MD,Pediatrics,Independent Practice,5756 University Ave,Peoria,IL,61602,(713) 739-3010,No,"Bronze,Silver,Gold",No,English,University Medical Center
+1495293592,John,Jackson,NP,Pediatrics,Midwest Health Partners,6500 Maple Dr,Aurora,IL,60505,(278) 311-3699,Yes,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1319318381,Chen,Johnson,MD,Pulmonology,Prairie Regional Medical,7864 Medical Center Dr,Evanston,IL,60201,(654) 955-1351,Yes,"Silver,Gold",Yes,English,Midwest Regional Medical Center
+1996518070,Chen,Lewis,MD,Infectious Disease,Independent Practice,5446 University Ave,Decatur,IL,62521,(881) 913-9686,No,"Bronze,Silver,Gold",No,"English,Hindi",Midwest Regional Medical Center
+1947556242,Betty,Anderson,MD,Neurology,Community Care Clinic,6193 Lake Shore Dr,Springfield,IL,62701,(351) 561-5659,No,"Silver,Gold",Yes,"English,French",University Medical Center
+1406281188,Susan,Thomas,MD,Orthopedics,Great Lakes Health System,2015 Main St,Joliet,IL,60431,(788) 329-8223,Yes,Gold,Yes,"English,Spanish",University Medical Center
+1859279763,Robert,Clark,DO,Cardiology,Independent Practice,7447 Commerce St,Naperville,IL,60540,(746) 508-2990,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Midwest Regional Medical Center
+1591817492,Daniel,Taylor,MD,Occupational Therapy,Independent Practice,4942 University Ave,Aurora,IL,60505,(972) 787-3409,No,Gold,Yes,"English,French",Lake Shore Medical Center
+1143036559,William,Perez,DO,Psychiatry,SilverShield Medical Group,6680 Center Rd,Rockford,IL,61101,(656) 565-2515,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",University Medical Center
+1338525147,Nancy,Jackson,MD,Pediatrics,Community Care Clinic,1531 Commerce St,Evanston,IL,60201,(399) 702-6206,Yes,Gold,Yes,"English,Spanish",N/A (outpatient only)
+1559175471,Sandra,King,DO,Family Medicine,Heartland Medical Associates,5751 Medical Center Dr,Aurora,IL,60505,(656) 774-2435,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1409918418,David,Nguyen,MD,Cardiology,Midwest Health Partners,2453 Park Blvd,Aurora,IL,60505,(686) 737-6495,Yes,"Bronze,Silver,Gold",Yes,English,Springfield General Hospital
+1539655012,Nancy,Gupta,MD,Nephrology,Community Care Clinic,9404 Maple Dr,Rockford,IL,61101,(390) 590-5742,No,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",University Medical Center
+1426325581,Rahul,Perez,NP,Neurology,SilverShield Medical Group,140 Maple Dr,Aurora,IL,60505,(507) 855-8742,Yes,Gold,Yes,"English,Spanish",Lake Shore Medical Center
+1838565998,Lisa,Johnson,DO,Speech Therapy,Heartland Medical Associates,8178 Oak Ave,Decatur,IL,62521,(963) 570-8872,No,Gold,Yes,"English,French",Springfield General Hospital
+1500722831,Aisha,Wilson,MD,General Surgery,Heartland Medical Associates,2768 Center Rd,Springfield,IL,62701,(349) 527-8553,Yes,Gold,Yes,English,Prairie Community Hospital
+1487796299,Mark,Walker,MD,Psychiatry,Heartland Medical Associates,8777 Oak Ave,Champaign,IL,61820,(398) 984-4002,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Prairie Community Hospital
+1439528365,Betty,Moore,DO,OB/GYN,Independent Practice,2454 Main St,Naperville,IL,60540,(730) 488-7111,No,"Bronze,Silver,Gold",No,"English,Spanish",Springfield General Hospital
+1333942807,Barbara,Hernandez,MD,Plastic Surgery,Great Lakes Health System,9253 Center Rd,Champaign,IL,61820,(744) 929-2867,No,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1118660989,Priya,Walker,MD,Physical Therapy,Independent Practice,2377 University Ave,Decatur,IL,62521,(735) 981-6604,Yes,Gold,Yes,"English,French",Springfield General Hospital
+1338754922,William,Taylor,MD,Psychiatry,Prairie Regional Medical,3538 Maple Dr,Chicago,IL,60601,(635) 907-2830,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1145652216,Richard,Miller,MD,Allergy & Immunology,SilverShield Medical Group,7785 Oak Ave,Aurora,IL,60505,(244) 267-5942,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1730933965,Richard,Thomas,DO,Family Medicine,Midwest Health Partners,2484 Lake Shore Dr,Decatur,IL,62521,(556) 560-3630,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1919527047,James,Lopez,MD,Physical Therapy,Great Lakes Health System,4717 Maple Dr,Champaign,IL,61820,(204) 942-2616,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1732842568,Susan,Kim,DO,Orthopedics,Independent Practice,6319 Health Plaza,Rockford,IL,61101,(726) 433-7677,Yes,Gold,Yes,English,Springfield General Hospital
+1658053247,William,Martinez,DO,Physical Therapy,Heartland Medical Associates,9228 Main St,Chicago,IL,60601,(535) 705-2895,No,Gold,Yes,"English,Hindi",N/A (outpatient only)
+1435014871,Donald,Harris,PA-C,Pulmonology,Heartland Medical Associates,7111 Park Blvd,Chicago,IL,60601,(687) 895-7020,Yes,"Bronze,Silver,Gold",Yes,"English,French",Springfield General Hospital
+1525598787,Donald,Lopez,DO,OB/GYN,Prairie Regional Medical,6568 Health Plaza,Decatur,IL,62521,(304) 959-3764,Yes,Gold,Yes,"English,Mandarin",Midwest Regional Medical Center
+1738834325,Ashley,Davis,MD,Plastic Surgery,University Health Associates,8277 Lake Shore Dr,Decatur,IL,62521,(807) 479-7557,Yes,"Bronze,Silver,Gold",Yes,English,University Medical Center
+1399456538,Barbara,Chen,DO,OB/GYN,Heartland Medical Associates,8117 University Ave,Rockford,IL,61101,(843) 337-1486,Yes,"Bronze,Silver,Gold",Yes,English,N/A (outpatient only)
+1128721392,Susan,King,MD,Urgent Care,Independent Practice,2602 Lake Shore Dr,Decatur,IL,62521,(838) 298-2253,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1634615027,Rahul,Hernandez,MD,Nephrology,Independent Practice,8956 Commerce St,Springfield,IL,62701,(982) 232-8051,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1575191040,Emily,Williams,MD,Orthopedics,Heartland Medical Associates,2789 University Ave,Evanston,IL,60201,(337) 519-7374,No,"Bronze,Silver,Gold",Yes,"English,French",University Medical Center
+1835914904,Wei,Wilson,NP,Ophthalmology,Prairie Regional Medical,8401 Main St,Evanston,IL,60201,(469) 706-7189,Yes,Gold,No,English,Springfield General Hospital
+1734005271,Robert,Wilson,DO,Radiology,SilverShield Medical Group,5691 Health Plaza,Chicago,IL,60601,(638) 553-6855,No,Gold,Yes,"English,French",Midwest Regional Medical Center
+1365873433,Lisa,Allen,MD,Pediatrics,Midwest Health Partners,5095 Oak Ave,Joliet,IL,60431,(373) 220-9821,Yes,"Bronze,Silver,Gold",Yes,"English,French",Lake Shore Medical Center
+1709938401,Aisha,Gupta,MD,Family Medicine,Community Care Clinic,9733 Main St,Joliet,IL,60431,(586) 784-7394,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1207435042,Karen,Lewis,NP,Urology,Independent Practice,2830 Center Rd,Aurora,IL,60505,(572) 646-4305,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",Prairie Community Hospital
+1151036409,Betty,Wilson,MD,Allergy & Immunology,Great Lakes Health System,1606 Center Rd,Chicago,IL,60601,(806) 544-5478,Yes,"Bronze,Silver,Gold",Yes,English,Midwest Regional Medical Center
+1472928235,John,Allen,PA-C,Allergy & Immunology,Heartland Medical Associates,7192 Commerce St,Joliet,IL,60431,(404) 624-7591,Yes,"Bronze,Silver,Gold",Yes,"English,French",University Medical Center
+1293918682,Mary,Lopez,MD,Infectious Disease,Community Care Clinic,3589 University Ave,Aurora,IL,60505,(853) 745-8106,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Lake Shore Medical Center
+1258638580,Lisa,Taylor,MD,General Surgery,University Health Associates,6821 Medical Center Dr,Chicago,IL,60601,(849) 408-7757,Yes,Gold,Yes,"English,Mandarin",N/A (outpatient only)
+1745568239,Lisa,Patel,MD,OB/GYN,Prairie Regional Medical,3244 Main St,Rockford,IL,61101,(517) 675-8952,No,"Bronze,Silver,Gold",Yes,"English,Spanish",Midwest Regional Medical Center
+1392822240,William,Johnson,MD,Allergy & Immunology,Heartland Medical Associates,9122 Maple Dr,Springfield,IL,62701,(939) 697-1326,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Prairie Community Hospital
+1168270327,Mark,Hall,DO,Endocrinology,Prairie Regional Medical,3967 Oak Ave,Decatur,IL,62521,(952) 712-2976,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",University Medical Center
+1231293747,Daniel,Lewis,MD,Occupational Therapy,University Health Associates,3965 Health Plaza,Rockford,IL,61101,(347) 309-3869,Yes,Gold,Yes,English,Prairie Community Hospital
+1732950344,Patricia,Martinez,PA-C,Radiology,Midwest Health Partners,5285 Commerce St,Evanston,IL,60201,(686) 899-5036,Yes,"Silver,Gold",No,English,N/A (outpatient only)
+1494857051,Betty,Johnson,MD,Internal Medicine,SilverShield Medical Group,4026 Lake Shore Dr,Champaign,IL,61820,(593) 516-6945,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1517117581,James,Patel,MD,Psychiatry,Midwest Health Partners,3957 Lake Shore Dr,Rockford,IL,61101,(364) 649-6196,No,"Bronze,Silver,Gold",No,"English,Spanish,Portuguese",Springfield General Hospital
+1983901883,Rahul,Rodriguez,MD,Pain Management,Independent Practice,7020 Oak Ave,Naperville,IL,60540,(915) 467-9295,Yes,Gold,Yes,"English,Hindi",N/A (outpatient only)
+1973411714,Maria,Clark,NP,Physical Therapy,SilverShield Medical Group,953 Maple Dr,Peoria,IL,61602,(856) 339-1050,No,"Silver,Gold",No,"English,Mandarin",University Medical Center
+1188295994,Linda,Anderson,MD,Urology,Prairie Regional Medical,9832 Health Plaza,Joliet,IL,60431,(662) 689-3187,Yes,"Silver,Gold",No,"English,Spanish,Portuguese",Prairie Community Hospital
+1313313546,Jennifer,Gupta,DO,Orthopedics,University Health Associates,6282 Center Rd,Rockford,IL,61101,(221) 223-4747,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1281200333,Patricia,Patel,MD,Pulmonology,Heartland Medical Associates,2545 Oak Ave,Joliet,IL,60431,(374) 780-2922,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1988260922,Rahul,Davis,MD,Physical Therapy,Great Lakes Health System,3221 Lake Shore Dr,Aurora,IL,60505,(964) 706-7259,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1984858711,Charles,Jackson,MD,Orthopedics,University Health Associates,2491 Main St,Aurora,IL,60505,(468) 441-8388,Yes,Gold,Yes,English,Springfield General Hospital
+1603457793,William,Clark,MD,Urgent Care,Great Lakes Health System,6383 Health Plaza,Decatur,IL,62521,(462) 274-2561,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Lake Shore Medical Center
+1480428530,Omar,Nelson,MD,Family Medicine,Heartland Medical Associates,8366 Center Rd,Evanston,IL,60201,(509) 604-7076,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Midwest Regional Medical Center
+1379486036,David,Hernandez,NP,Pain Management,Independent Practice,7769 Maple Dr,Chicago,IL,60601,(524) 927-9690,No,"Silver,Gold",No,English,Prairie Community Hospital
+1147418754,William,Martinez,MD,Occupational Therapy,Independent Practice,7146 Lake Shore Dr,Aurora,IL,60505,(827) 979-5321,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",N/A (outpatient only)
+1627502276,Barbara,Perez,NP,Internal Medicine,Great Lakes Health System,2535 Main St,Rockford,IL,61101,(387) 236-8704,Yes,"Silver,Gold",Yes,English,Springfield General Hospital
+1631406400,Robert,Kim,DO,Physical Therapy,Community Care Clinic,7599 University Ave,Chicago,IL,60601,(937) 351-3025,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Prairie Community Hospital
+1293976787,David,Hernandez,MD,Infectious Disease,Great Lakes Health System,9660 Main St,Champaign,IL,61820,(985) 784-3958,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center

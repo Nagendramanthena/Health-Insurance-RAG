@@ -1,0 +1,67 @@
+
+⚙️  Building retrieval pipeline...
+  📦 Loading ChromaDB vector store...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 23998.07it/s]
+    ✅ Vector retriever ready (k=20)
+  📝 Building BM25 index from stored documents...
+    ✅ BM25 retriever ready (k=20, 295 documents indexed)
+    ✅ Ensemble retriever ready (weights: BM25=0.4, Vector=0.6)
+  🔄 Loading reranker model: BAAI/bge-reranker-base...
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 22892.93it/s]
+    ✅ Reranker ready (top_n=5)
+  🎯 Full pipeline ready!
+
+
+--- Analyzing retrieval for query: 'Will you pay less if you use a network provider?' ---
+
+--- Full Document Object Inspection ---
+{'id': None, 'metadata': {'doc_type': 'summary_of_benefits_bronze', 'plan_tier': 'Bronze', 'source': '/Users/nagendravarma/Library/Mobile Documents/com~apple~CloudDocs/Health-Insurance-RAG/Documents/SBC_BRONZE_SilverShield.pdf', 'source_file': 'SBC_BRONZE_SilverShield.pdf'}, 'page_content': ">>> DOCUMENT CONTEXT <<<\nSource: SBC_BRONZE_SilverShield.pdf\nDocument Type: Summary Of Benefits Bronze\nPlan Tier: Bronze\n------------------------\nIMPORTANT QUESTIONS\n charges, and health care this plan doesn't cover.. What is not included in the out-of-pocket limit?, Why This Matters = Even though you pay these expenses, they don't count toward the out-of-pocket limit.. Will you pay less if you use a network provider?, Answers = Yes. See silvershieldh ealthplans.com or call 1-800-555-0100.. Will you pay less if you use a network provider?, Why This Matters = This plan uses a network of providers. If you use an in-network doctor or other health care provider, this plan will pay more of the costs than if you use an out-of-network provider.. Do you need a referral to see a specialist?, Answers = No.. Do you need a referral to see a specialist?, Why This Matters = You can see the specialist you choose without a referral.", 'type': 'Document'}
+
+[Chunk 1]
+Metadata: {'doc_type': 'summary_of_benefits_bronze', 'plan_tier': 'Bronze', 'source': '/Users/nagendravarma/Library/Mobile Documents/com~apple~CloudDocs/Health-Insurance-RAG/Documents/SBC_BRONZE_SilverShield.pdf', 'source_file': 'SBC_BRONZE_SilverShield.pdf'}
+Content Preview: >>> DOCUMENT CONTEXT <<<
+Source: SBC_BRONZE_SilverShield.pdf
+Document Type: Summary Of Benefits Bronze
+Plan Tier: Bronze
+------------------------
+IMPORTANT QUESTIONS
+ charges, and health care this plan doesn't cover.. What is not included in the out-of-pocket limit?, Why This Matters = Even though you pay these expenses, they don't count toward the out-of-pocket limit.. Will you pay less if you use a network provider?, Answers = Yes. See silvershieldh ealthplans.com or call 1-800-555-0100.. Will...
+
+[Chunk 2]
+Metadata: {'plan_tier': 'Silver', 'source_file': 'SBC_SILVER_SilverShield.pdf', 'source': '/Users/nagendravarma/Library/Mobile Documents/com~apple~CloudDocs/Health-Insurance-RAG/Documents/SBC_SILVER_SilverShield.pdf', 'doc_type': 'summary_of_benefits_silver'}
+Content Preview: >>> DOCUMENT CONTEXT <<<
+Source: SBC_SILVER_SilverShield.pdf
+Document Type: Summary Of Benefits Silver
+Plan Tier: Silver
+------------------------
+IMPORTANT QUESTIONS
+ charges, and health care this plan doesn't cover.. What is not included in the out-of-pocket limit?, Why This Matters = Even though you pay these expenses, they don't count toward the out-of-pocket limit.. Will you pay less if you use a network provider?, Answers = Yes. See silvershieldh ealthplans.com or call 1-800-555-0100.. Will...
+
+[Chunk 3]
+Metadata: {'plan_tier': 'Gold', 'doc_type': 'summary_of_benefits_gold', 'source_file': 'SBC_GOLD_SilverShield.pdf', 'source': '/Users/nagendravarma/Library/Mobile Documents/com~apple~CloudDocs/Health-Insurance-RAG/Documents/SBC_GOLD_SilverShield.pdf'}
+Content Preview: >>> DOCUMENT CONTEXT <<<
+Source: SBC_GOLD_SilverShield.pdf
+Document Type: Summary Of Benefits Gold
+Plan Tier: Gold
+------------------------
+IMPORTANT QUESTIONS
+ charges, and health care this plan doesn't cover.. What is not included in the out-of-pocket limit?, Why This Matters = Even though you pay these expenses, they don't count toward the out-of-pocket limit.. Will you pay less if you use a network provider?, Answers = Yes. See silvershieldh ealthplans.com or call 1-800-555-0100.. Will you p...
+
+[Chunk 4]
+Metadata: {'doc_type': 'member_faq_glossary', 'plan_tier': 'all', 'source_file': 'MemberFAQ_Glossary_SilverShield.pdf', 'source': '/Users/nagendravarma/Library/Mobile Documents/com~apple~CloudDocs/Health-Insurance-RAG/Documents/MemberFAQ_Glossary_SilverShield.pdf'}
+Content Preview: >>> DOCUMENT CONTEXT <<<
+Source: MemberFAQ_Glossary_SilverShield.pdf
+Document Type: Member Faq Glossary
+------------------------
+Allowed Amount
+The maximum payment the plan will pay for a covered health care service.  May  also  be  called  'eligible  expense,' 'payment allowance,' or 'negotiated rate.' If your provider charges more than the allowed amount, you may owe the difference (balance billing) if using an out-of-network provider....
+
+[Chunk 5]
+Metadata: {'source_file': 'MemberFAQ_Glossary_SilverShield.pdf', 'source': '/Users/nagendravarma/Library/Mobile Documents/com~apple~CloudDocs/Health-Insurance-RAG/Documents/MemberFAQ_Glossary_SilverShield.pdf', 'doc_type': 'member_faq_glossary', 'plan_tier': 'all'}
+Content Preview: >>> DOCUMENT CONTEXT <<<
+Source: MemberFAQ_Glossary_SilverShield.pdf
+Document Type: Member Faq Glossary
+------------------------
+In-Network
+Providers (doctors, hospitals, labs, etc.) who have contracts with SilverShield to provide services at negotiated rates. Using  in-network  providers  results  in  lower  cost-sharing  for  you.  Always  verify  a  provider's  network  status  before receiving services....
