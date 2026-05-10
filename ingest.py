@@ -32,6 +32,8 @@ from config import (
     CSV_CHUNK_SIZE,
     EMBEDDING_MODEL,
     COLLECTION_NAME,
+    RECORD_CSV_MIN_ROWS,
+    RECORD_CSV_MIN_COLS,
 )
 
 console = Console()
@@ -55,31 +57,150 @@ def _classify_document(filename: str) -> dict:
 
 
 def _is_table_chunk(text: str) -> bool:
-    """Check if the text chunk looks like a Markdown table."""
+    """Return True if the chunk contains a markdown table."""
     return any(line.strip().startswith("|") for line in text.splitlines())
 
 
+def _is_record_style_csv(df: pd.DataFrame) -> bool:
+    """
+    Return True if this CSV looks like a record-per-row file
+    (e.g. a drug formulary) rather than a summary/batch table.
+
+    Heuristic: more than RECORD_CSV_MIN_ROWS rows AND every row
+    has at least RECORD_CSV_MIN_COLS non-null values. When both
+    are true, each row is an independent record and should be
+    chunked individually instead of batched.
+    """
+    if len(df) < RECORD_CSV_MIN_ROWS:
+        return False
+    avg_non_null = df.notna().sum(axis=1).mean()
+    return avg_non_null >= RECORD_CSV_MIN_COLS
+
+
 def _build_contextual_header(metadata: dict) -> str:
-    """Create a descriptive header for retrieval context."""
-    # Note: This header is stored in metadata["display_header"] and 
-    # should be prepended to chunks at retrieval time, not during embedding.
+    """
+    Create a descriptive header for retrieval context.
+    Stored in metadata['display_header'] — prepended at retrieval
+    time by the retriever, NOT during embedding.
+    """
     source = metadata.get("source_file", "Unknown")
     doc_type = metadata.get("doc_type", "Unknown").replace("_", " ").title()
     tier = metadata.get("plan_tier", "all")
-    
-    header = f">>> DOCUMENT CONTEXT <<<\n"
+
+    header = ">>> DOCUMENT CONTEXT <<<\n"
     header += f"Source: {source}\n"
     header += f"Document Type: {doc_type}\n"
     if tier != "all":
         header += f"Plan Tier: {tier}\n"
-    
+    if "drug_tier" in metadata:
+        header += f"Drug Tier: {metadata['drug_tier']}\n"
+    if "drug_class" in metadata:
+        header += f"Drug Class: {metadata['drug_class']}\n"
     if "row_range" in metadata:
         header += f"CSV Rows: {metadata['row_range']}\n"
     if "group_value" in metadata:
         header += f"Group: {metadata['group_value']}\n"
-        
     header += "------------------------\n"
     return header
+
+
+# ──────────────────────────────────────────────────────────────
+# CSV chunking strategies
+# ──────────────────────────────────────────────────────────────
+
+def _chunk_record_csv(df: pd.DataFrame, filename: str, classification: dict) -> list[Document]:
+    """
+    One Document per row for record-style CSVs like a drug formulary.
+
+    Each row becomes a natural-language sentence:
+        drug_name: metformin | brand_name: Glucophage | tier: 1 | ...
+
+    Key columns (tier, drug_class, prior_auth_required) are also
+    stored as filterable metadata fields in ChromaDB so the retriever
+    can pre-filter before doing semantic search.
+    """
+    docs = []
+    for idx, row in df.iterrows():
+        # Natural language representation — every non-null field
+        content = " | ".join(
+            f"{k}: {v}" for k, v in row.items() if pd.notna(v)
+        )
+
+        # Flat metadata — pull out high-value filter columns if present
+        metadata = {
+            "source_file": filename,
+            "doc_type": classification["doc_type"],
+            "plan_tier": classification["plan_tier"],
+            "chunk_type": "record",
+            "row_index": int(idx),
+        }
+
+        # Promote key columns to filterable metadata fields
+        for col, meta_key in [
+            ("tier",                 "drug_tier"),
+            ("drug_class",           "drug_class"),
+            ("prior_auth_required",  "prior_auth_required"),
+            ("step_therapy_required","step_therapy_required"),
+            ("formulary_status",     "formulary_status"),
+            ("specialty_pharmacy_only", "specialty_pharmacy_only"),
+        ]:
+            if col in row and pd.notna(row[col]):
+                metadata[meta_key] = str(row[col])
+
+        metadata["display_header"] = _build_contextual_header(metadata)
+        docs.append(Document(page_content=content, metadata=metadata))
+
+    return docs
+
+
+def _chunk_batch_csv(df: pd.DataFrame, filename: str, classification: dict) -> list[Document]:
+    """
+    Batch chunking for summary/tabular CSVs that don't have one
+    meaningful record per row. Groups by a semantic column if found
+    (plan, tier, category, group), otherwise falls back to fixed-size
+    slicing with CSV_CHUNK_SIZE.
+    """
+    docs = []
+
+    group_col = next(
+        (col for col in df.columns
+         if any(k in col.lower() for k in ["plan", "tier", "category", "group"])),
+        None
+    )
+
+    def _make_batch_doc(batch, offset, group_val=None):
+        markdown_table = batch.to_markdown(index=False)
+        row_details = "\n".join(
+            " | ".join(f"{k}: {v}" for k, v in row.items() if pd.notna(v))
+            for _, row in batch.iterrows()
+        )
+        content = (
+            f"### TABLE DATA (Rows {offset+1}-{offset+len(batch)})\n\n"
+            f"{markdown_table}\n\n### ROW DETAILS\n{row_details}"
+        )
+        metadata = {
+            "source_file": filename,
+            "row_range": f"{offset+1}-{offset+len(batch)}",
+            "doc_type": classification["doc_type"],
+            "plan_tier": classification["plan_tier"],
+            "chunk_type": "table",
+        }
+        if group_val is not None:
+            metadata["group_value"] = str(group_val)
+        metadata["display_header"] = _build_contextual_header(metadata)
+        return Document(page_content=content, metadata=metadata)
+
+    if group_col:
+        for val, group in df.groupby(group_col):
+            for i in range(0, len(group), CSV_CHUNK_SIZE):
+                batch = group.iloc[i: i + CSV_CHUNK_SIZE]
+                docs.append(_make_batch_doc(batch, i, val))
+    else:
+        for i in range(0, len(df), CSV_CHUNK_SIZE):
+            batch = df.iloc[i: i + CSV_CHUNK_SIZE]
+            docs.append(_make_batch_doc(batch, i))
+
+    return docs
 
 
 # ──────────────────────────────────────────────────────────────
@@ -87,7 +208,7 @@ def _build_contextual_header(metadata: dict) -> str:
 # ──────────────────────────────────────────────────────────────
 
 def load_and_chunk_documents() -> list[Document]:
-    """Load and chunk PDFs via Docling and CSVs via specialized Markdown logic."""
+    """Load and chunk PDFs via Docling and CSVs via the right strategy."""
     pdf_files = sorted(glob.glob(os.path.join(DOCUMENTS_DIR, "*.pdf")))
     csv_files = sorted(glob.glob(os.path.join(DOCUMENTS_DIR, "*.csv")))
     all_chunks = []
@@ -95,9 +216,9 @@ def load_and_chunk_documents() -> list[Document]:
     console.print(f"\n⚙️  Configuring Docling with {EMBEDDING_MODEL} tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained(EMBEDDING_MODEL)
     chunker = HybridChunker(
-        tokenizer=tokenizer, 
+        tokenizer=tokenizer,
         max_tokens=MAX_TOKENS_PER_CHUNK,
-        overlap=CHUNK_OVERLAP
+        overlap=CHUNK_OVERLAP,
     )
 
     # 1. Process PDFs
@@ -107,32 +228,36 @@ def load_and_chunk_documents() -> list[Document]:
             for file_path in pdf_files:
                 filename = os.path.basename(file_path)
                 progress.update(task, description=f"Chunking {filename}")
-                
                 try:
-                    # Switch to ExportType.MARKDOWN for better table formatting
                     loader = DoclingLoader(
-                        file_path=file_path, 
-                        export_type=ExportType.DOC_CHUNKS, # Keeping DOC_CHUNKS to preserve Fix 4 metadata
-                        chunker=chunker
+                        file_path=file_path,
+                        export_type=ExportType.DOC_CHUNKS,
+                        chunker=chunker,
                     )
                     chunks = loader.load()
-                    
                     classification = _classify_document(filename)
                     for chunk in chunks:
-                        # Fix 2: Table detection
-                        if _is_table_chunk(chunk.page_content):
-                            chunk.metadata["chunk_type"] = "table"
-                        else:
-                            chunk.metadata["chunk_type"] = "prose"
-                            
-                        # Fix 1: Store header in metadata, leave content untouched
+                        chunk.metadata["chunk_type"] = (
+                            "table" if _is_table_chunk(chunk.page_content) else "prose"
+                        )
                         chunk.metadata.update({"source_file": filename, **classification})
                         chunk.metadata["display_header"] = _build_contextual_header(chunk.metadata)
-                        
+
+                        # Flatten Docling nested metadata before filter strips it
+                        dl_meta = chunk.metadata.get("dl_meta", {})
+                        if dl_meta:
+                            chunk.metadata["page_no"] = dl_meta.get("page_no")
+                            chunk.metadata["heading"] = (
+                                dl_meta.get("headings", [""])[0]
+                                if dl_meta.get("headings") else ""
+                            )
+                            bbox = dl_meta.get("bbox")
+                            if bbox:
+                                chunk.metadata["bbox"] = str(bbox)
+
                     all_chunks.extend(chunks)
                 except Exception as e:
-                    console.print(f"[bold red]Error processing {filename}:[/] {str(e)}")
-                
+                    console.print(f"[bold red]⚠ Skipping {filename}:[/] {e}")
                 progress.advance(task)
 
     # 2. Process CSVs
@@ -142,64 +267,27 @@ def load_and_chunk_documents() -> list[Document]:
             for file_path in csv_files:
                 filename = os.path.basename(file_path)
                 progress.update(task, description=f"Chunking {filename}")
-                
                 try:
                     classification = _classify_document(filename)
                     df = pd.read_csv(file_path)
-                    
-                    # Fix 5: Semantic grouping
-                    group_col = None
-                    for col in df.columns:
-                        if any(k in col.lower() for k in ["plan", "tier", "category", "group"]):
-                            group_col = col
-                            break
-                    
-                    if group_col:
-                        # Group by semantic column and chunk within each group
-                        for val, group in df.groupby(group_col):
-                            for i in range(0, len(group), CSV_CHUNK_SIZE):
-                                batch = group.iloc[i : i + CSV_CHUNK_SIZE]
-                                _process_csv_batch(batch, filename, classification, i, val, all_chunks)
+
+                    if _is_record_style_csv(df):
+                        console.print(f"  📋 {filename} → record-per-row mode ({len(df)} rows)")
+                        chunks = _chunk_record_csv(df, filename, classification)
                     else:
-                        # Fallback to fixed-size slicing
-                        for i in range(0, len(df), CSV_CHUNK_SIZE):
-                            batch = df.iloc[i : i + CSV_CHUNK_SIZE]
-                            _process_csv_batch(batch, filename, classification, i, None, all_chunks)
+                        console.print(f"  📋 {filename} → batch mode")
+                        chunks = _chunk_batch_csv(df, filename, classification)
+
+                    all_chunks.extend(chunks)
                 except Exception as e:
-                    console.print(f"[bold red]Error processing {filename}:[/] {str(e)}")
-                
+                    console.print(f"[bold red]⚠ Skipping {filename}:[/] {e}")
                 progress.advance(task)
 
-    console.print(f"  ✅ Created [bold green]{len(all_chunks)}[/] high-precision chunks from [bold]{len(pdf_files) + len(csv_files)}[/] files")
+    console.print(
+        f"  ✅ Created [bold green]{len(all_chunks)}[/] chunks from "
+        f"[bold]{len(pdf_files) + len(csv_files)}[/] files"
+    )
     return all_chunks
-
-
-def _process_csv_batch(batch, filename, classification, offset, group_val, all_chunks):
-    """Helper to format and append CSV chunks."""
-    markdown_table = batch.to_markdown(index=False)
-    semantic_text = []
-    for _, row in batch.iterrows():
-        row_desc = " | ".join([f"{k}: {v}" for k, v in row.items() if pd.notna(v)])
-        semantic_text.append(row_desc)
-    
-    content = f"### TABLE DATA (Rows {offset+1}-{offset+len(batch)})\n\n"
-    content += markdown_table + "\n\n### ROW DETAILS\n" + "\n".join(semantic_text)
-    
-    metadata = {
-        "source_file": filename,
-        "row_range": f"{offset+1}-{offset+len(batch)}",
-        "doc_type": classification["doc_type"],
-        "plan_tier": classification["plan_tier"],
-        "chunk_type": "table"
-    }
-    if group_val is not None:
-        metadata["group_value"] = str(group_val)
-        
-    # Store header in metadata
-    metadata["display_header"] = _build_contextual_header(metadata)
-    
-    doc = Document(page_content=content, metadata=metadata)
-    all_chunks.append(doc)
 
 
 # ──────────────────────────────────────────────────────────────
@@ -208,17 +296,6 @@ def _process_csv_batch(batch, filename, classification, offset, group_val, all_c
 
 def build_vector_store(chunks: list[Document]) -> Chroma:
     """Embed chunks and persist to ChromaDB."""
-    # Fix 4: Flatten Docling metadata before it gets filtered
-    for chunk in chunks:
-        dl_meta = chunk.metadata.get("dl_meta", {})
-        if dl_meta:
-            chunk.metadata["page_no"] = dl_meta.get("page_no")
-            chunk.metadata["heading"] = dl_meta.get("headings", [""])[0]
-            # Convert bbox dict to string for Chroma compatibility
-            bbox = dl_meta.get("bbox")
-            if bbox:
-                chunk.metadata["bbox"] = str(bbox)
-    
     chunks = filter_complex_metadata(chunks)
 
     embeddings = HuggingFaceEmbeddings(
@@ -227,12 +304,11 @@ def build_vector_store(chunks: list[Document]) -> Chroma:
         encode_kwargs={"normalize_embeddings": True},
     )
 
-    # Fix 7: Top-level shutil import (done above)
     if os.path.exists(CHROMA_PERSIST_DIR):
         shutil.rmtree(CHROMA_PERSIST_DIR)
         console.print("  🗑️  Cleared previous ChromaDB")
 
-    console.print(f"  📦 Embedding [bold]{len(chunks)}[/] chunks and storing in ChromaDB...")
+    console.print(f"  📦 Embedding [bold]{len(chunks)}[/] chunks into ChromaDB...")
 
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console) as progress:
         task = progress.add_task("Embedding & indexing...", total=None)
@@ -265,10 +341,11 @@ def main():
     summary_table = Table(title="Knowledge Base Summary")
     summary_table.add_column("Metric", style="cyan")
     summary_table.add_column("Value", style="green")
-    summary_table.add_row("Total layout-aware chunks", str(len(chunks)))
-    summary_table.add_row("Vector store location", CHROMA_PERSIST_DIR)
+    summary_table.add_row("Total chunks", str(len(chunks)))
+    summary_table.add_row("Vector store", CHROMA_PERSIST_DIR)
     summary_table.add_row("Time elapsed", f"{elapsed:.1f}s")
     console.print(summary_table)
+
 
 if __name__ == "__main__":
     main()

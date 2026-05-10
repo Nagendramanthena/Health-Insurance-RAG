@@ -69,3 +69,6 @@ MIN_RELEVANCE_SCORE = 0.05
 
 # ChromaDB collection name
 COLLECTION_NAME = "health_insurance_kb"
+
+RECORD_CSV_MIN_ROWS = 200   # CSVs with more rows than this are candidates for record mode
+RECORD_CSV_MIN_COLS = 8     # ...and where each row has at least this many non-null fields
