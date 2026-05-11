@@ -20,6 +20,7 @@ from langchain_classic.retrievers import EnsembleRetriever, ContextualCompressio
 from langchain_classic.retrievers.document_compressors import CrossEncoderReranker
 from langchain_community.cross_encoders import HuggingFaceCrossEncoder
 from langchain_core.documents import Document
+from graph_retriever import GraphRetriever
 
 from config import (
     CHROMA_PERSIST_DIR,
@@ -138,9 +139,30 @@ def get_retriever(
         base_retriever=ensemble_retriever,
     )
     console.print(f"    ✅ Reranker ready (top_n={top_n}, min_score={MIN_RELEVANCE_SCORE})")
-    console.print("  🎯 Full pipeline ready!\n")
 
-    return compression_retriever
+    # ── Step 5: Knowledge Graph Integration ─────────────────────
+    console.print("  🌐 Initializing Knowledge Graph retriever...")
+    graph_retriever = GraphRetriever()
+    
+    class GraphEnhancedRetriever:
+        def __init__(self, base_retriever, graph_retriever):
+            self.base_retriever = base_retriever
+            self.graph_retriever = graph_retriever
+            
+        def invoke(self, query: str) -> list[Document]:
+            # 1. Get graph context (high precision structured data)
+            graph_docs = self.graph_retriever.invoke(query)
+            
+            # 2. Get vector/BM25 chunks
+            base_docs = self.base_retriever.invoke(query)
+            
+            # 3. Combine: Graph context comes first if found
+            return graph_docs + base_docs
+
+    final_retriever = GraphEnhancedRetriever(compression_retriever, graph_retriever)
+    console.print("  🎯 Full pipeline (Hybrid + Reranker + Graph) ready!\n")
+
+    return final_retriever
 
 
 def get_vector_only_retriever(k: int | None = None):

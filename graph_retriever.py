@@ -1,0 +1,119 @@
+"""
+Knowledge Graph Retriever for Health Insurance RAG.
+
+Queries the NetworkX Knowledge Graph to find structured context 
+related to entities identified in the user query.
+"""
+
+import os
+import networkx as nx
+import difflib
+from langchain_core.documents import Document
+from rich.console import Console
+
+from config import GRAPH_DATA_PATH
+
+console = Console()
+
+class GraphRetriever:
+    def __init__(self, graph_path: str = GRAPH_DATA_PATH):
+        self.graph_path = graph_path
+        self.G = self._load_graph()
+        # Pre-cache node labels for faster fuzzy matching
+        self.node_labels = list(self.G.nodes())
+        
+    def _load_graph(self):
+        """Load the GraphML file into NetworkX."""
+        if not os.path.exists(self.graph_path):
+            console.print(f"[bold red]Warning:[/] Graph file not found at {self.graph_path}. Returning empty graph.")
+            return nx.MultiDiGraph()
+        return nx.read_graphml(self.graph_path)
+
+    def _extract_entities(self, query: str, threshold: float = 0.7):
+        """
+        Simple entity extraction using fuzzy matching against node labels.
+        In a production system, this could be an LLM-based NER step.
+        """
+        query_words = query.lower().split()
+        found_entities = []
+        
+        # Check for multi-word matches first
+        # This is a naive approach; for better results use a sliding window or LLM
+        for node in self.node_labels:
+            node_lower = str(node).lower()
+            if node_lower in query.lower():
+                found_entities.append(node)
+                continue
+            
+            # Fuzzy match for typos
+            matches = difflib.get_close_matches(node_lower, query_words, n=1, cutoff=threshold)
+            if matches:
+                found_entities.append(node)
+                
+        return list(set(found_entities))
+
+    def _get_node_context(self, node):
+        """Format a node and its immediate neighbors into a string."""
+        data = self.G.nodes[node]
+        node_type = data.get("type", "Unknown")
+        
+        context = f"### GRAPH ENTITY: {node} ({node_type})\n"
+        # Add properties
+        props = [f"{k}: {v}" for k, v in data.items() if k != "type"]
+        if props:
+            context += f"Properties: {', '.join(props)}\n"
+            
+        # Add relationships
+        # Outgoing
+        out_edges = self.G.out_edges(node, data=True)
+        if out_edges:
+            context += "Relationships:\n"
+            for _, target, attr in out_edges:
+                rel = attr.get("relation", "connected to")
+                target_type = self.G.nodes[target].get("type", "")
+                context += f"  - [{rel}] -> {target} ({target_type})"
+                # Add relationship attributes (like copay)
+                rel_props = [f"{k}={v}" for k, v in attr.items() if k != "relation"]
+                if rel_props:
+                    context += f" [{', '.join(rel_props)}]"
+                context += "\n"
+                
+        # Incoming (reverse lookup)
+        in_edges = self.G.in_edges(node, data=True)
+        if in_edges:
+            for source, _, attr in in_edges:
+                rel = attr.get("relation", "connected to")
+                source_type = self.G.nodes[source].get("type", "")
+                context += f"  - {source} ({source_type}) -> [{rel}] -> [THIS ENTITY]\n"
+                
+        return context
+
+    def invoke(self, query: str, k: int = 3) -> list[Document]:
+        """Perform graph retrieval and return LangChain Documents."""
+        entities = self._extract_entities(query)
+        if not entities:
+            return []
+            
+        docs = []
+        # Limit to top k identified entities to avoid context overflow
+        for entity in entities[:k]:
+            content = self._get_node_context(entity)
+            metadata = {
+                "source_file": "knowledge_graph.graphml",
+                "doc_type": "knowledge_graph",
+                "entity_name": entity,
+                "chunk_type": "graph_node",
+                "display_header": f">>> GRAPH CONTEXT: {entity} <<<\n"
+            }
+            docs.append(Document(page_content=content, metadata=metadata))
+            
+        return docs
+
+if __name__ == "__main__":
+    retriever = GraphRetriever()
+    # Test query
+    test_query = "What is the copay for metformin on the Silver plan and which doctors in Chicago accept it?"
+    results = retriever.invoke(test_query)
+    for d in results:
+        print(d.page_content)
+        print("-" * 40)

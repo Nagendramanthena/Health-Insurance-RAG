@@ -11,6 +11,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOCUMENTS_DIR = os.path.join(BASE_DIR, "Documents")
 CHROMA_PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
+GRAPH_DATA_PATH = os.path.join(BASE_DIR, "knowledge_graph.graphml")
 
 # ──────────────────────────────────────────────
 # Document type classification (by filename substring)
