@@ -21,3 +21,8 @@ rich>=13.0.0
 
 # Graph DB (NetworkX for local implementation)
 networkx>=3.0
+
+# Orchestrator & LLM
+langchain-google-genai>=2.0.0
+langgraph>=0.2.0
+python-dotenv>=1.0.0

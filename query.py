@@ -1,10 +1,10 @@
 """
 Interactive Query Tool for Health Insurance Knowledge Base.
 
-Test the retrieval pipeline with natural language health insurance queries.
+Test the retrieval pipeline or chat with the AI Copilot.
 
 Usage:
-    python query.py                     # Interactive mode
+    python query.py                     # Interactive AI Copilot mode
     python query.py --demo              # Run sample queries
     python query.py --compare "query"   # Compare retriever types
 """
@@ -19,7 +19,8 @@ from rich.markdown import Markdown
 from rich.prompt import Prompt
 from rich import box
 
-from retriever import get_retriever, get_vector_only_retriever, get_bm25_only_retriever
+from retriever import get_hybrid_retriever, get_vector_only_retriever, get_bm25_only_retriever
+from orchestrator import Orchestrator
 
 console = Console()
 
@@ -131,7 +132,7 @@ def compare_retrievers(query: str):
 
     # Hybrid + Reranker
     console.print("\n[bold yellow]━━━ Hybrid + Reranker ━━━[/bold yellow]")
-    hybrid_ret = get_retriever()
+    hybrid_ret = get_hybrid_retriever()
     run_query(query, hybrid_ret, "Hybrid + Reranker")
 
 
@@ -139,7 +140,7 @@ def interactive_mode():
     """Run interactive query loop."""
     console.print(
         Panel(
-            "[bold]Health Insurance Knowledge Base — Interactive Query Tool[/bold]\n\n"
+            "[bold]Health Insurance Knowledge Base — Interactive AI Copilot[/bold]\n\n"
             "Ask any question about your health insurance.\n"
             "Type [bold cyan]'quit'[/bold cyan] to exit, "
             "[bold cyan]'demo'[/bold cyan] for sample queries, or "
@@ -150,7 +151,15 @@ def interactive_mode():
         )
     )
 
-    retriever = get_retriever()
+    console.print("  [dim]Initializing AI Copilot Orchestrator...[/]")
+    try:
+        orchestrator = Orchestrator()
+        console.print("  [green]✅ Orchestrator Ready![/]\n")
+    except Exception as e:
+        console.print(f"  [red]❌ Error initializing Orchestrator: {e}[/]")
+        console.print("  [yellow]Falling back to raw retrieval mode.[/]\n")
+        orchestrator = None
+        retriever = get_hybrid_retriever()
 
     while True:
         console.print()
@@ -160,8 +169,14 @@ def interactive_mode():
             console.print("\n[bold]Goodbye! 👋[/bold]\n")
             break
         elif query.lower() == "demo":
-            for q in SAMPLE_QUERIES:
-                run_query(q, retriever)
+            if orchestrator:
+                for q in SAMPLE_QUERIES:
+                    with console.status(f"[bold green]Thinking about: {q}...[/]"):
+                        answer = orchestrator.ask(q)
+                    console.print(Panel(Markdown(answer), title=f"🏥 Response: {q}", border_style="green"))
+            else:
+                for q in SAMPLE_QUERIES:
+                    run_query(q, retriever)
         elif query.lower().startswith("compare "):
             compare_query = query[8:].strip()
             if compare_query:
@@ -169,7 +184,12 @@ def interactive_mode():
             else:
                 console.print("[yellow]Usage: compare <your query>[/yellow]")
         elif query.strip():
-            run_query(query, retriever)
+            if orchestrator:
+                with console.status("[bold green]Thinking...[/]"):
+                    answer = orchestrator.ask(query)
+                console.print(Panel(Markdown(answer), title="🏥 AI Copilot Response", border_style="green"))
+            else:
+                run_query(query, retriever)
         else:
             console.print("[yellow]Please enter a query.[/yellow]")
 
@@ -184,10 +204,16 @@ def demo_mode():
         )
     )
 
-    retriever = get_retriever()
-
-    for query in SAMPLE_QUERIES:
-        run_query(query, retriever)
+    try:
+        orchestrator = Orchestrator()
+        for query in SAMPLE_QUERIES:
+            answer = orchestrator.ask(query)
+            console.print(Panel(Markdown(answer), title=f"🏥 Response: {query}", border_style="green"))
+    except Exception as e:
+        console.print(f"[red]Error in demo mode: {e}[/]")
+        retriever = get_hybrid_retriever()
+        for query in SAMPLE_QUERIES:
+            run_query(query, retriever)
 
 
 def main():

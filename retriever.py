@@ -66,14 +66,14 @@ def _get_all_documents(vectorstore: Chroma) -> list[Document]:
     return docs
 
 
-def get_retriever(
+def get_hybrid_retriever(
     ensemble_weights: list[float] | None = None,
     retriever_k: int | None = None,
     reranker_top_n: int | None = None,
     use_reranker: bool = True,
 ):
     """
-    Build and return the full retrieval pipeline.
+    Build and return the hybrid retrieval pipeline.
 
     Args:
         ensemble_weights: [BM25_weight, Vector_weight]. Defaults to config.
