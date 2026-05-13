@@ -77,7 +77,7 @@ RECORD_CSV_MIN_COLS = 8     # ...and where each row has at least this many non-n
 # ──────────────────────────────────────────────
 # Orchestrator & LLM settings
 # ──────────────────────────────────────────────
-LLM_MODEL = "gemini-pro-latest"  # Fast and capable for orchestration
+LLM_MODEL = "gpt-4o"  # High performance for complex orchestration
 LLM_TEMPERATURE = 0.0
 
 SYSTEM_PROMPT = """You are a helpful and precise Health Insurance AI Copilot. 

@@ -20,6 +20,52 @@ from langchain_classic.retrievers import EnsembleRetriever, ContextualCompressio
 from langchain_classic.retrievers.document_compressors import CrossEncoderReranker
 from langchain_community.cross_encoders import HuggingFaceCrossEncoder
 from langchain_core.documents import Document
+from langchain_openai import ChatOpenAI
+
+from langchain_core.runnables import Runnable
+
+class SimpleMultiQueryRetriever(Runnable):
+    """Generate multiple query variants via an LLM and aggregate results.
+
+    This mimics LangChain's MultiQueryRetriever without requiring the external package.
+    """
+
+    def __init__(self, base_retriever, llm, num_variants: int = 3):
+        self.base_retriever = base_retriever
+        self.llm = llm
+        self.num_variants = num_variants
+
+    def _generate_variants(self, query: str) -> list[str]:
+        prompt = (
+            f"Generate {self.num_variants} different phrasings for the same intent of the question: '{query}'. "
+            "Return each phrasing on a separate line."
+        )
+        response = self.llm.invoke(prompt)
+        variants = [line.strip() for line in response.splitlines() if line.strip()]
+        if len(variants) < self.num_variants:
+            variants = [query] * self.num_variants
+        return variants
+
+    def invoke(self, query: str, **kwargs) -> list[Document]:
+        all_docs: list[Document] = []
+        seen_keys = set()
+        for variant in self._generate_variants(query):
+            docs = self.base_retriever.invoke(variant)
+            for d in docs:
+                key = (
+                    d.metadata.get("source_file"),
+                    d.metadata.get("page"),
+                    d.page_content[:30],
+                )
+                if key not in seen_keys:
+                    seen_keys.add(key)
+                    all_docs.append(d)
+        return all_docs
+
+# Note: No custom SimpleMultiQueryRetriever needed; we use LangChain's built‑in MultiQueryRetriever.
+
+
+from langchain_openai import ChatOpenAI
 from graph_retriever import GraphRetriever
 
 from config import (
@@ -31,6 +77,8 @@ from config import (
     RERANKER_TOP_N,
     COLLECTION_NAME,
     MIN_RELEVANCE_SCORE,
+    LLM_MODEL,
+    LLM_TEMPERATURE,
 )
 
 console = Console()
@@ -112,9 +160,15 @@ def get_hybrid_retriever(
     )
     console.print(f"    ✅ Ensemble retriever ready (weights: BM25={weights[0]}, Vector={weights[1]})")
 
+    # ── Step 3.5: Multi-Query Retriever ─────────────────────────
+    console.print("  🧠 Initializing Multi-Query generation...")
+    llm = ChatOpenAI(temperature=LLM_TEMPERATURE, model=LLM_MODEL)
+    multi_query_retriever = SimpleMultiQueryRetriever(base_retriever=ensemble_retriever, llm=llm, num_variants=3)
+    console.print("    ✅ Multi-Query retriever ready")
+
     if not use_reranker:
         console.print("  🎯 Pipeline ready (no reranking)\n")
-        return ensemble_retriever
+        return multi_query_retriever
 
     # ── Step 4: Cross-Encoder Reranking ─────────────────────────
     console.print(f"  🔄 Loading reranker model: [bold]{RERANKER_MODEL}[/]...")
@@ -136,7 +190,7 @@ def get_hybrid_retriever(
 
     compression_retriever = ContextualCompressionRetriever(
         base_compressor=compressor,
-        base_retriever=ensemble_retriever,
+        base_retriever=multi_query_retriever,
     )
     console.print(f"    ✅ Reranker ready (top_n={top_n}, min_score={MIN_RELEVANCE_SCORE})")
 

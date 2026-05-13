@@ -52,8 +52,8 @@ class GraphRetriever:
                 
         return list(set(found_entities))
 
-    def _get_node_context(self, node):
-        """Format a node and its immediate neighbors into a string."""
+    def _get_node_context(self, node, max_rel: int = 15):
+        """Format a node and its immediate neighbors into a string, with limits."""
         data = self.G.nodes[node]
         node_type = data.get("type", "Unknown")
         
@@ -65,26 +65,47 @@ class GraphRetriever:
             
         # Add relationships
         # Outgoing
-        out_edges = self.G.out_edges(node, data=True)
+        out_edges = list(self.G.out_edges(node, data=True))
         if out_edges:
             context += "Relationships:\n"
-            for _, target, attr in out_edges:
+            for _, target, attr in out_edges[:max_rel]:
                 rel = attr.get("relation", "connected to")
                 target_type = self.G.nodes[target].get("type", "")
                 context += f"  - [{rel}] -> {target} ({target_type})"
-                # Add relationship attributes (like copay)
                 rel_props = [f"{k}={v}" for k, v in attr.items() if k != "relation"]
                 if rel_props:
                     context += f" [{', '.join(rel_props)}]"
                 context += "\n"
+            
+            if len(out_edges) > max_rel:
+                context += f"  ... and {len(out_edges) - max_rel} more outgoing relationships.\n"
                 
         # Incoming (reverse lookup)
-        in_edges = self.G.in_edges(node, data=True)
+        in_edges = list(self.G.in_edges(node, data=True))
         if in_edges:
+            # Group incoming by relation type to summarize if needed
+            rel_counts = {}
             for source, _, attr in in_edges:
                 rel = attr.get("relation", "connected to")
+                rel_counts[rel] = rel_counts.get(rel, 0) + 1
+            
+            # Show a few specific ones, but summarize if they are too many (like ACCEPTS_PLAN)
+            shown_count = 0
+            for source, _, attr in in_edges:
+                rel = attr.get("relation", "connected to")
+                # If this relation type is very common, only show a few and summarize the rest
+                if rel_counts[rel] > 5 and shown_count >= max_rel:
+                    continue
+                
                 source_type = self.G.nodes[source].get("type", "")
                 context += f"  - {source} ({source_type}) -> [{rel}] -> [THIS ENTITY]\n"
+                shown_count += 1
+                if shown_count >= max_rel:
+                    break
+            
+            for rel, count in rel_counts.items():
+                if count > 5: # If we summarized some of these
+                    context += f"  - [Note: {count} total nodes have '{rel}' relationship to this entity]\n"
                 
         return context
 

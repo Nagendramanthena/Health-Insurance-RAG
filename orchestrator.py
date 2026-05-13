@@ -1,11 +1,11 @@
 """
 Health Insurance AI Copilot Orchestrator.
-Uses Gemini to reason over user queries and dispatch retrieval tools.
+Uses OpenAI to reason over user queries and dispatch retrieval tools.
 """
 
 import os
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage
@@ -18,13 +18,13 @@ load_dotenv()
 
 class Orchestrator:
     def __init__(self):
-        if not os.getenv("GOOGLE_API_KEY"):
-            raise ValueError("GOOGLE_API_KEY not found in environment. Please set it in a .env file.")
+        if not os.getenv("OPENAI_API_KEY"):
+            raise ValueError("OPENAI_API_KEY not found in environment. Please set it in a .env file.")
             
-        self.llm = ChatGoogleGenerativeAI(
+        self.llm = ChatOpenAI(
             model=LLM_MODEL,
             temperature=LLM_TEMPERATURE,
-            disable_streaming=False
+            streaming=True
         )
         self.tools = get_tools()
         
