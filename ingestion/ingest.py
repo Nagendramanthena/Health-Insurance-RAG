@@ -1,11 +1,21 @@
 """
 Document Ingestion Pipeline for Health Insurance Knowledge Base.
 
-Loads PDFs and CSVs from the Documents/ folder, chunks them intelligently,
+Loads PDFs and CSVs from the data/ folder, chunks them intelligently,
 enriches with metadata and contextual headers, and persists to ChromaDB.
+
+Usage:
+    python -m ingestion.ingest
+    # or from project root:
+    python ingestion/ingest.py
 """
 
+import sys
 import os
+
+# Ensure project root is on sys.path so `config` can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import time
 import glob
 import shutil
@@ -121,12 +131,10 @@ def _chunk_record_csv(df: pd.DataFrame, filename: str, classification: dict) -> 
     """
     docs = []
     for idx, row in df.iterrows():
-        # Natural language representation — every non-null field
         content = " | ".join(
             f"{k}: {v}" for k, v in row.items() if pd.notna(v)
         )
 
-        # Flat metadata — pull out high-value filter columns if present
         metadata = {
             "source_file": filename,
             "doc_type": classification["doc_type"],
@@ -135,7 +143,6 @@ def _chunk_record_csv(df: pd.DataFrame, filename: str, classification: dict) -> 
             "row_index": int(idx),
         }
 
-        # Promote key columns to filterable metadata fields
         for col, meta_key in [
             ("tier",                 "drug_tier"),
             ("drug_class",           "drug_class"),
@@ -156,9 +163,7 @@ def _chunk_record_csv(df: pd.DataFrame, filename: str, classification: dict) -> 
 def _chunk_batch_csv(df: pd.DataFrame, filename: str, classification: dict) -> list[Document]:
     """
     Batch chunking for summary/tabular CSVs that don't have one
-    meaningful record per row. Groups by a semantic column if found
-    (plan, tier, category, group), otherwise falls back to fixed-size
-    slicing with CSV_CHUNK_SIZE.
+    meaningful record per row.
     """
     docs = []
 
@@ -221,7 +226,6 @@ def load_and_chunk_documents() -> list[Document]:
         overlap=CHUNK_OVERLAP,
     )
 
-    # 1. Process PDFs
     if pdf_files:
         with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console) as progress:
             task = progress.add_task("Processing PDFs...", total=len(pdf_files))
@@ -243,7 +247,6 @@ def load_and_chunk_documents() -> list[Document]:
                         chunk.metadata.update({"source_file": filename, **classification})
                         chunk.metadata["display_header"] = _build_contextual_header(chunk.metadata)
 
-                        # Flatten Docling nested metadata before filter strips it
                         dl_meta = chunk.metadata.get("dl_meta", {})
                         if dl_meta:
                             chunk.metadata["page_no"] = dl_meta.get("page_no")
@@ -260,7 +263,6 @@ def load_and_chunk_documents() -> list[Document]:
                     console.print(f"[bold red]⚠ Skipping {filename}:[/] {e}")
                 progress.advance(task)
 
-    # 2. Process CSVs
     if csv_files:
         with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console) as progress:
             task = progress.add_task("Processing CSVs...", total=len(csv_files))

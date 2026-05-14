@@ -9,9 +9,9 @@ import os
 # Paths
 # ──────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DOCUMENTS_DIR = os.path.join(BASE_DIR, "Documents")
-CHROMA_PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
-GRAPH_DATA_PATH = os.path.join(BASE_DIR, "knowledge_graph.graphml")
+DOCUMENTS_DIR = os.path.join(BASE_DIR, "data")
+CHROMA_PERSIST_DIR = os.path.join(BASE_DIR, "storage", "chroma_db")
+GRAPH_DATA_PATH = os.path.join(BASE_DIR, "storage", "knowledge_graph.graphml")
 
 # ──────────────────────────────────────────────
 # Document type classification (by filename substring)
@@ -77,7 +77,8 @@ RECORD_CSV_MIN_COLS = 8     # ...and where each row has at least this many non-n
 # ──────────────────────────────────────────────
 # Orchestrator & LLM settings
 # ──────────────────────────────────────────────
-LLM_MODEL = "gpt-4o"  # High performance for complex orchestration
+LLM_MODEL = "gpt-4o"            # Used for synthesis (high accuracy)
+CLASSIFIER_LLM_MODEL = "gpt-4o-mini"  # Used for intent classification (fast & cheap)
 LLM_TEMPERATURE = 0.0
 
 SYSTEM_PROMPT = """You are a helpful and precise Health Insurance AI Copilot. 

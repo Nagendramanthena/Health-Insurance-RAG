@@ -1,11 +1,16 @@
 """
 Knowledge Graph Retriever for Health Insurance RAG.
 
-Queries the NetworkX Knowledge Graph to find structured context 
+Queries the NetworkX Knowledge Graph to find structured context
 related to entities identified in the user query.
 """
 
+import sys
 import os
+
+# Ensure project root is on sys.path so `config` can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import networkx as nx
 import difflib
 from langchain_core.documents import Document
@@ -21,7 +26,7 @@ class GraphRetriever:
         self.G = self._load_graph()
         # Pre-cache node labels for faster fuzzy matching
         self.node_labels = list(self.G.nodes())
-        
+
     def _load_graph(self):
         """Load the GraphML file into NetworkX."""
         if not os.path.exists(self.graph_path):
@@ -36,35 +41,31 @@ class GraphRetriever:
         """
         query_words = query.lower().split()
         found_entities = []
-        
-        # Check for multi-word matches first
-        # This is a naive approach; for better results use a sliding window or LLM
+
         for node in self.node_labels:
             node_lower = str(node).lower()
             if node_lower in query.lower():
                 found_entities.append(node)
                 continue
-            
+
             # Fuzzy match for typos
             matches = difflib.get_close_matches(node_lower, query_words, n=1, cutoff=threshold)
             if matches:
                 found_entities.append(node)
-                
+
         return list(set(found_entities))
 
     def _get_node_context(self, node, max_rel: int = 15):
         """Format a node and its immediate neighbors into a string, with limits."""
         data = self.G.nodes[node]
         node_type = data.get("type", "Unknown")
-        
+
         context = f"### GRAPH ENTITY: {node} ({node_type})\n"
-        # Add properties
         props = [f"{k}: {v}" for k, v in data.items() if k != "type"]
         if props:
             context += f"Properties: {', '.join(props)}\n"
-            
-        # Add relationships
-        # Outgoing
+
+        # Outgoing edges
         out_edges = list(self.G.out_edges(node, data=True))
         if out_edges:
             context += "Relationships:\n"
@@ -76,37 +77,33 @@ class GraphRetriever:
                 if rel_props:
                     context += f" [{', '.join(rel_props)}]"
                 context += "\n"
-            
+
             if len(out_edges) > max_rel:
                 context += f"  ... and {len(out_edges) - max_rel} more outgoing relationships.\n"
-                
-        # Incoming (reverse lookup)
+
+        # Incoming edges
         in_edges = list(self.G.in_edges(node, data=True))
         if in_edges:
-            # Group incoming by relation type to summarize if needed
             rel_counts = {}
             for source, _, attr in in_edges:
                 rel = attr.get("relation", "connected to")
                 rel_counts[rel] = rel_counts.get(rel, 0) + 1
-            
-            # Show a few specific ones, but summarize if they are too many (like ACCEPTS_PLAN)
+
             shown_count = 0
             for source, _, attr in in_edges:
                 rel = attr.get("relation", "connected to")
-                # If this relation type is very common, only show a few and summarize the rest
                 if rel_counts[rel] > 5 and shown_count >= max_rel:
                     continue
-                
                 source_type = self.G.nodes[source].get("type", "")
                 context += f"  - {source} ({source_type}) -> [{rel}] -> [THIS ENTITY]\n"
                 shown_count += 1
                 if shown_count >= max_rel:
                     break
-            
+
             for rel, count in rel_counts.items():
-                if count > 5: # If we summarized some of these
+                if count > 5:
                     context += f"  - [Note: {count} total nodes have '{rel}' relationship to this entity]\n"
-                
+
         return context
 
     def invoke(self, query: str, k: int = 3) -> list[Document]:
@@ -114,9 +111,8 @@ class GraphRetriever:
         entities = self._extract_entities(query)
         if not entities:
             return []
-            
+
         docs = []
-        # Limit to top k identified entities to avoid context overflow
         for entity in entities[:k]:
             content = self._get_node_context(entity)
             metadata = {
@@ -127,12 +123,11 @@ class GraphRetriever:
                 "display_header": f">>> GRAPH CONTEXT: {entity} <<<\n"
             }
             docs.append(Document(page_content=content, metadata=metadata))
-            
+
         return docs
 
 if __name__ == "__main__":
     retriever = GraphRetriever()
-    # Test query
     test_query = "What is the copay for metformin on the Silver plan and which doctors in Chicago accept it?"
     results = retriever.invoke(test_query)
     for d in results:

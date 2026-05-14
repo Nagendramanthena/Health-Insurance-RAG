@@ -19,8 +19,8 @@ from rich.markdown import Markdown
 from rich.prompt import Prompt
 from rich import box
 
-from retriever import get_hybrid_retriever, get_vector_only_retriever, get_bm25_only_retriever
-from orchestrator import Orchestrator
+from retrieval.retriever import get_hybrid_retriever, get_vector_only_retriever, get_bm25_only_retriever
+from orchestration.orchestrator import Orchestrator
 
 console = Console()
 
@@ -141,7 +141,8 @@ def interactive_mode():
     console.print(
         Panel(
             "[bold]Health Insurance Knowledge Base — Interactive AI Copilot[/bold]\n\n"
-            "Ask any question about your health insurance.\n"
+            "Powered by LangGraph Sequential Chain (GPT-4o-mini → GPT-4o).\n"
+            "Intent is auto-classified and retrieval adapts per query type.\n\n"
             "Type [bold cyan]'quit'[/bold cyan] to exit, "
             "[bold cyan]'demo'[/bold cyan] for sample queries, or "
             "[bold cyan]'compare <query>'[/bold cyan] to compare retriever types.",
@@ -151,10 +152,10 @@ def interactive_mode():
         )
     )
 
-    console.print("  [dim]Initializing AI Copilot Orchestrator...[/]")
+    console.print("  [dim]Initializing LangGraph Orchestrator...[/]")
     try:
         orchestrator = Orchestrator()
-        console.print("  [green]✅ Orchestrator Ready![/]\n")
+        console.print("  [green]✅ LangGraph Orchestrator Ready![/]\n")
     except Exception as e:
         console.print(f"  [red]❌ Error initializing Orchestrator: {e}[/]")
         console.print("  [yellow]Falling back to raw retrieval mode.[/]\n")
@@ -171,8 +172,9 @@ def interactive_mode():
         elif query.lower() == "demo":
             if orchestrator:
                 for q in SAMPLE_QUERIES:
-                    with console.status(f"[bold green]Thinking about: {q}...[/]"):
-                        answer = orchestrator.ask(q)
+                    console.print(f"\n[bold cyan]Q:[/bold cyan] {q}")
+                    with console.status("[bold green]Running LangGraph chain...[/]"):
+                        answer = orchestrator.ask(q, verbose=True)
                     console.print(Panel(Markdown(answer), title=f"🏥 Response: {q}", border_style="green"))
             else:
                 for q in SAMPLE_QUERIES:
@@ -185,8 +187,8 @@ def interactive_mode():
                 console.print("[yellow]Usage: compare <your query>[/yellow]")
         elif query.strip():
             if orchestrator:
-                with console.status("[bold green]Thinking...[/]"):
-                    answer = orchestrator.ask(query)
+                with console.status("[bold green]Running LangGraph chain...[/]"):
+                    answer = orchestrator.ask(query, verbose=True)
                 console.print(Panel(Markdown(answer), title="🏥 AI Copilot Response", border_style="green"))
             else:
                 run_query(query, retriever)

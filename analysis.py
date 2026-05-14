@@ -48,5 +48,5 @@ def print_docling_chunks(file_path):
 
 if __name__ == "__main__":
     # Test with one of the PDF documents
-    sample_pdf = "Documents/SBC_SILVER_SilverShield.pdf"
+    sample_pdf = "data/SBC_SILVER_SilverShield.pdf"
     print_docling_chunks(sample_pdf)
