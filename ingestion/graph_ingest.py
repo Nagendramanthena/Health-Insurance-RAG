@@ -83,7 +83,7 @@ def build_knowledge_graph():
             state     = str(row['state']).strip()
 
             # Provider Node
-            G.add_node(npi, type="Provider", name=name, specialty=specialty)
+            G.add_node(npi, type="Provider", name=name, specialty=specialty, city=city, state=state)
 
             # Specialty Node
             G.add_node(specialty, type="Specialty")

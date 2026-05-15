@@ -71,13 +71,16 @@ class SimpleMultiQueryRetriever(Runnable):
 
     def _generate_variants(self, query: str) -> list[str]:
         prompt = (
-            f"Generate {self.num_variants} different phrasings for the same intent of the question: '{query}'. "
-            "Return each phrasing on a separate line."
+            f"You are a medical search expert. Generate {self.num_variants} different search queries "
+            f"to retrieve relevant documents for: '{query}'.\n"
+            "Include variations using synonyms for conditions, symptoms, or drug classes (e.g., 'headache' -> 'pain', 'acid reflux' -> 'GERD').\n"
+            "Return ONLY the queries, one per line."
         )
         response = self.llm.invoke(prompt)
         variants = [line.strip() for line in response.content.splitlines() if line.strip()]
         if len(variants) < self.num_variants:
             variants = [query] * self.num_variants
+        
         return variants
 
     def invoke(self, query: str, **kwargs) -> list[Document]:
@@ -189,12 +192,31 @@ def get_hybrid_retriever(
     )
     console.print(f"    ✅ Ensemble retriever ready (weights: BM25={weights[0]}, Vector={weights[1]})")
 
-    # ── Stage 4: Multi-Query Retriever ──────────────────────────
+    # ── Stage 4: Knowledge Graph Integration ────────────────────
+    # Moved before Multi-Query so variants can be used for graph lookups too.
+    console.print("  🌐 Initializing Knowledge Graph retriever...")
+    graph_retriever = GraphRetriever()
+
+    class GraphEnhancedRetriever:
+        def __init__(self, base_retriever, graph_retriever):
+            self.base_retriever   = base_retriever
+            self.graph_retriever  = graph_retriever
+
+        def invoke(self, query: str) -> list[Document]:
+            # Graph context first (structured, high-precision)
+            graph_docs = self.graph_retriever.invoke(query)
+            # Hybrid pipeline docs
+            base_docs  = self.base_retriever.invoke(query)
+            return graph_docs + base_docs
+
+    graph_hybrid_retriever = GraphEnhancedRetriever(ensemble_retriever, graph_retriever)
+
+    # ── Stage 5: Multi-Query Retriever ──────────────────────────
     # Uses gpt-4o-mini — rephrasing a query is simple, no need for gpt-4o.
     console.print("  🧠 Initializing Multi-Query generation (gpt-4o-mini)...")
     llm = ChatOpenAI(temperature=LLM_TEMPERATURE, model=CLASSIFIER_LLM_MODEL)
     multi_query_retriever = SimpleMultiQueryRetriever(
-        base_retriever=ensemble_retriever, llm=llm, num_variants=3
+        base_retriever=graph_hybrid_retriever, llm=llm, num_variants=3
     )
     console.print("    ✅ Multi-Query retriever ready")
 
@@ -202,7 +224,7 @@ def get_hybrid_retriever(
         console.print("  🎯 Pipeline ready (no reranking)\n")
         return multi_query_retriever
 
-    # ── Stage 5: Cross-Encoder Reranking ────────────────────────
+    # ── Stage 6: Cross-Encoder Reranking ────────────────────────
     console.print(f"  🔄 Loading reranker model: [bold]{RERANKER_MODEL}[/]...")
     cross_encoder = HuggingFaceCrossEncoder(model_name=RERANKER_MODEL)
 
@@ -224,27 +246,9 @@ def get_hybrid_retriever(
         base_retriever=multi_query_retriever,
     )
     console.print(f"    ✅ Reranker ready (top_n={top_n}, min_score={MIN_RELEVANCE_SCORE})")
-
-    # ── Stage 6: Knowledge Graph Integration ────────────────────
-    console.print("  🌐 Initializing Knowledge Graph retriever...")
-    graph_retriever = GraphRetriever()
-
-    class GraphEnhancedRetriever:
-        def __init__(self, base_retriever, graph_retriever):
-            self.base_retriever   = base_retriever
-            self.graph_retriever  = graph_retriever
-
-        def invoke(self, query: str) -> list[Document]:
-            # Graph context first (structured, high-precision)
-            graph_docs = self.graph_retriever.invoke(query)
-            # Hybrid pipeline docs
-            base_docs  = self.base_retriever.invoke(query)
-            return graph_docs + base_docs
-
-    final_retriever = GraphEnhancedRetriever(compression_retriever, graph_retriever)
     console.print("  🎯 Full pipeline (Hybrid + Reranker + Graph) ready!\n")
 
-    return final_retriever
+    return compression_retriever
 
 
 # ══════════════════════════════════════════════════════════════

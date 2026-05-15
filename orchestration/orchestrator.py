@@ -215,6 +215,7 @@ _SYNTHESIS_TEMPLATE = """{system_prompt}
 ──────────────────────────────────────────────────────────────
 
 Using ONLY the retrieved context above, answer the user's question.
+If the user asks for entities with multiple criteria (e.g., "Specialist X in City Y"), you MUST verify that the same entity satisfies ALL criteria in the context. Do NOT assume an entity has a property just because it is listed in the context alongside another entity.
 Always cite the source file and page number for every fact you state.
 If the context does not contain enough information, say so explicitly — do NOT guess."""
 
