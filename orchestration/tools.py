@@ -142,3 +142,7 @@ def prior_auth_search(query: str) -> str:
 # ── Expose all tools ───────────────────────────────────────────────────────────
 def get_tools():
     return [policy_search, relational_search, plan_comparison_search, prior_auth_search]
+
+def preload_retrievers():
+    """Explicitly trigger retriever build (call this on app startup)."""
+    _get_retrievers()

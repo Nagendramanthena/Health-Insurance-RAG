@@ -46,6 +46,7 @@ from config import (
     SYSTEM_PROMPT,
 )
 from orchestration.tools import policy_search, relational_search, plan_comparison_search, prior_auth_search
+from orchestration.tracing import trace_log
 
 load_dotenv()
 console = Console()
@@ -149,6 +150,10 @@ def retrieve(state: AgentState) -> AgentState:
     log    = list(state.get("steps_log", []))
     parts: list[str] = []
 
+    # Initialize context-aware trace log for this node execution
+    internal_logs = []
+    token = trace_log.set(internal_logs)
+
     # ── SIMPLE_LOOKUP ────────────────────────────────────────────
     if intent == "SIMPLE_LOOKUP":
         log.append("📊 [SIMPLE_LOOKUP] Step 1 — Graph entity lookup")
@@ -195,7 +200,15 @@ def retrieve(state: AgentState) -> AgentState:
 
     separator   = "\n\n" + "─" * 60 + "\n\n"
     full_context = separator.join(parts) if parts else "No relevant context found."
+    
+    # Capture any internal logs (like Multi-Query variants)
+    for l in internal_logs:
+        log.append(l)
+    
     log.append(f"✅ Retrieved {len(parts)} context section(s)")
+    
+    # Cleanup context
+    trace_log.reset(token)
 
     return {**state, "retrieved_context": full_context, "steps_log": log}
 
@@ -275,6 +288,7 @@ class Orchestrator:
             raise ValueError("OPENAI_API_KEY not found in environment.")
         self.graph: any = build_graph()
         self.chat_history: List[tuple] = []
+        self.last_detailed_result: dict = {}
 
     def ask(self, query: str, verbose: bool = False) -> str:
         initial_state: AgentState = {
@@ -301,6 +315,72 @@ class Orchestrator:
             self.chat_history = self.chat_history[-10:]
 
         return answer
+
+    def ask_detailed(self, query: str) -> dict:
+        """
+        Like ask(), but returns the full result dict for the API layer.
+
+        Returns:
+            {
+                "answer":            str,
+                "intent":            str,
+                "steps_log":         list[str],
+                "retrieved_context": str,
+            }
+        """
+        initial_state: AgentState = {
+            "query":             query,
+            "intent":            "",
+            "retrieved_context": "",
+            "answer":            "",
+            "chat_history":      self.chat_history.copy(),
+            "steps_log":         [],
+        }
+
+        result = self.graph.invoke(initial_state)
+        answer = result["answer"]
+
+        self.chat_history.append(("human", query))
+        self.chat_history.append(("ai",    answer))
+        if len(self.chat_history) > 10:
+            self.chat_history = self.chat_history[-10:]
+
+        self.last_detailed_result = {
+            "query":             query,
+            "answer":            answer,
+            "intent":            result.get("intent", "POLICY_QUESTION"),
+            "steps_log":         result.get("steps_log", []),
+            "retrieved_context": result.get("retrieved_context", ""),
+        }
+        return self.last_detailed_result
+
+    def stream_detailed(self, query: str):
+        """
+        Generator that yields intermediate AgentState updates as they happen.
+        Useful for "Live" Developer Console views.
+        """
+        initial_state: AgentState = {
+            "query":             query,
+            "intent":            "",
+            "retrieved_context": "",
+            "answer":            "",
+            "chat_history":      self.chat_history.copy(),
+            "steps_log":         [],
+        }
+
+        # Use LangGraph's streaming mode
+        for event in self.graph.stream(initial_state):
+            # event is a dict like {"node_name": state_update}
+            for node, state in event.items():
+                # We yield the current state and which node just finished
+                yield {
+                    "node": node,
+                    "state": state
+                }
+        
+        # After completion, update internal history (last yield will have the full state)
+        # Note: In a production stream, you might want to handle this differently
+        # but for this POC, the last event from 'synthesize' has the answer.
 
 
 if __name__ == "__main__":

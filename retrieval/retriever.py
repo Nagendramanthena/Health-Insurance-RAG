@@ -32,6 +32,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.runnables import Runnable
 
 from retrieval.graph_retriever import GraphRetriever
+from orchestration.tracing import log_event
 
 from config import (
     CHROMA_PERSIST_DIR,
@@ -81,6 +82,10 @@ class SimpleMultiQueryRetriever(Runnable):
         if len(variants) < self.num_variants:
             variants = [query] * self.num_variants
         
+        # Log variants for the Developer Console
+        for i, v in enumerate(variants):
+            log_event(f"🧠 Multi-Query Variant {i+1}: {v}")
+            
         return variants
 
     def invoke(self, query: str, **kwargs) -> list[Document]:
