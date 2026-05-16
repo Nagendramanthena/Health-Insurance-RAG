@@ -25,6 +25,7 @@ from orchestration.tools import preload_retrievers
 
 
 from backend.session_manager import manager
+from backend.database import get_all_sessions, get_session_history
 from fastapi.responses import StreamingResponse
 import io
 from graphviz import Digraph
@@ -84,6 +85,16 @@ async def health_check():
         active_sessions=manager.get_active_session_count()
     )
 
+@app.get("/sessions")
+async def list_sessions():
+    """List all saved chat sessions."""
+    return get_all_sessions()
+
+@app.get("/chat/history")
+async def chat_history(session_id: str):
+    """Retrieve message history for a session."""
+    return get_session_history(session_id)
+
 @app.post("/chat", response_model=ChatResponse, responses={400: {"model": ErrorResponse}, 500: {"model": ErrorResponse}})
 async def chat(request: ChatRequest):
     """Process a chat query for a specific session."""
@@ -100,6 +111,10 @@ async def chat(request: ChatRequest):
         
         logger.info(f"Query processed in {duration:.2f}s for session {request.session_id}")
         
+        # Save to History
+        manager.add_message(request.session_id, "user", request.query)
+        manager.add_message(request.session_id, "ai", result["answer"], intent=result["intent"])
+
         return ChatResponse(
             session_id=request.session_id,
             query=request.query,
@@ -180,6 +195,13 @@ async def chat_stream(session_id: str, query: str):
                         "steps_log":         current_steps,
                         "retrieved_context": state.get("retrieved_context", ""),
                     }
+                    # Final Answer
+                    if final_answer:
+                        manager.add_message(session_id, "user", query)
+                        manager.add_message(session_id, "ai", final_answer, intent=last_intent)
+                        yield emit({"type": "node_done", "node": "synthesize", "answer": final_answer})
+                    
+                    yield emit({"type": "done", "msg": "[DONE]"})
 
                 prev_steps = current_steps
                 await asyncio.sleep(0.1)

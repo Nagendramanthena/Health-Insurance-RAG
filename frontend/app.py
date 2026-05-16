@@ -160,6 +160,22 @@ async def get_health():
         except:
             return None
 
+async def get_sessions():
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(f"{API_BASE_URL}/sessions")
+            return response.json()
+        except:
+            return []
+
+async def get_chat_history(session_id: str):
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(f"{API_BASE_URL}/chat/history", params={"session_id": session_id})
+            return response.json()
+        except:
+            return []
+
 # ══════════════════════════════════════════════════════════════
 # 4. SIDEBAR
 # ══════════════════════════════════════════════════════════════
@@ -178,6 +194,25 @@ with st.sidebar:
 
     st.markdown("---")
     st.link_button("🚀 Open Developer Console", "http://localhost:8000/dev-console", use_container_width=True, help="Requires password '2002'")
+    st.markdown("---")
+    
+    # Chat History
+    st.markdown("### 💬 Chat History")
+    sessions = asyncio.run(get_sessions())
+    if sessions:
+        for s in sessions[:5]: # Show last 5
+            try:
+                time_str = datetime.fromisoformat(s['updated_at']).strftime("%H:%M")
+            except:
+                time_str = "??:??"
+            if st.button(f"📅 {time_str} | {s['id'][:8]}...", key=f"hist_{s['id']}", use_container_width=True):
+                history = asyncio.run(get_chat_history(s['id']))
+                st.session_state.session_id = s['id']
+                st.session_state.messages = history
+                st.rerun()
+    else:
+        st.caption("No recent chats")
+
     st.markdown("---")
     
     # Example Queries
