@@ -1,0 +1,96 @@
+"search engine" for the brain we just built.
+
+While standard retrieval (Vector RAG) looks for words that sound similar, Graph Retrieval looks for specific things and their connections.
+
+Here is the 3-step process of how it works:
+
+Step 1: Entity Identification (The "Spotter")
+When you ask a question, the retriever first scans your sentence to find any "Entities" that exist in our 800 nodes.
+
+Query: "Is metformin ER covered on the Silvr plan?"
+The Spotter: It uses a technique called Fuzzy Matching. Even though "Silvr" is a typo, it realizes you mean the PlanTier: Silver node and the Drug: metformin ER node.
+Step 2: Context Extraction (The "Neighbor Search")
+Once it finds the nodes, it doesn't just look at the word; it looks at everything connected to it. It asks the graph: "Give me everything you know about metformin ER."
+
+The Graph replies: "It's a Biguanide, it treats Type 2 Diabetes, and it has a $10 copay on the Silver plan."
+Step 3: Structured Context (The "Cheat Sheet")
+Finally, it turns that data into a clean, structured "cheat sheet" for the AI model. It formats it like this:
+
+text
+### GRAPH ENTITY: metformin ER (Drug)
+Properties: brand: Glucophage XR, drug_class: Biguanide
+Relationships:
+  - [TREATS] -> Type 2 Diabetes (Condition)
+  - [IN_TIER] -> Silver (PlanTier) [copay=$10]
+Why this is a game-changer for your responses:
+In the main 
+
+retriever.py
+, we combined this with your other search methods:
+
+Vector Search finds the paragraphs about coverage.
+BM25 Search finds the exact keywords.
+Graph Retrieval finds the Structured Facts.
+When the AI gets the final context, it sees the "fact" from the graph first. It doesn't have to read through a 50-page PDF to find a copay; it sees it right there in the "cheat sheet." This makes your responses much faster, more accurate, and less likely to hallucinate.
+
+
+
+//Examples for graph db with in our dataset
+"search engine" for the brain we just built.
+
+While standard retrieval (Vector RAG) looks for words that sound similar, Graph Retrieval looks for specific things and their connections.
+
+Here is the 3-step process of how it works:
+
+Step 1: Entity Identification (The "Spotter")
+When you ask a question, the retriever first scans your sentence to find any "Entities" that exist in our 800 nodes.
+
+Query: "Is metformin ER covered on the Silvr plan?"
+The Spotter: It uses a technique called Fuzzy Matching. Even though "Silvr" is a typo, it realizes you mean the PlanTier: Silver node and the Drug: metformin ER node.
+Step 2: Context Extraction (The "Neighbor Search")
+Once it finds the nodes, it doesn't just look at the word; it looks at everything connected to it. It asks the graph: "Give me everything you know about metformin ER."
+
+The Graph replies: "It's a Biguanide, it treats Type 2 Diabetes, and it has a $10 copay on the Silver plan."
+Step 3: Structured Context (The "Cheat Sheet")
+Finally, it turns that data into a clean, structured "cheat sheet" for the AI model. It formats it like this:
+
+text
+### GRAPH ENTITY: metformin ER (Drug)
+Properties: brand: Glucophage XR, drug_class: Biguanide
+Relationships:
+  - [TREATS] -> Type 2 Diabetes (Condition)
+  - [IN_TIER] -> Silver (PlanTier) [copay=$10]
+Why this is a game-changer for your responses:
+In the main 
+
+retriever.py
+, we combined this with your other search methods:
+
+Vector Search finds the paragraphs about coverage.
+BM25 Search finds the exact keywords.
+Graph Retrieval finds the Structured Facts.
+When the AI gets the final context, it sees the "fact" from the graph first. It doesn't have to read through a 50-page PDF to find a copay; it sees it right there in the "cheat sheet." This makes your responses much faster, more accurate, and less likely to hallucinate.
+
+
+for line 57 & 58 if someone asked i eed which drugs covered in silver trie ami correct or any other better examples
+
+
+You are correct, but a better example is a query where you ask for a comparison or a filtered list, because those are much harder for a standard search to get right.
+
+Since you are storing the copay as a property on the relationship (Line 59), the Graph DB can answer much "smarter" questions than just a list of drugs:
+
+Better Examples for Lines 57-59:
+Price Comparison (Across Tiers):
+
+"How much more will I pay for Ozempic if I switch from the Gold plan to the Silver plan?"
+Why Graph is better: It looks at the Ozempic node and follows two different IN_TIER edges (one to Gold, one to Silver) and compares the copay values on those edges instantly.
+Budget Filtering (Most Powerful):
+
+"Show me all Asthma medications that have a copay of $10 or less on the Silver plan."
+Why Graph is better: It finds the Asthma node → follows TREATS to all drugs → then follows the IN_TIER edge to Silver and only returns the drugs where the copay property matches your $10 filter.
+Plan Eligibility:
+
+"Are there any specialty drugs that are ONLY covered on the Gold plan?"
+Why Graph is better: It can check for Drug nodes that have an IN_TIER edge to Gold but lack one to Silver or Bronze.
+Summary
+While "Which drugs are covered in Silver?" works, the real power is using the copay property to answer "Which drug is cheapest for my specific condition on my specific plan?"
