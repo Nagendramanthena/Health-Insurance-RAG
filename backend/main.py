@@ -11,10 +11,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from loguru import logger
-import subprocess
-import httpx
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import StreamingResponse as StarletteStreamingResponse
 
 # Ensure project root is on sys.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -51,58 +47,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── Proxy Middleware for Single-Port Deployment (Hugging Face) ──
-class StreamlitProxyMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request, call_next):
-        # Let FastAPI handles these routes directly
-        if (request.url.path.startswith("/chat") or 
-            request.url.path.startswith("/session") or 
-            request.url.path.startswith("/health") or 
-            request.url.path.startswith("/dev-console") or
-            request.url.path.startswith("/static")):
-            return await call_next(request)
-        
-        # Everything else goes to Streamlit (running on 8501 internally)
-        target_url = f"http://localhost:8501{request.url.path}"
-        if request.url.query:
-            target_url += f"?{request.url.query}"
-            
-        async with httpx.AsyncClient() as client:
-            try:
-                # Basic proxy logic
-                proxy_req = client.build_request(
-                    request.method,
-                    target_url,
-                    headers=request.headers.raw,
-                    content=await request.body()
-                )
-                proxy_res = await client.send(proxy_req, stream=True)
-                return StarletteStreamingResponse(
-                    proxy_res.aiter_raw(),
-                    status_code=proxy_res.status_code,
-                    headers=proxy_res.headers
-                )
-            except Exception as e:
-                logger.error(f"Proxy error: {str(e)}")
-                return await call_next(request)
-
-app.add_middleware(StreamlitProxyMiddleware)
-
 @app.on_event("startup")
 async def startup_event():
     logger.info("Initializing retrieval pipeline on startup...")
     preload_retrievers()
-    
-    # Start Streamlit as a background process if not already running
-    logger.info("Starting Streamlit frontend sidecar...")
-    subprocess.Popen([
-        "streamlit", "run", "frontend/app.py", 
-        "--server.port", "8501", 
-        "--server.address", "0.0.0.0",
-        "--server.headless", "true"
-    ])
-    
-    logger.info("Backend and Frontend sidecar are fully ready.")
+    logger.info("Backend is fully ready.")
 
 # Mount static frontend files
 _frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")

@@ -499,3 +499,476 @@ npi,provider_first_name,provider_last_name,credential,specialty,group_practice,s
 1627502276,Barbara,Perez,NP,Internal Medicine,Great Lakes Health System,2535 Main St,Rockford,IL,61101,(387) 236-8704,Yes,"Silver,Gold",Yes,English,Springfield General Hospital
 1631406400,Robert,Kim,DO,Physical Therapy,Community Care Clinic,7599 University Ave,Chicago,IL,60601,(937) 351-3025,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Prairie Community Hospital
 1293976787,David,Hernandez,MD,Infectious Disease,Great Lakes Health System,9660 Main St,Champaign,IL,61820,(985) 784-3958,No,"Bronze,Silver,Gold",Yes,"English,Spanish,Portuguese",Lake Shore Medical Center
+1034126396,James,Moore,DO,Cardiology,New York Medical Group,1524 Broadway Rd,Brooklyn,NY,11201,(230) 295-4582,Yes,"Silver,Gold",Yes,"English,Portuguese",Lenox Hill Hospital
+1298362082,Priya,Miller,NP,Cardiology,New York Medical Group,2715 Elm Blvd,New York,NY,10001,(359) 420-6514,Yes,"Bronze,Silver",Yes,"English,Spanish",Jamaica Hospital Medical Center
+1890566476,Jennifer,Anderson,MD,Cardiology,Empire State Health Partners,1391 Highland Blvd,Bronx,NY,10451,(843) 833-6925,Yes,"Bronze,Silver",Yes,"English,Tagalog",Montefiore Medical Center
+1895619255,Maria,Allen,MD,Cardiology,Empire State Health Partners,4654 Maple Way,Brooklyn,NY,11201,(573) 366-7065,Yes,"Silver,Gold",Yes,"English,Tagalog",Montefiore Medical Center
+1738908273,Ana,Allen,MD,Neurology,Columbia Medical Associates,6316 Pine Way,Albany,NY,12201,(770) 424-6313,Yes,"Silver,Gold",Yes,English,Mount Sinai Hospital
+1949921299,Richard,Thompson,DO,Neurology,New York Medical Group,3583 Maple Rd,New York,NY,10001,(858) 669-3340,Yes,"Bronze,Silver,Gold",Yes,"English,Arabic",NYU Langone Medical Center
+1547099690,Kenji,Chen,NP,Neurology,Columbia Medical Associates,6030 Lake St,Buffalo,NY,14201,(705) 293-1771,Yes,"Bronze,Silver",Yes,"English,Tagalog",Montefiore Medical Center
+1924255163,Omar,White,MD,Neurology,Northeast Specialty Group,8769 Pine Dr,Queens,NY,11354,(211) 896-2876,Yes,"Bronze,Silver",Yes,"English,Russian",NYU Langone Medical Center
+1320452650,Karen,White,MD,Dermatology,Empire State Health Partners,8417 Oak Way,Brooklyn,NY,11201,(854) 719-4258,Yes,Gold,No,"English,Hindi",Staten Island University Hospital
+1062196678,Priya,Patel,MD,Dermatology,Northeast Specialty Group,6047 Pine St,Queens,NY,11354,(446) 780-2290,Yes,"Bronze,Silver,Gold",Yes,English,Bellevue Hospital Center
+1227416584,Robert,Chen,MD,Dermatology,Northeast Specialty Group,8745 Broadway Rd,Syracuse,NY,13201,(752) 973-4295,Yes,"Bronze,Silver,Gold",No,English,Mount Sinai Hospital
+1247083812,Thomas,Patel,PA-C,Orthopedics,New York Medical Group,444 Broadway Dr,Rochester,NY,14601,(802) 425-1117,Yes,"Silver,Gold",Yes,English,NYU Langone Medical Center
+1142068763,Susan,Williams,MD,Orthopedics,Empire State Health Partners,8053 Lake Dr,New York,NY,10001,(940) 784-8744,Yes,"Bronze,Silver,Gold",No,English,Bellevue Hospital Center
+1432311310,David,Brown,MD,Orthopedics,MetroHealth Associates,987 Oak Ave,Bronx,NY,10451,(945) 547-2790,Yes,"Bronze,Silver",Yes,English,Jamaica Hospital Medical Center
+1105128697,Priya,Harris,MD,Orthopedics,New York Medical Group,1335 Maple Dr,Buffalo,NY,14201,(251) 867-9856,Yes,Gold,Yes,English,Jamaica Hospital Medical Center
+1994841203,Sandra,Kim,PA-C,Gastroenterology,Northeast Specialty Group,135 Elm Blvd,Queens,NY,11354,(665) 492-7930,No,"Bronze,Silver,Gold",Yes,English,Lenox Hill Hospital
+1169042105,Karen,Miller,MD,Gastroenterology,MetroHealth Associates,7911 Highland Dr,Buffalo,NY,14201,(258) 720-2312,Yes,"Bronze,Silver,Gold",Yes,English,New York-Presbyterian Hospital
+1626713347,Omar,Davis,MD,Ophthalmology,Columbia Medical Associates,1443 Elm Way,Brooklyn,NY,11201,(778) 735-6183,Yes,"Silver,Gold",Yes,"English,Spanish",NYU Langone Medical Center
+1666964667,Susan,Wilson,MD,Ophthalmology,MetroHealth Associates,1288 Main Rd,Rochester,NY,14601,(776) 302-2200,Yes,"Bronze,Silver",Yes,English,Mount Sinai Hospital
+1866616964,Michael,Anderson,MD,Ophthalmology,MetroHealth Associates,9000 Pine Dr,Albany,NY,12201,(869) 741-1128,Yes,Gold,Yes,English,Lenox Hill Hospital
+1738194420,Michael,Wilson,MD,Ophthalmology,Columbia Medical Associates,3550 Cedar St,Brooklyn,NY,11201,(849) 470-9280,No,"Silver,Gold",No,English,NYU Langone Medical Center
+1757704655,Yuki,White,DO,Nephrology,Empire State Health Partners,2747 Maple Dr,Brooklyn,NY,11201,(637) 774-1158,Yes,Gold,Yes,"English,Korean",New York-Presbyterian Hospital
+1225567963,Priya,Johnson,MD,Nephrology,Northeast Specialty Group,6074 Main Blvd,Queens,NY,11354,(898) 455-2684,Yes,"Silver,Gold",Yes,English,Mount Sinai Hospital
+1170937380,Susan,Garcia,MD,Pulmonology,Empire State Health Partners,6845 Lake Blvd,Queens,NY,11354,(918) 310-7267,Yes,"Silver,Gold",No,"English,Arabic",Jamaica Hospital Medical Center
+1299147754,David,Harris,MD,Pulmonology,New York Medical Group,3264 Elm Blvd,Buffalo,NY,14201,(271) 991-5573,Yes,"Silver,Gold",Yes,English,Montefiore Medical Center
+1640563507,Omar,Chen,MD,Pulmonology,Empire State Health Partners,4449 Main Ave,Bronx,NY,10451,(644) 553-6139,No,Gold,Yes,English,New York-Presbyterian Hospital
+1463102056,Joseph,Rodriguez,MD,Endocrinology,Empire State Health Partners,8921 Lake Blvd,Brooklyn,NY,11201,(271) 880-6409,Yes,"Bronze,Silver",Yes,English,Montefiore Medical Center
+1205986733,Kenji,Taylor,NP,Endocrinology,Northeast Specialty Group,4944 Highland St,Brooklyn,NY,11201,(630) 880-7211,Yes,Gold,Yes,English,Montefiore Medical Center
+1346012478,Joseph,Chen,MD,Endocrinology,MetroHealth Associates,9602 Broadway Way,Albany,NY,12201,(676) 652-8244,Yes,"Silver,Gold",Yes,English,Montefiore Medical Center
+1866040317,Kenji,Garcia,MD,Endocrinology,Columbia Medical Associates,3948 Pine St,Syracuse,NY,13201,(403) 350-1400,Yes,"Bronze,Silver,Gold",Yes,English,Montefiore Medical Center
+1835822550,Thomas,White,MD,Oncology,Northeast Specialty Group,2517 Main Ave,Brooklyn,NY,11201,(635) 424-3881,No,"Bronze,Silver",Yes,English,Lenox Hill Hospital
+1478796089,Jennifer,Harris,MD,Oncology,Columbia Medical Associates,8370 Elm Dr,Buffalo,NY,14201,(362) 961-8777,No,"Bronze,Silver,Gold",No,"English,Russian",Staten Island University Hospital
+1360613550,Yuki,Wilson,NP,Oncology,New York Medical Group,4781 Lake Blvd,Buffalo,NY,14201,(527) 753-2320,Yes,Gold,Yes,English,Staten Island University Hospital
+1222086735,Ana,Jones,MD,Hematology,Northeast Specialty Group,7733 Elm Ave,Bronx,NY,10451,(630) 598-1320,No,"Bronze,Silver",No,English,NYU Langone Medical Center
+1467975319,Patricia,Taylor,MD,Hematology,Columbia Medical Associates,8099 Lake Blvd,New York,NY,10001,(697) 229-7371,Yes,"Bronze,Silver,Gold",Yes,"English,French",Jamaica Hospital Medical Center
+1711890569,Kenji,Garcia,PA-C,Psychiatry,Columbia Medical Associates,6555 Broadway Dr,Bronx,NY,10451,(227) 285-8022,Yes,"Bronze,Silver,Gold",No,English,Mount Sinai Hospital
+1270874491,Maria,Wilson,MD,Psychiatry,New York Medical Group,6311 Pine Rd,Queens,NY,11354,(283) 681-1317,Yes,"Bronze,Silver",No,English,Bellevue Hospital Center
+1718825964,Yuki,Williams,MD,Psychiatry,New York Medical Group,4008 Park Rd,Buffalo,NY,14201,(317) 777-4571,No,"Silver,Gold",Yes,"English,Hindi",New York-Presbyterian Hospital
+1727296111,Patricia,Garcia,MD,Psychiatry,New York Medical Group,520 Pine Dr,Albany,NY,12201,(584) 606-4249,Yes,Gold,Yes,English,NYU Langone Medical Center
+1543271261,Jennifer,Young,DO,OB/GYN,Columbia Medical Associates,7118 Cedar Ave,Buffalo,NY,14201,(863) 549-1207,No,"Bronze,Silver,Gold",No,English,NYU Langone Medical Center
+1467694547,Sandra,Anderson,PA-C,OB/GYN,Northeast Specialty Group,8917 Maple Rd,Brooklyn,NY,11201,(948) 806-5397,Yes,"Silver,Gold",Yes,"English,Korean",Mount Sinai Hospital
+1195249057,William,Harris,MD,OB/GYN,Columbia Medical Associates,570 Maple Blvd,Brooklyn,NY,11201,(699) 417-6813,Yes,"Bronze,Silver,Gold",No,"English,Arabic",Staten Island University Hospital
+1814073098,Ahmed,Young,DO,OB/GYN,Columbia Medical Associates,6758 Maple Dr,Albany,NY,12201,(446) 907-8800,No,"Silver,Gold",No,English,New York-Presbyterian Hospital
+1456881239,Karen,Davis,MD,Pediatrics,MetroHealth Associates,9168 Highland Blvd,Brooklyn,NY,11201,(963) 763-6419,Yes,"Bronze,Silver,Gold",Yes,English,Lenox Hill Hospital
+1232341238,William,Taylor,DO,Pediatrics,Empire State Health Partners,8879 Park St,Syracuse,NY,13201,(956) 695-5530,Yes,"Silver,Gold",Yes,English,Lenox Hill Hospital
+1313679331,Susan,Anderson,MD,Internal Medicine,Empire State Health Partners,845 Main Dr,Albany,NY,12201,(914) 329-9042,Yes,"Bronze,Silver,Gold",Yes,English,Montefiore Medical Center
+1430256336,Jessica,Kim,PA-C,Internal Medicine,New York Medical Group,7927 Oak Ave,Albany,NY,12201,(703) 275-1878,Yes,"Bronze,Silver,Gold",Yes,English,Bellevue Hospital Center
+1975499151,Robert,Davis,MD,Family Medicine,Columbia Medical Associates,8661 Elm Rd,Albany,NY,12201,(653) 504-8025,Yes,"Bronze,Silver,Gold",Yes,"English,French",Jamaica Hospital Medical Center
+1080600295,Ahmed,Moore,MD,Family Medicine,New York Medical Group,4029 Park Dr,New York,NY,10001,(360) 202-7693,No,Gold,Yes,"English,Hindi",Lenox Hill Hospital
+1633281747,Karen,Johnson,MD,Family Medicine,MetroHealth Associates,3924 Pine Way,Syracuse,NY,13201,(877) 402-7965,Yes,"Bronze,Silver",Yes,English,Montefiore Medical Center
+1885021282,Yuki,Jones,DO,Family Medicine,Empire State Health Partners,5139 Broadway Way,Buffalo,NY,14201,(782) 495-8195,Yes,"Bronze,Silver,Gold",No,English,Mount Sinai Hospital
+1027772220,Ana,Thompson,DO,Rheumatology,Northeast Specialty Group,5380 Broadway Blvd,Albany,NY,12201,(293) 434-1339,Yes,"Bronze,Silver,Gold",Yes,"English,Tagalog",Staten Island University Hospital
+1373620340,Linda,Kim,NP,Rheumatology,MetroHealth Associates,8156 Oak Rd,New York,NY,10001,(618) 541-6260,Yes,"Silver,Gold",Yes,"English,Tagalog",Staten Island University Hospital
+1347112584,Sandra,Young,PA-C,Rheumatology,Northeast Specialty Group,1542 Cedar Blvd,Rochester,NY,14601,(318) 991-7622,Yes,"Bronze,Silver,Gold",Yes,English,Montefiore Medical Center
+1140674381,Sandra,Johnson,MD,Rheumatology,Columbia Medical Associates,3435 Pine Dr,Syracuse,NY,13201,(494) 648-8941,Yes,"Bronze,Silver",Yes,"English,Spanish",Bellevue Hospital Center
+1695472980,Ana,Garcia,DO,Urology,Columbia Medical Associates,1958 Maple Ave,Buffalo,NY,14201,(357) 710-5781,Yes,"Bronze,Silver",No,English,New York-Presbyterian Hospital
+1829653607,Jessica,Davis,PA-C,Urology,Northeast Specialty Group,2336 Oak Blvd,Syracuse,NY,13201,(624) 548-9318,Yes,"Silver,Gold",Yes,"English,Portuguese",Mount Sinai Hospital
+1405026213,Kenji,Taylor,MD,Urology,New York Medical Group,5546 Highland Dr,Albany,NY,12201,(666) 529-4090,Yes,"Bronze,Silver",Yes,"English,Arabic",Staten Island University Hospital
+1135555899,Susan,White,MD,Urology,Northeast Specialty Group,2592 Maple Ave,Bronx,NY,10451,(714) 804-6439,Yes,"Bronze,Silver",No,English,Bellevue Hospital Center
+1743785903,James,Moore,MD,Infectious Disease,New York Medical Group,4442 Cedar Dr,Syracuse,NY,13201,(607) 865-2315,Yes,"Bronze,Silver,Gold",Yes,English,Jamaica Hospital Medical Center
+1097044071,Richard,Hall,PA-C,Infectious Disease,Columbia Medical Associates,4808 Lake Way,Bronx,NY,10451,(644) 300-2646,No,"Bronze,Silver,Gold",Yes,English,New York-Presbyterian Hospital
+1442437192,James,Johnson,MD,Radiology,MetroHealth Associates,2485 Lake Dr,Albany,NY,12201,(779) 898-3950,Yes,Gold,Yes,English,New York-Presbyterian Hospital
+1274154962,Ahmed,Thompson,MD,Radiology,Northeast Specialty Group,7655 Pine Rd,Brooklyn,NY,11201,(882) 209-8622,Yes,"Bronze,Silver,Gold",Yes,English,Lenox Hill Hospital
+1916261972,Robert,Harris,MD,Radiology,Northeast Specialty Group,5049 Lake Rd,Queens,NY,11354,(694) 309-4886,No,Gold,Yes,English,Montefiore Medical Center
+1533356861,Carlos,Taylor,DO,Radiology,Northeast Specialty Group,903 Broadway Way,Rochester,NY,14601,(493) 994-4770,Yes,Gold,Yes,English,New York-Presbyterian Hospital
+1141102355,Ahmed,Wilson,MD,Emergency Medicine,Empire State Health Partners,9595 Cedar Way,Buffalo,NY,14201,(292) 502-6352,No,Gold,Yes,"English,Spanish",NYU Langone Medical Center
+1502866993,Michael,Chen,MD,Emergency Medicine,New York Medical Group,4935 Cedar Ave,Buffalo,NY,14201,(277) 344-4696,No,Gold,Yes,"English,Russian",Montefiore Medical Center
+1883063850,Robert,Thompson,MD,Emergency Medicine,Columbia Medical Associates,4395 Broadway Rd,Rochester,NY,14601,(853) 580-2775,Yes,"Bronze,Silver,Gold",No,English,Montefiore Medical Center
+1048690765,Ahmed,Chen,MD,Emergency Medicine,Empire State Health Partners,6789 Oak St,New York,NY,10001,(238) 511-9071,Yes,"Bronze,Silver",Yes,"English,Korean",Lenox Hill Hospital
+1300368694,Joseph,Harris,MD,General Surgery,Columbia Medical Associates,8117 Broadway Rd,Queens,NY,11354,(233) 906-7070,Yes,"Silver,Gold",No,"English,Mandarin",Jamaica Hospital Medical Center
+1910568697,Susan,Anderson,MD,General Surgery,Columbia Medical Associates,4620 Lake Ave,Syracuse,NY,13201,(665) 293-4475,Yes,Gold,Yes,English,Bellevue Hospital Center
+1003044648,Michael,Rodriguez,MD,Vascular Surgery,Columbia Medical Associates,5483 Park Dr,Buffalo,NY,14201,(483) 348-3129,Yes,"Silver,Gold",Yes,"English,French",NYU Langone Medical Center
+1136105947,Omar,Smith,MD,Vascular Surgery,MetroHealth Associates,2954 Pine Ave,Brooklyn,NY,11201,(959) 631-9619,Yes,"Silver,Gold",Yes,"English,Spanish",New York-Presbyterian Hospital
+1491819409,Jessica,Harris,MD,Vascular Surgery,Northeast Specialty Group,810 Highland Blvd,Brooklyn,NY,11201,(858) 231-1996,No,"Bronze,Silver,Gold",No,English,NYU Langone Medical Center
+1679760958,Jessica,Young,PA-C,Plastic Surgery,Empire State Health Partners,2167 Pine Dr,Brooklyn,NY,11201,(799) 761-6327,No,Gold,Yes,"English,Mandarin",NYU Langone Medical Center
+1953580472,Thomas,Patel,MD,Plastic Surgery,Empire State Health Partners,3622 Elm Rd,Albany,NY,12201,(433) 623-6553,No,"Bronze,Silver,Gold",No,"English,Portuguese",Jamaica Hospital Medical Center
+1097951867,Kenji,Brown,MD,Plastic Surgery,MetroHealth Associates,2600 Maple Ave,Bronx,NY,10451,(287) 295-8075,Yes,Gold,Yes,English,Jamaica Hospital Medical Center
+1644685429,Michael,Chen,MD,Speech Therapy,Empire State Health Partners,7029 Main Blvd,Rochester,NY,14601,(519) 560-2697,Yes,"Bronze,Silver",Yes,English,Bellevue Hospital Center
+1724750726,Susan,Brown,MD,Speech Therapy,Empire State Health Partners,9290 Broadway Dr,Syracuse,NY,13201,(858) 770-1430,Yes,Gold,Yes,"English,Tagalog",Bellevue Hospital Center
+1430338918,William,Young,DO,Speech Therapy,MetroHealth Associates,2447 Broadway Way,Queens,NY,11354,(271) 345-1502,Yes,"Bronze,Silver,Gold",Yes,English,Bellevue Hospital Center
+1091221925,Joseph,White,PA-C,Speech Therapy,New York Medical Group,5414 Broadway Dr,Buffalo,NY,14201,(253) 359-3579,Yes,Gold,Yes,English,Bellevue Hospital Center
+1370626529,Thomas,Allen,MD,Physical Therapy,Columbia Medical Associates,3631 Highland Ave,Albany,NY,12201,(640) 313-5640,No,"Bronze,Silver",Yes,English,Staten Island University Hospital
+1310791488,Maria,Davis,MD,Physical Therapy,Empire State Health Partners,3560 Park Blvd,Albany,NY,12201,(535) 322-1126,No,"Silver,Gold",Yes,English,New York-Presbyterian Hospital
+1045421708,Michael,Thompson,NP,Occupational Therapy,Columbia Medical Associates,1280 Elm Way,Queens,NY,11354,(646) 219-8532,Yes,"Bronze,Silver,Gold",No,"English,Arabic",Lenox Hill Hospital
+1494025283,Carlos,Thompson,MD,Occupational Therapy,Empire State Health Partners,5421 Park Dr,Bronx,NY,10451,(906) 570-2443,No,"Bronze,Silver",Yes,English,Montefiore Medical Center
+1548127255,Sandra,Rodriguez,MD,Occupational Therapy,Northeast Specialty Group,5556 Park Ave,Buffalo,NY,14201,(848) 316-9693,Yes,Gold,No,"English,French",NYU Langone Medical Center
+1810080036,Susan,Brown,MD,Allergy & Immunology,New York Medical Group,3002 Maple Rd,Queens,NY,11354,(777) 978-8354,Yes,"Silver,Gold",Yes,"English,Mandarin",Montefiore Medical Center
+1333297890,Michael,Harris,MD,Allergy & Immunology,Northeast Specialty Group,5866 Highland Ave,Rochester,NY,14601,(672) 662-1616,Yes,Gold,No,"English,Spanish",Staten Island University Hospital
+1202120588,Robert,Hall,MD,Allergy & Immunology,Northeast Specialty Group,7468 Broadway Way,Albany,NY,12201,(529) 819-8792,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Jamaica Hospital Medical Center
+1170452446,Richard,Young,MD,Pain Management,Empire State Health Partners,8686 Highland Dr,Brooklyn,NY,11201,(572) 581-5634,No,"Silver,Gold",No,"English,Russian",Mount Sinai Hospital
+1777103091,Omar,Walker,MD,Pain Management,Empire State Health Partners,6433 Pine Blvd,Rochester,NY,14601,(872) 817-3463,Yes,Gold,Yes,English,Bellevue Hospital Center
+1719532005,Patricia,Taylor,MD,Pain Management,Columbia Medical Associates,6271 Cedar St,Queens,NY,11354,(919) 956-9624,Yes,"Bronze,Silver,Gold",Yes,English,Mount Sinai Hospital
+1147709679,Wei,Anderson,MD,Urgent Care,MetroHealth Associates,8067 Lake St,Bronx,NY,10451,(358) 279-5846,Yes,"Silver,Gold",Yes,"English,Arabic",Bellevue Hospital Center
+1774364348,Omar,Martinez,MD,Urgent Care,Columbia Medical Associates,3062 Broadway St,New York,NY,10001,(648) 244-7731,Yes,"Bronze,Silver",Yes,English,Mount Sinai Hospital
+1728326405,Thomas,Walker,DO,Urgent Care,New York Medical Group,7784 Lake Blvd,Buffalo,NY,14201,(784) 651-8564,Yes,"Bronze,Silver,Gold",No,English,Staten Island University Hospital
+1908269915,Linda,Miller,MD,Urgent Care,MetroHealth Associates,9185 Oak Way,Bronx,NY,10451,(728) 327-5670,Yes,"Bronze,Silver,Gold",Yes,"English,Arabic",Mount Sinai Hospital
+1539026034,Wei,Jones,MD,Cardiology,Lone Star Medical Group,6897 Main Rd,Plano,TX,75023,(582) 441-7326,Yes,"Bronze,Silver",No,"English,Spanish",UT Southwestern Medical Center
+1503703167,James,Martinez,MD,Cardiology,Lone Star Medical Group,7840 Park Way,San Antonio,TX,78201,(659) 830-1086,Yes,"Silver,Gold",Yes,English,Dell Medical School
+1450784243,David,Jones,NP,Cardiology,Texas Health Partners,2096 Main St,Fort Worth,TX,76101,(854) 837-8489,Yes,Gold,Yes,English,University Health System
+1447286055,Yuki,Patel,MD,Neurology,Lone Star Medical Group,5880 Lake Dr,Houston,TX,77001,(391) 880-2402,Yes,Gold,Yes,English,Texas Health Resources
+1786989426,Joseph,Kim,MD,Neurology,Gulf Coast Specialists,1206 Cedar St,Houston,TX,77001,(872) 843-2698,Yes,Gold,Yes,"English,Arabic",University Health System
+1315081566,Patricia,Chen,MD,Neurology,Central Texas Health Partners,1133 Maple Ave,Houston,TX,77001,(406) 244-4268,Yes,"Bronze,Silver",No,"English,Hindi",Baylor Scott & White
+1133654018,Priya,Kim,DO,Dermatology,Lone Star Medical Group,883 Cedar Blvd,Arlington,TX,76001,(576) 647-7553,No,Gold,No,English,Houston Methodist Hospital
+1882982227,Linda,Kim,PA-C,Dermatology,DFW Medical Associates,1393 Elm Dr,El Paso,TX,79901,(384) 758-5813,Yes,Gold,Yes,"English,Tagalog",Dell Medical School
+1045478504,Richard,Allen,DO,Dermatology,Central Texas Health Partners,7372 Cedar Rd,Dallas,TX,75201,(944) 561-8126,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Memorial Hermann Hospital
+1072191273,Omar,Hall,MD,Orthopedics,DFW Medical Associates,7279 Main St,Dallas,TX,75201,(441) 997-7001,Yes,"Silver,Gold",No,"English,Hindi",Dell Medical School
+1337568796,Ahmed,Jones,PA-C,Orthopedics,Gulf Coast Specialists,8774 Cedar Rd,Houston,TX,77001,(865) 485-5089,Yes,"Bronze,Silver",Yes,"English,Hindi",Dell Medical School
+1131680929,Jessica,Patel,MD,Gastroenterology,Gulf Coast Specialists,4778 Maple St,Austin,TX,78701,(338) 275-8406,Yes,Gold,Yes,"English,French",UT Southwestern Medical Center
+1546272321,Robert,Allen,MD,Gastroenterology,Texas Health Partners,2680 Park Blvd,Plano,TX,75023,(429) 324-4292,Yes,"Bronze,Silver,Gold",Yes,"English,Korean",Dell Medical School
+1427521016,James,Anderson,NP,Gastroenterology,Central Texas Health Partners,1512 Oak Blvd,Plano,TX,75023,(934) 936-8842,No,"Bronze,Silver,Gold",No,English,Dell Medical School
+1824399252,Michael,Martinez,MD,Gastroenterology,Central Texas Health Partners,9132 Broadway St,Dallas,TX,75201,(332) 643-9238,Yes,"Bronze,Silver,Gold",Yes,English,JPS Health Network
+1210777576,Karen,Garcia,MD,Ophthalmology,Lone Star Medical Group,4753 Oak Blvd,Austin,TX,78701,(850) 764-5496,Yes,Gold,Yes,"English,Portuguese",Dell Medical School
+1886090690,Ahmed,Chen,MD,Ophthalmology,DFW Medical Associates,5631 Broadway Ave,Fort Worth,TX,76101,(229) 283-1744,Yes,"Bronze,Silver,Gold",Yes,English,Baylor Scott & White
+1864027324,Carlos,White,MD,Ophthalmology,Central Texas Health Partners,5049 Maple St,San Antonio,TX,78201,(901) 615-5873,No,"Bronze,Silver,Gold",Yes,English,Houston Methodist Hospital
+1342863363,Linda,Harris,MD,Ophthalmology,Central Texas Health Partners,2453 Cedar Way,Houston,TX,77001,(951) 553-7532,Yes,"Silver,Gold",No,English,JPS Health Network
+1412477736,Richard,Davis,PA-C,Nephrology,Gulf Coast Specialists,1686 Main Blvd,Dallas,TX,75201,(830) 628-5067,Yes,"Bronze,Silver",No,English,UT Southwestern Medical Center
+1490947659,David,Garcia,PA-C,Nephrology,Central Texas Health Partners,1575 Elm Dr,El Paso,TX,79901,(446) 420-6781,Yes,Gold,Yes,English,JPS Health Network
+1392750748,Jessica,Walker,PA-C,Nephrology,DFW Medical Associates,2294 Pine Way,Fort Worth,TX,76101,(982) 612-6995,Yes,"Bronze,Silver,Gold",No,"English,Tagalog",Memorial Hermann Hospital
+1300347789,Carlos,Chen,MD,Nephrology,DFW Medical Associates,8361 Maple Dr,Houston,TX,77001,(838) 896-2946,Yes,Gold,Yes,English,Dell Medical School
+1147141682,Richard,Chen,MD,Pulmonology,Lone Star Medical Group,759 Main Ave,El Paso,TX,79901,(930) 541-8761,No,"Bronze,Silver,Gold",Yes,"English,Portuguese",Baylor Scott & White
+1889368954,Richard,Walker,MD,Pulmonology,Central Texas Health Partners,9827 Cedar Dr,Austin,TX,78701,(721) 745-9025,Yes,"Bronze,Silver,Gold",No,"English,Korean",Baylor Scott & White
+1703935444,Patricia,Martinez,MD,Pulmonology,DFW Medical Associates,9879 Maple Blvd,Houston,TX,77001,(994) 792-4728,Yes,Gold,Yes,"English,Spanish",University Health System
+1473561557,Wei,Hall,MD,Endocrinology,Lone Star Medical Group,1900 Lake Ave,Austin,TX,78701,(521) 628-3481,No,"Silver,Gold",Yes,English,University Health System
+1404612520,Sandra,Patel,MD,Endocrinology,Texas Health Partners,5425 Maple Dr,San Antonio,TX,78201,(521) 377-8531,Yes,"Silver,Gold",Yes,"English,Portuguese",JPS Health Network
+1828042067,Omar,Moore,DO,Endocrinology,Lone Star Medical Group,4990 Lake Blvd,El Paso,TX,79901,(495) 921-4396,No,"Silver,Gold",No,English,JPS Health Network
+1311871167,Priya,Moore,DO,Oncology,Texas Health Partners,6564 Cedar St,El Paso,TX,79901,(243) 494-2294,Yes,"Bronze,Silver,Gold",No,"English,Tagalog",Memorial Hermann Hospital
+1795525625,Kenji,Kim,MD,Oncology,DFW Medical Associates,2349 Oak Dr,Fort Worth,TX,76101,(800) 445-4972,Yes,Gold,Yes,"English,Korean",Texas Health Resources
+1997613190,Yuki,Davis,MD,Oncology,Central Texas Health Partners,2352 Main Dr,San Antonio,TX,78201,(361) 616-8793,No,Gold,Yes,"English,Mandarin",UT Southwestern Medical Center
+1987450363,Richard,Taylor,MD,Hematology,DFW Medical Associates,2968 Elm St,Fort Worth,TX,76101,(237) 606-9116,Yes,"Silver,Gold",Yes,"English,Spanish",UT Southwestern Medical Center
+1954835612,Maria,Smith,DO,Hematology,Gulf Coast Specialists,9001 Highland Rd,Fort Worth,TX,76101,(337) 716-8668,Yes,Gold,Yes,English,UT Southwestern Medical Center
+1656007396,Linda,Moore,PA-C,Psychiatry,Lone Star Medical Group,9402 Lake St,El Paso,TX,79901,(854) 615-8007,Yes,"Bronze,Silver,Gold",Yes,"English,Korean",Memorial Hermann Hospital
+1479678614,Omar,Brown,MD,Psychiatry,Central Texas Health Partners,4372 Elm St,Arlington,TX,76001,(971) 473-6400,Yes,Gold,Yes,"English,Spanish",Baylor Scott & White
+1539577241,William,Hall,MD,OB/GYN,Texas Health Partners,2716 Elm Way,Houston,TX,77001,(920) 988-6095,Yes,"Bronze,Silver,Gold",Yes,English,Texas Health Resources
+1589736058,Patricia,Walker,MD,OB/GYN,Lone Star Medical Group,6221 Elm Way,Fort Worth,TX,76101,(682) 975-9806,Yes,"Bronze,Silver",Yes,English,Texas Health Resources
+1614933740,Wei,Harris,NP,OB/GYN,Texas Health Partners,9072 Highland St,Dallas,TX,75201,(749) 353-3695,Yes,"Bronze,Silver,Gold",Yes,English,Dell Medical School
+1551095672,Jennifer,Allen,MD,OB/GYN,Texas Health Partners,1011 Maple St,Plano,TX,75023,(625) 667-1945,No,"Bronze,Silver,Gold",Yes,English,JPS Health Network
+1064698991,Joseph,Wilson,MD,Pediatrics,DFW Medical Associates,5744 Oak Dr,Houston,TX,77001,(270) 683-1519,Yes,"Bronze,Silver,Gold",No,English,Texas Health Resources
+1710594320,Michael,Hall,MD,Pediatrics,Central Texas Health Partners,6254 Oak Way,Austin,TX,78701,(752) 336-6697,Yes,"Bronze,Silver",Yes,"English,Tagalog",Dell Medical School
+1407245006,Wei,Jones,MD,Pediatrics,Texas Health Partners,9020 Elm Dr,Arlington,TX,76001,(435) 453-8546,Yes,Gold,Yes,English,Houston Methodist Hospital
+1036052248,Kenji,Brown,MD,Internal Medicine,DFW Medical Associates,1202 Oak Dr,San Antonio,TX,78201,(657) 812-1797,Yes,"Bronze,Silver,Gold",Yes,English,University Health System
+1620058859,Joseph,Harris,MD,Internal Medicine,Texas Health Partners,3936 Broadway Blvd,Houston,TX,77001,(812) 991-6253,Yes,"Silver,Gold",No,"English,Korean",Texas Health Resources
+1728802398,Omar,Patel,MD,Internal Medicine,Gulf Coast Specialists,9793 Park Way,Austin,TX,78701,(637) 769-9120,Yes,Gold,No,English,University Health System
+1911972883,Wei,Martinez,MD,Family Medicine,Lone Star Medical Group,8913 Maple St,Arlington,TX,76001,(430) 507-3365,No,Gold,Yes,English,University Health System
+1909602544,Sandra,Chen,NP,Family Medicine,Central Texas Health Partners,5511 Oak Rd,Arlington,TX,76001,(579) 294-9775,Yes,"Silver,Gold",Yes,English,Baylor Scott & White
+1933590437,Joseph,Allen,MD,Family Medicine,Texas Health Partners,3655 Maple St,Fort Worth,TX,76101,(540) 510-1251,Yes,"Silver,Gold",Yes,"English,Portuguese",Houston Methodist Hospital
+1696559239,Kenji,Kim,MD,Family Medicine,Central Texas Health Partners,6336 Maple Dr,Dallas,TX,75201,(567) 515-5285,Yes,"Silver,Gold",Yes,"English,Korean",Texas Health Resources
+1795913682,Jennifer,Moore,PA-C,Rheumatology,Lone Star Medical Group,849 Broadway St,Plano,TX,75023,(349) 216-5272,No,Gold,No,English,Dell Medical School
+1776914430,David,Martinez,MD,Rheumatology,DFW Medical Associates,5630 Pine Rd,Austin,TX,78701,(857) 957-9037,No,"Silver,Gold",Yes,English,University Health System
+1878316418,Linda,Jones,NP,Rheumatology,Lone Star Medical Group,8684 Main Ave,El Paso,TX,79901,(884) 249-1104,No,"Bronze,Silver,Gold",Yes,"English,Spanish",JPS Health Network
+1715922437,Robert,Young,MD,Urology,Lone Star Medical Group,1090 Broadway Way,San Antonio,TX,78201,(831) 694-8993,Yes,"Bronze,Silver,Gold",Yes,English,Houston Methodist Hospital
+1985747441,James,Smith,NP,Urology,DFW Medical Associates,7154 Park Ave,Arlington,TX,76001,(298) 736-3439,Yes,Gold,Yes,English,Memorial Hermann Hospital
+1734484102,Patricia,Wilson,MD,Urology,Gulf Coast Specialists,4084 Lake Blvd,Fort Worth,TX,76101,(282) 869-1519,Yes,"Bronze,Silver",No,English,UT Southwestern Medical Center
+1921227867,Joseph,Chen,PA-C,Urology,Texas Health Partners,7209 Cedar Dr,Arlington,TX,76001,(297) 740-1697,Yes,"Silver,Gold",Yes,English,Houston Methodist Hospital
+1630325223,William,Johnson,MD,Infectious Disease,DFW Medical Associates,5252 Main St,Plano,TX,75023,(347) 970-7525,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Memorial Hermann Hospital
+1800427880,Carlos,Davis,MD,Infectious Disease,DFW Medical Associates,2392 Oak Dr,Austin,TX,78701,(554) 254-2600,No,Gold,Yes,English,University Health System
+1593819730,Richard,Walker,MD,Infectious Disease,Gulf Coast Specialists,8138 Lake Blvd,Dallas,TX,75201,(584) 642-4043,No,"Bronze,Silver,Gold",Yes,"English,Russian",University Health System
+1387298927,Susan,Young,MD,Infectious Disease,Gulf Coast Specialists,2627 Elm Blvd,Fort Worth,TX,76101,(309) 293-1085,Yes,"Silver,Gold",No,English,UT Southwestern Medical Center
+1096227496,Jennifer,Jones,MD,Radiology,Central Texas Health Partners,6785 Oak Ave,Fort Worth,TX,76101,(562) 767-2524,Yes,"Bronze,Silver",No,"English,Portuguese",Baylor Scott & White
+1288749542,Karen,White,MD,Radiology,DFW Medical Associates,6337 Park St,Houston,TX,77001,(508) 474-9079,Yes,"Silver,Gold",Yes,"English,Hindi",UT Southwestern Medical Center
+1662143074,Sandra,Wilson,MD,Radiology,Central Texas Health Partners,4140 Maple Dr,Austin,TX,78701,(400) 668-2752,Yes,"Bronze,Silver,Gold",No,English,Memorial Hermann Hospital
+1344311586,Richard,Walker,MD,Emergency Medicine,Central Texas Health Partners,9838 Park Blvd,Arlington,TX,76001,(817) 911-4290,No,Gold,No,English,Dell Medical School
+1122286118,Joseph,Martinez,DO,Emergency Medicine,DFW Medical Associates,4692 Elm Blvd,Austin,TX,78701,(777) 404-9939,Yes,"Silver,Gold",Yes,English,JPS Health Network
+1325164079,Kenji,Harris,MD,General Surgery,Gulf Coast Specialists,8280 Park Way,Houston,TX,77001,(447) 458-3525,No,"Bronze,Silver,Gold",No,"English,Tagalog",JPS Health Network
+1753374076,Thomas,Walker,PA-C,General Surgery,DFW Medical Associates,9007 Main Blvd,Dallas,TX,75201,(749) 808-2392,Yes,"Bronze,Silver,Gold",Yes,"English,Tagalog",University Health System
+1105877984,Linda,Hall,MD,General Surgery,DFW Medical Associates,7152 Oak Ave,El Paso,TX,79901,(464) 427-9366,Yes,"Bronze,Silver",No,"English,Arabic",Houston Methodist Hospital
+1124628497,Joseph,Harris,MD,General Surgery,Gulf Coast Specialists,4940 Elm Ave,El Paso,TX,79901,(947) 345-6707,Yes,"Bronze,Silver,Gold",No,English,Baylor Scott & White
+1047978060,Wei,Kim,MD,Vascular Surgery,Texas Health Partners,5325 Oak Blvd,San Antonio,TX,78201,(927) 317-1370,Yes,"Bronze,Silver",Yes,"English,Russian",JPS Health Network
+1856583753,Omar,Garcia,MD,Vascular Surgery,DFW Medical Associates,7085 Maple St,Dallas,TX,75201,(614) 844-4022,Yes,"Silver,Gold",Yes,English,Baylor Scott & White
+1298870482,Joseph,Smith,MD,Vascular Surgery,Central Texas Health Partners,172 Lake St,Arlington,TX,76001,(970) 920-2025,Yes,"Bronze,Silver,Gold",Yes,English,Texas Health Resources
+1421490916,Richard,Miller,PA-C,Plastic Surgery,Gulf Coast Specialists,9880 Elm Dr,El Paso,TX,79901,(801) 316-6700,Yes,"Bronze,Silver",No,"English,Arabic",UT Southwestern Medical Center
+1400834337,Omar,Young,DO,Plastic Surgery,Lone Star Medical Group,5103 Oak St,Austin,TX,78701,(910) 344-9369,No,Gold,No,English,UT Southwestern Medical Center
+1310133983,Carlos,Thompson,MD,Speech Therapy,Central Texas Health Partners,9191 Park Rd,Austin,TX,78701,(343) 391-6154,No,"Bronze,Silver,Gold",Yes,"English,Hindi",Baylor Scott & White
+1527986647,Patricia,Smith,PA-C,Speech Therapy,Lone Star Medical Group,8209 Elm Way,Houston,TX,77001,(625) 927-8272,No,"Bronze,Silver",Yes,"English,Portuguese",Baylor Scott & White
+1607362554,Carlos,Smith,MD,Speech Therapy,Texas Health Partners,4829 Park Rd,Dallas,TX,75201,(960) 991-9115,Yes,Gold,Yes,English,Memorial Hermann Hospital
+1891281644,William,Chen,MD,Speech Therapy,Central Texas Health Partners,7065 Oak Way,Dallas,TX,75201,(869) 969-5055,Yes,"Bronze,Silver,Gold",Yes,English,Houston Methodist Hospital
+1149502403,Patricia,Williams,PA-C,Physical Therapy,Lone Star Medical Group,7115 Park Dr,Fort Worth,TX,76101,(411) 411-1972,Yes,"Silver,Gold",Yes,"English,Arabic",UT Southwestern Medical Center
+1986520398,Ahmed,Chen,MD,Physical Therapy,Gulf Coast Specialists,1660 Park Rd,Fort Worth,TX,76101,(260) 483-3078,Yes,Gold,Yes,"English,Portuguese",Dell Medical School
+1081084980,Ana,Martinez,MD,Physical Therapy,Central Texas Health Partners,6886 Elm Rd,Austin,TX,78701,(848) 987-2525,No,"Silver,Gold",Yes,"English,Korean",University Health System
+1713118992,Ana,Anderson,PA-C,Occupational Therapy,Gulf Coast Specialists,1626 Maple Way,Fort Worth,TX,76101,(914) 566-2037,No,"Bronze,Silver,Gold",Yes,English,JPS Health Network
+1960091255,David,Kim,DO,Occupational Therapy,Gulf Coast Specialists,9375 Maple Blvd,Arlington,TX,76001,(898) 980-1793,Yes,Gold,Yes,"English,Hindi",Dell Medical School
+1324125621,James,Brown,MD,Occupational Therapy,Central Texas Health Partners,3414 Park Way,Plano,TX,75023,(362) 480-2529,Yes,"Bronze,Silver,Gold",No,"English,Tagalog",JPS Health Network
+1102202698,Patricia,Allen,MD,Occupational Therapy,Central Texas Health Partners,7132 Oak Way,Dallas,TX,75201,(201) 418-8812,Yes,Gold,Yes,"English,French",Houston Methodist Hospital
+1245829826,Wei,Allen,PA-C,Allergy & Immunology,Texas Health Partners,2265 Maple Ave,San Antonio,TX,78201,(592) 291-2678,Yes,Gold,No,"English,Tagalog",Houston Methodist Hospital
+1775705487,Karen,Jones,MD,Allergy & Immunology,Lone Star Medical Group,2788 Maple Blvd,El Paso,TX,79901,(418) 843-3480,No,"Bronze,Silver,Gold",Yes,"English,Spanish",Baylor Scott & White
+1266058599,David,Williams,MD,Allergy & Immunology,Texas Health Partners,7135 Cedar St,Plano,TX,75023,(483) 860-2380,Yes,"Bronze,Silver,Gold",Yes,"English,Arabic",Baylor Scott & White
+1531381642,Ana,Smith,DO,Allergy & Immunology,DFW Medical Associates,4942 Main St,Fort Worth,TX,76101,(595) 315-4949,No,"Bronze,Silver,Gold",Yes,"English,Tagalog",Texas Health Resources
+1185510711,Wei,Smith,MD,Pain Management,Lone Star Medical Group,6086 Highland Way,Dallas,TX,75201,(981) 682-2195,Yes,"Bronze,Silver",Yes,"English,Tagalog",Dell Medical School
+1431942087,James,Wilson,MD,Pain Management,Texas Health Partners,6906 Elm Way,Dallas,TX,75201,(284) 855-9791,Yes,"Bronze,Silver",No,"English,Portuguese",Houston Methodist Hospital
+1750197517,Karen,Williams,NP,Pain Management,Lone Star Medical Group,9708 Oak Blvd,Dallas,TX,75201,(647) 947-4909,Yes,"Bronze,Silver,Gold",Yes,English,Texas Health Resources
+1533019326,Sandra,Brown,PA-C,Pain Management,Gulf Coast Specialists,2348 Main St,Dallas,TX,75201,(555) 735-9474,Yes,"Silver,Gold",Yes,English,Houston Methodist Hospital
+1619175016,Kenji,Wilson,MD,Urgent Care,Gulf Coast Specialists,1146 Pine Way,Austin,TX,78701,(842) 278-9128,No,"Bronze,Silver",Yes,English,Houston Methodist Hospital
+1776077372,Maria,Kim,MD,Urgent Care,Gulf Coast Specialists,1785 Broadway Way,El Paso,TX,79901,(318) 433-9336,Yes,"Silver,Gold",Yes,English,Baylor Scott & White
+1795283876,Susan,Johnson,PA-C,Urgent Care,Central Texas Health Partners,679 Highland Way,Houston,TX,77001,(871) 629-4678,Yes,"Silver,Gold",Yes,English,Dell Medical School
+1049315449,William,Williams,MD,Cardiology,Pacific Health Partners,3038 Lake Dr,Oakland,CA,94601,(610) 270-8620,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Scripps Health
+1498137488,Robert,Chen,PA-C,Cardiology,Bay Area Specialists,5079 Broadway St,Oakland,CA,94601,(577) 805-9083,Yes,"Silver,Gold",Yes,English,Cedars-Sinai Medical Center
+1814893975,Michael,Smith,MD,Cardiology,Golden State Medical Group,257 Cedar Ave,Sacramento,CA,95814,(873) 585-6038,Yes,"Bronze,Silver,Gold",Yes,English,Cedars-Sinai Medical Center
+1752528635,Sandra,Kim,MD,Neurology,Bay Area Specialists,3892 Highland Rd,Sacramento,CA,95814,(581) 669-2391,Yes,"Bronze,Silver,Gold",Yes,English,Stanford Health Care
+1752398388,Yuki,Thompson,MD,Neurology,SoCal Medical Associates,4376 Cedar Rd,San Diego,CA,92101,(953) 534-6211,No,"Silver,Gold",No,English,Cedars-Sinai Medical Center
+1129640083,Robert,Miller,MD,Neurology,Golden State Medical Group,7735 Cedar Rd,Sacramento,CA,95814,(748) 566-4401,No,"Bronze,Silver,Gold",No,English,UCSF Medical Center
+1763599447,William,Brown,MD,Neurology,Bay Area Specialists,5470 Park Ave,Long Beach,CA,90802,(454) 564-7492,Yes,"Bronze,Silver,Gold",Yes,English,Stanford Health Care
+1130409444,Linda,Smith,MD,Dermatology,California Health Network,7670 Oak St,San Jose,CA,95101,(212) 263-4641,Yes,"Bronze,Silver,Gold",Yes,English,Providence Saint Joseph Medical Center
+1971820065,Patricia,Allen,MD,Dermatology,Pacific Health Partners,7365 Park Ave,Fresno,CA,93701,(539) 325-1699,No,"Bronze,Silver,Gold",Yes,"English,French",Kaiser Permanente
+1295259429,Carlos,White,MD,Dermatology,Pacific Health Partners,5899 Lake St,San Diego,CA,92101,(486) 656-3435,Yes,"Bronze,Silver",Yes,"English,Hindi",Providence Saint Joseph Medical Center
+1450149967,Yuki,Taylor,PA-C,Orthopedics,California Health Network,4683 Elm St,Sacramento,CA,95814,(404) 858-9614,Yes,"Bronze,Silver",Yes,English,Huntington Hospital
+1417021222,Joseph,Young,MD,Orthopedics,California Health Network,9367 Highland Blvd,Los Angeles,CA,90001,(476) 384-1427,Yes,"Bronze,Silver",Yes,English,Providence Saint Joseph Medical Center
+1705302800,James,Wilson,MD,Orthopedics,California Health Network,2715 Oak St,Sacramento,CA,95814,(446) 472-9743,Yes,Gold,Yes,"English,French",Providence Saint Joseph Medical Center
+1752221438,Patricia,Garcia,MD,Orthopedics,California Health Network,9792 Main Way,Fresno,CA,93701,(560) 781-3328,Yes,Gold,No,"English,Arabic",UCLA Medical Center
+1356196659,Linda,Kim,MD,Gastroenterology,Pacific Health Partners,8725 Maple Ave,San Jose,CA,95101,(828) 406-3137,Yes,"Silver,Gold",Yes,"English,Spanish",UCSF Medical Center
+1756491925,Richard,Johnson,MD,Gastroenterology,California Health Network,6078 Oak Blvd,San Diego,CA,92101,(878) 605-2655,Yes,"Silver,Gold",No,"English,Portuguese",Stanford Health Care
+1632380409,Michael,Garcia,MD,Gastroenterology,Bay Area Specialists,5946 Lake Way,Oakland,CA,94601,(379) 587-6026,Yes,"Silver,Gold",Yes,"English,Portuguese",Providence Saint Joseph Medical Center
+1686815488,Kenji,Smith,MD,Gastroenterology,California Health Network,5313 Broadway St,San Diego,CA,92101,(779) 306-9129,Yes,"Bronze,Silver,Gold",No,English,Huntington Hospital
+1744292151,Susan,Anderson,MD,Ophthalmology,Pacific Health Partners,4445 Lake St,San Francisco,CA,94102,(269) 558-5205,Yes,Gold,Yes,English,Stanford Health Care
+1403026384,Maria,Thompson,PA-C,Ophthalmology,Golden State Medical Group,6304 Cedar Dr,Los Angeles,CA,90001,(303) 690-4695,Yes,"Bronze,Silver",No,English,Huntington Hospital
+1785963005,Maria,Taylor,MD,Ophthalmology,Bay Area Specialists,2887 Elm St,San Francisco,CA,94102,(276) 760-2525,Yes,"Bronze,Silver,Gold",Yes,English,Scripps Health
+1203994042,Ana,Smith,MD,Ophthalmology,California Health Network,1759 Cedar St,Long Beach,CA,90802,(619) 913-9849,Yes,"Bronze,Silver",Yes,English,Stanford Health Care
+1459138405,Susan,Brown,MD,Nephrology,California Health Network,993 Cedar Ave,San Jose,CA,95101,(289) 501-8869,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Huntington Hospital
+1960867381,David,Garcia,DO,Nephrology,SoCal Medical Associates,6612 Maple Rd,Los Angeles,CA,90001,(876) 471-2493,No,"Bronze,Silver,Gold",Yes,English,UCSF Medical Center
+1605855162,Joseph,Anderson,MD,Nephrology,Pacific Health Partners,4415 Lake Blvd,Oakland,CA,94601,(263) 354-2584,Yes,Gold,Yes,English,Providence Saint Joseph Medical Center
+1946668636,Carlos,Davis,NP,Pulmonology,SoCal Medical Associates,8873 Maple Dr,Fresno,CA,93701,(441) 687-5896,Yes,"Bronze,Silver,Gold",No,English,Cedars-Sinai Medical Center
+1135491190,Wei,Rodriguez,NP,Pulmonology,Pacific Health Partners,2838 Lake St,Los Angeles,CA,90001,(243) 633-2283,No,"Bronze,Silver",Yes,English,Stanford Health Care
+1491942526,Ahmed,Wilson,MD,Pulmonology,Pacific Health Partners,5443 Pine Dr,San Diego,CA,92101,(212) 917-9561,No,"Bronze,Silver",Yes,"English,Portuguese",UCSF Medical Center
+1283614547,Michael,Rodriguez,MD,Endocrinology,Pacific Health Partners,8875 Cedar Rd,San Diego,CA,92101,(592) 870-8955,No,"Bronze,Silver,Gold",Yes,"English,Korean",UCSF Medical Center
+1510261646,William,Thompson,MD,Endocrinology,Pacific Health Partners,3992 Main Way,San Diego,CA,92101,(475) 581-1331,Yes,"Bronze,Silver",No,"English,Arabic",Huntington Hospital
+1447506309,William,Kim,MD,Endocrinology,Golden State Medical Group,5357 Pine Way,San Jose,CA,95101,(819) 861-2462,Yes,Gold,No,"English,Russian",UCLA Medical Center
+1145652883,Kenji,Kim,NP,Oncology,Pacific Health Partners,5197 Highland Rd,Fresno,CA,93701,(999) 736-1474,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",Scripps Health
+1426213526,Maria,Davis,MD,Oncology,Pacific Health Partners,6135 Maple Dr,Sacramento,CA,95814,(850) 326-1500,Yes,Gold,No,"English,Korean",Providence Saint Joseph Medical Center
+1415071728,Linda,Kim,MD,Hematology,Bay Area Specialists,1580 Pine Ave,Long Beach,CA,90802,(250) 366-4511,Yes,"Silver,Gold",Yes,"English,Korean",Scripps Health
+1185972787,Omar,Miller,DO,Hematology,California Health Network,7867 Park Way,Sacramento,CA,95814,(815) 208-4666,Yes,"Bronze,Silver,Gold",Yes,"English,Spanish",Huntington Hospital
+1727133833,Ana,Young,DO,Hematology,SoCal Medical Associates,3675 Maple Blvd,San Jose,CA,95101,(733) 838-7506,Yes,Gold,Yes,English,Huntington Hospital
+1349113269,Priya,Hall,MD,Psychiatry,Bay Area Specialists,5609 Pine Way,Oakland,CA,94601,(483) 467-5895,Yes,"Bronze,Silver,Gold",Yes,English,Kaiser Permanente
+1416907018,Maria,Walker,MD,Psychiatry,Golden State Medical Group,4350 Elm Rd,Sacramento,CA,95814,(954) 236-4111,Yes,"Bronze,Silver,Gold",Yes,"English,Korean",Scripps Health
+1505497119,Omar,Chen,PA-C,Psychiatry,California Health Network,3067 Pine Ave,Sacramento,CA,95814,(331) 958-5237,Yes,Gold,Yes,"English,Portuguese",Scripps Health
+1628751749,Yuki,Williams,MD,Psychiatry,Golden State Medical Group,5528 Cedar Blvd,Oakland,CA,94601,(501) 674-2929,No,Gold,Yes,English,Scripps Health
+1215066828,Jessica,Miller,NP,OB/GYN,SoCal Medical Associates,985 Park St,San Francisco,CA,94102,(550) 619-8496,Yes,"Bronze,Silver,Gold",No,English,UCSF Medical Center
+1618774770,Robert,Kim,MD,OB/GYN,Bay Area Specialists,4581 Lake St,San Diego,CA,92101,(982) 362-9021,Yes,"Bronze,Silver,Gold",Yes,English,Stanford Health Care
+1400614581,Yuki,White,MD,OB/GYN,SoCal Medical Associates,8845 Lake Way,Fresno,CA,93701,(214) 529-9700,Yes,"Bronze,Silver",Yes,English,Huntington Hospital
+1328688580,Yuki,Moore,MD,OB/GYN,Bay Area Specialists,6384 Highland Dr,Los Angeles,CA,90001,(371) 266-1749,Yes,Gold,No,English,UCLA Medical Center
+1240863230,Sandra,Allen,MD,Pediatrics,SoCal Medical Associates,6709 Main St,Oakland,CA,94601,(944) 334-4460,Yes,Gold,Yes,"English,Hindi",Scripps Health
+1740613153,Jennifer,Anderson,MD,Pediatrics,Bay Area Specialists,1871 Main Ave,San Diego,CA,92101,(318) 626-8279,No,"Bronze,Silver,Gold",Yes,"English,Spanish",Huntington Hospital
+1668724016,Jessica,Young,MD,Pediatrics,Pacific Health Partners,1754 Highland Blvd,San Jose,CA,95101,(820) 917-3247,No,Gold,Yes,English,UCLA Medical Center
+1384315640,Karen,Brown,MD,Internal Medicine,Golden State Medical Group,4408 Highland St,San Francisco,CA,94102,(920) 619-5839,Yes,"Bronze,Silver,Gold",Yes,English,Providence Saint Joseph Medical Center
+1718356830,David,Young,PA-C,Internal Medicine,Golden State Medical Group,1558 Oak Dr,Long Beach,CA,90802,(705) 352-2475,Yes,"Bronze,Silver,Gold",Yes,English,Scripps Health
+1915095060,William,Hall,MD,Internal Medicine,Bay Area Specialists,1735 Park Ave,San Francisco,CA,94102,(497) 568-6123,No,Gold,Yes,English,Providence Saint Joseph Medical Center
+1943255923,Jennifer,Johnson,MD,Internal Medicine,Golden State Medical Group,7271 Broadway Blvd,San Francisco,CA,94102,(950) 295-7105,Yes,Gold,Yes,English,Stanford Health Care
+1779977998,Joseph,Harris,DO,Family Medicine,SoCal Medical Associates,1952 Park Way,Fresno,CA,93701,(260) 363-2699,No,"Bronze,Silver",Yes,"English,Hindi",Huntington Hospital
+1121265692,Carlos,Allen,PA-C,Family Medicine,California Health Network,2240 Maple Rd,Long Beach,CA,90802,(621) 651-1753,Yes,"Bronze,Silver",No,"English,Spanish",Stanford Health Care
+1371245687,James,Young,NP,Rheumatology,Bay Area Specialists,7191 Lake Rd,Oakland,CA,94601,(879) 892-7305,Yes,"Bronze,Silver,Gold",Yes,"English,Mandarin",UCLA Medical Center
+1355295629,James,Hall,MD,Rheumatology,SoCal Medical Associates,8155 Cedar St,Los Angeles,CA,90001,(484) 251-9305,Yes,"Silver,Gold",Yes,English,Providence Saint Joseph Medical Center
+1127460504,Joseph,Davis,MD,Rheumatology,SoCal Medical Associates,8266 Maple Blvd,Fresno,CA,93701,(709) 963-1291,Yes,"Bronze,Silver,Gold",No,English,Providence Saint Joseph Medical Center
+1702867083,Maria,Chen,NP,Rheumatology,Pacific Health Partners,8428 Highland St,Fresno,CA,93701,(887) 667-6584,Yes,"Bronze,Silver,Gold",Yes,"English,Korean",Cedars-Sinai Medical Center
+1381327572,Richard,Chen,MD,Urology,Bay Area Specialists,3733 Main Blvd,Long Beach,CA,90802,(848) 498-9973,Yes,"Bronze,Silver",Yes,English,Providence Saint Joseph Medical Center
+1998812098,Maria,Garcia,PA-C,Urology,SoCal Medical Associates,3309 Lake Ave,San Francisco,CA,94102,(602) 420-8488,Yes,"Bronze,Silver,Gold",Yes,English,Stanford Health Care
+1569474377,Sandra,Johnson,MD,Infectious Disease,SoCal Medical Associates,2305 Maple Ave,San Francisco,CA,94102,(953) 249-8091,No,"Bronze,Silver",Yes,"English,Portuguese",UCSF Medical Center
+1653901994,Ana,Rodriguez,MD,Infectious Disease,Pacific Health Partners,8359 Elm Rd,San Diego,CA,92101,(909) 980-5067,Yes,"Bronze,Silver",No,"English,Arabic",Stanford Health Care
+1764369269,Karen,Harris,MD,Infectious Disease,SoCal Medical Associates,4997 Highland Blvd,Oakland,CA,94601,(954) 766-4560,Yes,"Bronze,Silver,Gold",Yes,"English,Portuguese",Stanford Health Care
+1515793279,Omar,Anderson,MD,Radiology,California Health Network,1990 Cedar Dr,San Jose,CA,95101,(796) 784-7839,Yes,"Bronze,Silver,Gold",No,"English,Arabic",Stanford Health Care
+1733784779,Wei,Brown,MD,Radiology,Golden State Medical Group,4474 Park Blvd,Los Angeles,CA,90001,(456) 349-2016,Yes,"Bronze,Silver,Gold",Yes,"English,French",Huntington Hospital
+1416133637,Patricia,Harris,MD,Radiology,California Health Network,4812 Main Rd,Los Angeles,CA,90001,(626) 901-6122,Yes,"Bronze,Silver",Yes,English,UCLA Medical Center
+1190509600,David,Walker,PA-C,Radiology,Bay Area Specialists,3270 Pine Rd,San Jose,CA,95101,(899) 276-4063,Yes,"Bronze,Silver,Gold",Yes,"English,French",UCLA Medical Center
+1354939091,Joseph,Johnson,MD,Emergency Medicine,California Health Network,9668 Pine Ave,San Francisco,CA,94102,(677) 926-3536,Yes,Gold,Yes,English,Kaiser Permanente
+1197427943,Ahmed,Johnson,MD,Emergency Medicine,SoCal Medical Associates,5307 Highland St,Oakland,CA,94601,(733) 269-9276,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Kaiser Permanente
+1509874021,Robert,Anderson,MD,Emergency Medicine,Bay Area Specialists,3679 Broadway Dr,Fresno,CA,93701,(774) 970-1144,Yes,Gold,Yes,English,UCLA Medical Center
+1580075399,Thomas,Davis,MD,Emergency Medicine,Pacific Health Partners,1957 Elm Blvd,Oakland,CA,94601,(941) 489-1404,Yes,Gold,Yes,English,UCLA Medical Center
+1572525395,Jessica,Johnson,DO,General Surgery,Bay Area Specialists,1672 Park Dr,Long Beach,CA,90802,(207) 841-2072,Yes,"Bronze,Silver,Gold",Yes,English,UCLA Medical Center
+1769731458,Omar,White,MD,General Surgery,California Health Network,2619 Main Rd,Sacramento,CA,95814,(539) 238-2433,Yes,"Bronze,Silver",Yes,"English,Mandarin",UCLA Medical Center
+1018136542,William,Chen,MD,General Surgery,Bay Area Specialists,6726 Elm Blvd,San Diego,CA,92101,(598) 889-2938,Yes,"Bronze,Silver",Yes,English,UCLA Medical Center
+1302277050,Kenji,Rodriguez,MD,General Surgery,Bay Area Specialists,5037 Broadway Ave,San Francisco,CA,94102,(983) 648-7249,No,"Bronze,Silver,Gold",Yes,English,UCSF Medical Center
+1952385500,Linda,Chen,MD,Vascular Surgery,SoCal Medical Associates,2460 Pine Way,Long Beach,CA,90802,(946) 863-7113,Yes,"Bronze,Silver,Gold",Yes,English,Stanford Health Care
+1443084388,Jennifer,Johnson,MD,Vascular Surgery,California Health Network,3541 Cedar St,San Diego,CA,92101,(861) 724-3333,Yes,"Bronze,Silver,Gold",Yes,"English,Korean",Huntington Hospital
+1105444031,David,Brown,MD,Plastic Surgery,California Health Network,4862 Oak Blvd,San Jose,CA,95101,(402) 943-8982,Yes,"Bronze,Silver",No,"English,Mandarin",Cedars-Sinai Medical Center
+1483877436,Omar,Hall,MD,Plastic Surgery,Bay Area Specialists,3270 Cedar Rd,San Diego,CA,92101,(536) 831-6008,Yes,"Bronze,Silver,Gold",Yes,English,UCSF Medical Center
+1729693657,Richard,White,MD,Speech Therapy,Bay Area Specialists,4633 Cedar St,Oakland,CA,94601,(950) 539-8863,No,"Silver,Gold",No,"English,Tagalog",Cedars-Sinai Medical Center
+1210917183,Karen,Kim,NP,Speech Therapy,Golden State Medical Group,4697 Park Dr,Oakland,CA,94601,(469) 951-2252,Yes,"Bronze,Silver,Gold",Yes,English,UCSF Medical Center
+1832361696,Carlos,Rodriguez,MD,Speech Therapy,Pacific Health Partners,8942 Maple Way,Los Angeles,CA,90001,(352) 574-7430,Yes,"Bronze,Silver,Gold",Yes,English,UCLA Medical Center
+1479125557,Michael,Harris,NP,Speech Therapy,SoCal Medical Associates,2817 Highland St,San Jose,CA,95101,(363) 383-3395,No,Gold,No,"English,French",UCSF Medical Center
+1416711804,Jessica,Davis,MD,Physical Therapy,Bay Area Specialists,3487 Highland Blvd,Sacramento,CA,95814,(680) 665-1760,Yes,"Silver,Gold",Yes,English,Kaiser Permanente
+1631015334,Jennifer,Young,NP,Physical Therapy,Bay Area Specialists,6271 Elm Blvd,Oakland,CA,94601,(869) 279-9465,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Kaiser Permanente
+1082772849,Patricia,Anderson,PA-C,Occupational Therapy,California Health Network,7307 Park St,Fresno,CA,93701,(726) 858-5600,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Providence Saint Joseph Medical Center
+1226241647,Linda,Anderson,MD,Occupational Therapy,Golden State Medical Group,7989 Maple Rd,San Diego,CA,92101,(804) 365-7732,Yes,"Bronze,Silver",Yes,"English,Mandarin",UCSF Medical Center
+1990469789,Carlos,Rodriguez,MD,Allergy & Immunology,California Health Network,1016 Park Blvd,San Diego,CA,92101,(384) 729-7642,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Stanford Health Care
+1853212504,Robert,Miller,PA-C,Allergy & Immunology,SoCal Medical Associates,6830 Broadway St,San Jose,CA,95101,(796) 985-3979,Yes,"Silver,Gold",Yes,English,Providence Saint Joseph Medical Center
+1561257031,Thomas,Walker,MD,Pain Management,Golden State Medical Group,1878 Main St,Oakland,CA,94601,(716) 900-7877,Yes,"Bronze,Silver",Yes,English,UCSF Medical Center
+1579053918,Linda,Kim,MD,Pain Management,California Health Network,8001 Park Dr,San Francisco,CA,94102,(201) 993-8069,No,"Bronze,Silver,Gold",No,"English,Mandarin",Cedars-Sinai Medical Center
+1143755891,Ana,Patel,MD,Pain Management,SoCal Medical Associates,9539 Oak Rd,Los Angeles,CA,90001,(460) 688-4809,Yes,"Bronze,Silver",No,English,UCLA Medical Center
+1220566645,William,Miller,MD,Pain Management,California Health Network,217 Elm Way,Fresno,CA,93701,(904) 523-7698,Yes,"Bronze,Silver,Gold",Yes,English,Cedars-Sinai Medical Center
+1592818173,Yuki,Rodriguez,DO,Urgent Care,California Health Network,6611 Lake Rd,Fresno,CA,93701,(770) 694-3928,Yes,"Bronze,Silver",Yes,"English,Korean",Kaiser Permanente
+1173726191,William,Taylor,MD,Urgent Care,SoCal Medical Associates,3864 Maple Way,Long Beach,CA,90802,(302) 419-9328,No,"Silver,Gold",No,"English,Mandarin",Scripps Health
+1238123991,Linda,Thompson,MD,Cardiology,Florida Medical Group,1544 Oak Blvd,Miami,FL,33101,(579) 281-1618,No,"Bronze,Silver",No,"English,Tagalog",Jackson Memorial Hospital
+1036087763,Ana,Walker,MD,Cardiology,Coastal Health Associates,8589 Pine St,Fort Lauderdale,FL,33301,(813) 722-9451,Yes,"Bronze,Silver",Yes,English,Mayo Clinic Florida
+1719044151,Omar,Johnson,MD,Cardiology,Sunshine State Health Partners,4620 Elm Blvd,Tampa,FL,33601,(604) 615-4281,Yes,"Silver,Gold",Yes,English,Tampa General Hospital
+1617301394,Robert,Chen,DO,Cardiology,Southeast Specialists,3287 Maple Rd,Orlando,FL,32801,(204) 467-3867,No,Gold,Yes,English,Broward Health
+1519293644,Wei,Taylor,MD,Neurology,Florida Health Network,7354 Elm Dr,Orlando,FL,32801,(988) 449-6565,No,Gold,Yes,"English,Korean",Jackson Memorial Hospital
+1442839009,Carlos,Smith,PA-C,Neurology,Southeast Specialists,3710 Lake Blvd,Gainesville,FL,32601,(561) 728-9776,Yes,"Bronze,Silver,Gold",Yes,English,Jackson Memorial Hospital
+1960264762,Karen,Williams,MD,Dermatology,Sunshine State Health Partners,5242 Cedar St,Jacksonville,FL,32099,(787) 475-3994,Yes,"Bronze,Silver,Gold",No,"English,Russian",Broward Health
+1167498965,Susan,Moore,MD,Dermatology,Florida Medical Group,4191 Broadway Blvd,Jacksonville,FL,32099,(997) 309-2964,Yes,"Silver,Gold",Yes,English,UF Health Shands
+1196357164,Ahmed,Smith,NP,Dermatology,Coastal Health Associates,9512 Pine Rd,Gainesville,FL,32601,(982) 723-5591,No,Gold,Yes,"English,Russian",AdventHealth Orlando
+1749734394,Maria,Patel,MD,Orthopedics,Florida Health Network,2963 Maple Ave,Tampa,FL,33601,(730) 671-6171,Yes,"Bronze,Silver,Gold",Yes,"English,Tagalog",Baptist Health South Florida
+1289274886,Joseph,Rodriguez,MD,Orthopedics,Southeast Specialists,9087 Pine St,Jacksonville,FL,32099,(682) 827-6621,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Broward Health
+1618360105,Sandra,Miller,MD,Orthopedics,Southeast Specialists,3047 Broadway St,Gainesville,FL,32601,(902) 434-2636,Yes,"Bronze,Silver",Yes,English,Broward Health
+1555132014,Joseph,Miller,MD,Orthopedics,Coastal Health Associates,8285 Park Way,West Palm Beach,FL,33401,(746) 937-6172,No,"Bronze,Silver,Gold",No,English,Mayo Clinic Florida
+1359334721,Joseph,Brown,MD,Gastroenterology,Florida Medical Group,1677 Maple Way,Miami,FL,33101,(466) 569-6903,Yes,Gold,No,English,AdventHealth Orlando
+1349063037,Sandra,Brown,MD,Gastroenterology,Florida Health Network,2959 Pine Blvd,Miami,FL,33101,(889) 722-8987,No,"Bronze,Silver,Gold",Yes,"English,Portuguese",Tampa General Hospital
+1084945787,Ahmed,Taylor,PA-C,Gastroenterology,Florida Medical Group,9465 Elm Ave,West Palm Beach,FL,33401,(365) 551-4739,Yes,Gold,No,English,Mayo Clinic Florida
+1444517369,Ana,Wilson,MD,Ophthalmology,Southeast Specialists,9716 Highland Rd,Fort Lauderdale,FL,33301,(371) 388-1378,Yes,"Bronze,Silver",Yes,"English,Arabic",Cleveland Clinic Florida
+1057794625,Omar,Wilson,MD,Ophthalmology,Florida Medical Group,1145 Maple Dr,Jacksonville,FL,32099,(226) 989-7504,Yes,"Bronze,Silver",Yes,English,Tampa General Hospital
+1135733540,Ahmed,Jones,MD,Ophthalmology,Southeast Specialists,4755 Maple Way,Fort Lauderdale,FL,33301,(334) 739-3795,Yes,"Silver,Gold",Yes,English,Cleveland Clinic Florida
+1641651145,Richard,Kim,PA-C,Ophthalmology,Florida Health Network,8935 Park Dr,Boca Raton,FL,33431,(667) 846-8126,Yes,"Bronze,Silver",No,English,UF Health Shands
+1875507381,Robert,Harris,DO,Nephrology,Coastal Health Associates,272 Main Dr,Jacksonville,FL,32099,(976) 339-6634,Yes,Gold,No,English,Broward Health
+1202476546,Ana,Kim,PA-C,Nephrology,Sunshine State Health Partners,218 Highland Blvd,Miami,FL,33101,(621) 774-8161,No,"Bronze,Silver",Yes,"English,French",UF Health Shands
+1867126986,Ana,Moore,MD,Nephrology,Florida Medical Group,4024 Highland Dr,Tampa,FL,33601,(910) 901-5454,Yes,Gold,Yes,English,Cleveland Clinic Florida
+1292201792,Sandra,Miller,MD,Pulmonology,Florida Medical Group,7560 Broadway Rd,Fort Lauderdale,FL,33301,(917) 837-9060,Yes,Gold,No,English,Mayo Clinic Florida
+1008809073,Michael,Johnson,NP,Pulmonology,Florida Medical Group,2148 Maple Way,Miami,FL,33101,(438) 292-3468,Yes,"Bronze,Silver,Gold",No,English,AdventHealth Orlando
+1060170716,Richard,White,DO,Pulmonology,Southeast Specialists,5510 Oak St,Jacksonville,FL,32099,(472) 994-7429,Yes,"Bronze,Silver",Yes,"English,Spanish",Baptist Health South Florida
+1792012381,Linda,Miller,DO,Pulmonology,Sunshine State Health Partners,6404 Maple St,Gainesville,FL,32601,(234) 403-8550,Yes,"Bronze,Silver,Gold",Yes,"English,French",Cleveland Clinic Florida
+1516716343,Jessica,Thompson,DO,Endocrinology,Florida Medical Group,8634 Oak Blvd,Jacksonville,FL,32099,(853) 505-4255,Yes,"Bronze,Silver,Gold",Yes,"English,Portuguese",Broward Health
+1045090037,Jennifer,Davis,MD,Endocrinology,Sunshine State Health Partners,6584 Lake Ave,Jacksonville,FL,32099,(795) 907-8786,Yes,"Silver,Gold",No,"English,Mandarin",Broward Health
+1165268660,Susan,Garcia,PA-C,Endocrinology,Florida Health Network,1079 Cedar Way,Orlando,FL,32801,(918) 749-2759,Yes,Gold,No,"English,Spanish",Jackson Memorial Hospital
+1521089199,Richard,Chen,MD,Endocrinology,Florida Medical Group,2307 Pine Ave,Jacksonville,FL,32099,(923) 648-5828,No,"Bronze,Silver,Gold",Yes,"English,Arabic",Baptist Health South Florida
+1166457342,Priya,Anderson,MD,Oncology,Southeast Specialists,2727 Oak Dr,Tampa,FL,33601,(660) 502-5314,Yes,"Bronze,Silver,Gold",No,"English,Portuguese",Baptist Health South Florida
+1578700154,Yuki,Patel,MD,Oncology,Sunshine State Health Partners,5354 Oak Way,Miami,FL,33101,(596) 394-9586,No,"Bronze,Silver,Gold",Yes,"English,French",Mayo Clinic Florida
+1191811951,Ahmed,Taylor,MD,Oncology,Southeast Specialists,1192 Main St,Tampa,FL,33601,(232) 406-2753,No,"Bronze,Silver,Gold",Yes,English,Cleveland Clinic Florida
+1650637748,Maria,Rodriguez,MD,Oncology,Florida Health Network,904 Cedar St,Orlando,FL,32801,(935) 272-1214,Yes,"Bronze,Silver,Gold",Yes,"English,Korean",Baptist Health South Florida
+1788448988,Thomas,Hall,MD,Hematology,Florida Health Network,4455 Highland Ave,Orlando,FL,32801,(272) 511-2276,Yes,"Bronze,Silver",Yes,"English,Spanish",Broward Health
+1804441314,Jennifer,Moore,MD,Hematology,Florida Medical Group,9439 Park Dr,Orlando,FL,32801,(771) 625-2728,Yes,"Silver,Gold",Yes,"English,French",Cleveland Clinic Florida
+1644154611,Ana,Allen,MD,Hematology,Florida Medical Group,5629 Park Dr,Gainesville,FL,32601,(653) 560-6163,Yes,"Silver,Gold",No,"English,Portuguese",Jackson Memorial Hospital
+1485764529,Kenji,Martinez,MD,Psychiatry,Florida Health Network,9115 Pine Blvd,West Palm Beach,FL,33401,(658) 606-1003,Yes,"Bronze,Silver,Gold",No,English,Tampa General Hospital
+1882978122,Wei,Jones,DO,Psychiatry,Southeast Specialists,5259 Main Way,Miami,FL,33101,(482) 766-9376,Yes,"Silver,Gold",Yes,English,AdventHealth Orlando
+1098682372,Thomas,Anderson,MD,Psychiatry,Southeast Specialists,3917 Pine Blvd,Miami,FL,33101,(784) 609-4562,Yes,Gold,Yes,"English,French",Mayo Clinic Florida
+1837649523,Linda,Kim,MD,OB/GYN,Florida Health Network,9541 Elm Ave,Gainesville,FL,32601,(257) 989-6478,Yes,Gold,No,English,Jackson Memorial Hospital
+1606570606,Jennifer,Davis,MD,OB/GYN,Coastal Health Associates,774 Cedar Dr,West Palm Beach,FL,33401,(353) 534-9231,Yes,"Bronze,Silver,Gold",Yes,English,AdventHealth Orlando
+1158927104,Omar,Moore,MD,OB/GYN,Florida Health Network,7176 Pine Rd,Miami,FL,33101,(335) 544-2352,No,"Bronze,Silver,Gold",Yes,"English,French",Baptist Health South Florida
+1600539700,Priya,Thompson,DO,Pediatrics,Coastal Health Associates,2236 Park Rd,Miami,FL,33101,(402) 699-7476,Yes,"Bronze,Silver,Gold",Yes,English,Jackson Memorial Hospital
+1373992719,Susan,Williams,DO,Pediatrics,Southeast Specialists,6876 Elm Blvd,Jacksonville,FL,32099,(395) 528-6644,Yes,"Bronze,Silver,Gold",No,English,Cleveland Clinic Florida
+1813610452,Patricia,Walker,PA-C,Pediatrics,Coastal Health Associates,3371 Cedar St,Tampa,FL,33601,(945) 287-2841,Yes,"Bronze,Silver,Gold",Yes,"English,French",Mayo Clinic Florida
+1577678962,Karen,Smith,MD,Pediatrics,Southeast Specialists,5537 Lake Way,Tampa,FL,33601,(416) 408-9952,Yes,"Bronze,Silver",Yes,English,Jackson Memorial Hospital
+1215495749,Ana,Young,MD,Internal Medicine,Florida Health Network,2890 Main Blvd,Tampa,FL,33601,(913) 832-5444,Yes,"Bronze,Silver,Gold",No,English,Cleveland Clinic Florida
+1546041020,Robert,Thompson,DO,Internal Medicine,Sunshine State Health Partners,6432 Lake Rd,Miami,FL,33101,(926) 301-6168,No,"Bronze,Silver,Gold",Yes,English,Broward Health
+1526061386,Linda,Miller,NP,Internal Medicine,Florida Health Network,8773 Pine Blvd,Orlando,FL,32801,(602) 962-3572,Yes,"Bronze,Silver,Gold",No,English,Baptist Health South Florida
+1300855850,Patricia,Hall,DO,Family Medicine,Florida Health Network,6443 Main Dr,Boca Raton,FL,33431,(430) 355-6599,No,Gold,Yes,"English,Korean",Tampa General Hospital
+1482291740,Robert,Moore,MD,Family Medicine,Coastal Health Associates,5218 Broadway Blvd,Tampa,FL,33601,(755) 334-4387,Yes,"Silver,Gold",Yes,"English,Tagalog",Tampa General Hospital
+1572263097,Michael,Taylor,NP,Family Medicine,Coastal Health Associates,5301 Oak Dr,Jacksonville,FL,32099,(936) 321-4016,Yes,"Silver,Gold",Yes,"English,Hindi",Mayo Clinic Florida
+1198370042,Richard,White,MD,Family Medicine,Coastal Health Associates,3179 Oak St,Miami,FL,33101,(226) 980-5372,Yes,Gold,Yes,English,UF Health Shands
+1527685695,Omar,Smith,MD,Rheumatology,Coastal Health Associates,6226 Park Rd,Jacksonville,FL,32099,(685) 340-3683,Yes,"Silver,Gold",Yes,"English,Russian",Jackson Memorial Hospital
+1526072176,Sandra,Smith,DO,Rheumatology,Florida Medical Group,3001 Maple Dr,Miami,FL,33101,(904) 532-8496,Yes,"Silver,Gold",No,"English,Mandarin",Cleveland Clinic Florida
+1117377475,Ahmed,Moore,MD,Urology,Coastal Health Associates,8705 Main Dr,Miami,FL,33101,(662) 667-1694,Yes,"Bronze,Silver,Gold",Yes,"English,Portuguese",Broward Health
+1830729364,Kenji,Johnson,NP,Urology,Florida Health Network,7301 Elm Blvd,West Palm Beach,FL,33401,(492) 672-3727,No,"Bronze,Silver,Gold",No,English,Cleveland Clinic Florida
+1586700164,Ana,Patel,MD,Urology,Coastal Health Associates,3045 Broadway Way,Miami,FL,33101,(338) 602-7775,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Baptist Health South Florida
+1122583664,Thomas,Rodriguez,MD,Infectious Disease,Sunshine State Health Partners,2786 Oak Ave,Tampa,FL,33601,(923) 660-6946,Yes,Gold,Yes,English,Baptist Health South Florida
+1935557052,Kenji,Patel,MD,Infectious Disease,Coastal Health Associates,2899 Cedar Dr,West Palm Beach,FL,33401,(875) 353-3656,Yes,"Bronze,Silver,Gold",Yes,English,Mayo Clinic Florida
+1668469061,Sandra,Taylor,DO,Radiology,Southeast Specialists,2255 Lake Ave,Miami,FL,33101,(983) 459-1200,No,"Silver,Gold",No,English,Baptist Health South Florida
+1085260383,Priya,Smith,MD,Radiology,Florida Medical Group,7534 Elm Rd,Gainesville,FL,32601,(815) 814-1107,Yes,"Silver,Gold",Yes,"English,Russian",Baptist Health South Florida
+1916792220,Ahmed,Hall,NP,Radiology,Sunshine State Health Partners,5818 Main St,Fort Lauderdale,FL,33301,(233) 883-5889,Yes,"Silver,Gold",Yes,English,Tampa General Hospital
+1621660320,Jennifer,White,MD,Radiology,Southeast Specialists,3006 Maple Way,Miami,FL,33101,(568) 236-2525,Yes,"Bronze,Silver,Gold",No,"English,Portuguese",Mayo Clinic Florida
+1444269173,Robert,White,NP,Emergency Medicine,Southeast Specialists,4596 Cedar Dr,West Palm Beach,FL,33401,(737) 414-4425,Yes,"Bronze,Silver",Yes,English,Jackson Memorial Hospital
+1379947133,Jessica,Moore,MD,Emergency Medicine,Coastal Health Associates,8708 Broadway Dr,Orlando,FL,32801,(332) 829-9132,No,"Bronze,Silver,Gold",No,"English,Korean",UF Health Shands
+1445207819,Ahmed,Davis,DO,Emergency Medicine,Sunshine State Health Partners,2032 Lake Dr,Tampa,FL,33601,(623) 246-6468,Yes,"Bronze,Silver,Gold",Yes,English,Tampa General Hospital
+1823594990,James,Hall,MD,General Surgery,Southeast Specialists,8401 Highland Blvd,Jacksonville,FL,32099,(206) 316-6460,Yes,"Bronze,Silver,Gold",No,English,UF Health Shands
+1494584739,Linda,Miller,MD,General Surgery,Coastal Health Associates,7988 Park Way,Miami,FL,33101,(749) 543-8577,No,"Bronze,Silver",Yes,"English,Hindi",Broward Health
+1071095709,Wei,Taylor,MD,General Surgery,Florida Health Network,9560 Cedar Blvd,Miami,FL,33101,(352) 487-1510,Yes,"Bronze,Silver,Gold",No,English,Broward Health
+1444389067,Carlos,Walker,MD,General Surgery,Florida Health Network,5252 Main Blvd,Tampa,FL,33601,(288) 708-4893,Yes,"Bronze,Silver,Gold",No,"English,Korean",Mayo Clinic Florida
+1857946858,Wei,Taylor,MD,Vascular Surgery,Southeast Specialists,7370 Highland Ave,Jacksonville,FL,32099,(694) 712-3524,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Jackson Memorial Hospital
+1039247989,Kenji,Patel,DO,Vascular Surgery,Florida Medical Group,2274 Lake Way,Gainesville,FL,32601,(670) 596-9558,Yes,"Bronze,Silver,Gold",Yes,"English,Portuguese",Broward Health
+1620150147,Maria,Allen,MD,Vascular Surgery,Southeast Specialists,8629 Pine Ave,Fort Lauderdale,FL,33301,(976) 519-4438,Yes,"Bronze,Silver",Yes,"English,Mandarin",Jackson Memorial Hospital
+1668882058,William,Chen,MD,Plastic Surgery,Sunshine State Health Partners,4583 Oak Ave,Fort Lauderdale,FL,33301,(773) 726-2677,Yes,Gold,Yes,English,Baptist Health South Florida
+1958038736,Priya,Martinez,DO,Plastic Surgery,Southeast Specialists,1267 Pine Dr,Boca Raton,FL,33431,(546) 753-8268,Yes,"Bronze,Silver,Gold",Yes,English,Mayo Clinic Florida
+1675889004,Omar,Johnson,MD,Speech Therapy,Sunshine State Health Partners,3032 Broadway Dr,Gainesville,FL,32601,(906) 916-8304,Yes,"Bronze,Silver,Gold",No,English,Cleveland Clinic Florida
+1333280534,David,Young,NP,Speech Therapy,Coastal Health Associates,7772 Oak Rd,Boca Raton,FL,33431,(900) 859-8625,No,"Bronze,Silver,Gold",Yes,English,Jackson Memorial Hospital
+1070185347,Ahmed,Wilson,MD,Physical Therapy,Florida Medical Group,7526 Maple Ave,Tampa,FL,33601,(686) 315-6758,No,Gold,No,"English,Arabic",Cleveland Clinic Florida
+1697343144,Karen,Anderson,MD,Physical Therapy,Florida Health Network,1852 Cedar Dr,Tampa,FL,33601,(272) 509-9728,No,"Bronze,Silver,Gold",No,English,Mayo Clinic Florida
+1842150718,Susan,Walker,MD,Occupational Therapy,Coastal Health Associates,3511 Broadway Rd,West Palm Beach,FL,33401,(645) 780-6606,Yes,"Bronze,Silver",Yes,English,Mayo Clinic Florida
+1189165396,Kenji,Young,MD,Occupational Therapy,Sunshine State Health Partners,9194 Oak Rd,Orlando,FL,32801,(515) 615-2140,Yes,"Bronze,Silver,Gold",Yes,"English,Arabic",Baptist Health South Florida
+1570431597,Richard,Kim,MD,Occupational Therapy,Florida Medical Group,2503 Park Rd,West Palm Beach,FL,33401,(498) 599-8326,Yes,"Silver,Gold",Yes,"English,Spanish",Jackson Memorial Hospital
+1067012825,Karen,Rodriguez,DO,Occupational Therapy,Southeast Specialists,6722 Park Blvd,Boca Raton,FL,33431,(578) 762-1870,Yes,"Bronze,Silver,Gold",Yes,"English,Portuguese",Cleveland Clinic Florida
+1409702344,Jennifer,Taylor,MD,Allergy & Immunology,Coastal Health Associates,5312 Elm Rd,Boca Raton,FL,33431,(645) 758-4460,Yes,"Bronze,Silver,Gold",No,English,Tampa General Hospital
+1077036673,David,Chen,MD,Allergy & Immunology,Coastal Health Associates,2156 Park Ave,Tampa,FL,33601,(863) 216-3359,No,"Silver,Gold",Yes,English,Broward Health
+1592759204,Michael,Williams,MD,Allergy & Immunology,Coastal Health Associates,7544 Highland Rd,West Palm Beach,FL,33401,(660) 593-6821,Yes,"Bronze,Silver,Gold",Yes,"English,Hindi",Cleveland Clinic Florida
+1035929409,Ahmed,Smith,MD,Allergy & Immunology,Florida Medical Group,9048 Broadway Blvd,West Palm Beach,FL,33401,(238) 781-8917,Yes,"Bronze,Silver,Gold",Yes,English,Baptist Health South Florida
+1677169078,Ana,Williams,MD,Pain Management,Coastal Health Associates,1549 Lake Rd,Gainesville,FL,32601,(959) 879-2279,Yes,"Bronze,Silver,Gold",Yes,English,UF Health Shands
+1310535202,Richard,Chen,MD,Pain Management,Coastal Health Associates,6997 Cedar Blvd,Miami,FL,33101,(371) 236-5981,Yes,"Bronze,Silver,Gold",Yes,"English,Arabic",Baptist Health South Florida
+1542879692,Carlos,Garcia,MD,Pain Management,Southeast Specialists,8042 Oak St,Gainesville,FL,32601,(278) 484-5129,Yes,"Bronze,Silver,Gold",Yes,English,AdventHealth Orlando
+1280517824,William,Wilson,MD,Pain Management,Florida Health Network,7417 Cedar St,Fort Lauderdale,FL,33301,(917) 441-8944,Yes,"Silver,Gold",Yes,"English,Hindi",Jackson Memorial Hospital
+1620362276,Robert,Jones,MD,Urgent Care,Coastal Health Associates,7311 Park St,Boca Raton,FL,33431,(951) 553-1890,Yes,"Bronze,Silver",Yes,"English,French",Mayo Clinic Florida
+1757640614,Linda,Harris,MD,Urgent Care,Southeast Specialists,3928 Elm Way,Miami,FL,33101,(599) 685-5302,Yes,"Bronze,Silver",Yes,"English,Portuguese",Baptist Health South Florida
+1379920016,Karen,Harris,MD,Cardiology,Cascade Specialists,1695 Highland Way,Seattle,WA,98101,(642) 825-5466,Yes,"Bronze,Silver,Gold",No,"English,Spanish",Providence Regional Medical Center
+1741180707,Jennifer,Wilson,MD,Cardiology,Sound Health Associates,8618 Cedar Way,Tacoma,WA,98401,(384) 520-9972,Yes,"Silver,Gold",Yes,"English,French",Overlake Medical Center
+1207317573,Robert,Smith,MD,Cardiology,Northwest Medical Network,3694 Pine Blvd,Seattle,WA,98101,(234) 224-2506,Yes,"Bronze,Silver,Gold",Yes,"English,Arabic",UW Medicine
+1962074430,Ahmed,Hall,MD,Neurology,Pacific Northwest Health Partners,6259 Broadway St,Spokane,WA,99201,(313) 912-4018,Yes,"Bronze,Silver,Gold",No,"English,Hindi",Providence Regional Medical Center
+1411027302,Omar,Williams,PA-C,Neurology,Sound Health Associates,1312 Pine Ave,Bellevue,WA,98004,(597) 540-1984,Yes,Gold,No,English,Swedish Medical Center
+1580499353,Thomas,Williams,PA-C,Neurology,Northwest Medical Network,8161 Oak St,Spokane,WA,99201,(987) 641-4578,Yes,"Bronze,Silver",No,English,Virginia Mason Medical Center
+1701008808,William,Brown,MD,Neurology,Pacific Northwest Health Partners,407 Maple St,Redmond,WA,98052,(855) 200-1619,No,"Bronze,Silver,Gold",No,"English,Russian",UW Medicine
+1242501204,Richard,Thompson,MD,Dermatology,Northwest Medical Network,6717 Oak Dr,Redmond,WA,98052,(203) 593-8898,Yes,"Bronze,Silver",Yes,English,UW Medicine
+1816530277,Patricia,Martinez,DO,Dermatology,Pacific Northwest Health Partners,5671 Oak Rd,Olympia,WA,98501,(984) 496-4327,Yes,"Bronze,Silver,Gold",Yes,English,Overlake Medical Center
+1470281466,Omar,Miller,DO,Orthopedics,Sound Health Associates,8070 Oak Way,Bellevue,WA,98004,(952) 394-3292,Yes,"Bronze,Silver,Gold",Yes,"English,Arabic",Providence Regional Medical Center
+1017629000,Kenji,Rodriguez,MD,Orthopedics,Sound Health Associates,8286 Highland Rd,Seattle,WA,98101,(237) 547-1918,Yes,"Bronze,Silver,Gold",Yes,"English,Korean",Overlake Medical Center
+1152031615,Jennifer,Miller,NP,Gastroenterology,Northwest Medical Network,1280 Main Way,Bellevue,WA,98004,(700) 869-1312,No,"Silver,Gold",Yes,"English,French",Overlake Medical Center
+1896952545,Susan,Young,MD,Gastroenterology,Washington Medical Group,7574 Broadway St,Seattle,WA,98101,(805) 265-2742,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",UW Medicine
+1345304509,Susan,Williams,MD,Ophthalmology,Cascade Specialists,9536 Highland St,Olympia,WA,98501,(418) 982-1746,Yes,"Bronze,Silver",No,English,Overlake Medical Center
+1143205892,Jennifer,Wilson,MD,Ophthalmology,Washington Medical Group,4091 Broadway Ave,Seattle,WA,98101,(302) 847-7162,Yes,Gold,Yes,"English,Russian",Overlake Medical Center
+1153639423,Robert,Smith,MD,Ophthalmology,Pacific Northwest Health Partners,7898 Park St,Bellevue,WA,98004,(855) 477-9570,No,"Bronze,Silver,Gold",No,"English,Tagalog",Virginia Mason Medical Center
+1004907047,Linda,Walker,MD,Ophthalmology,Washington Medical Group,5034 Cedar Rd,Spokane,WA,99201,(771) 441-4144,Yes,"Bronze,Silver",Yes,"English,Mandarin",MultiCare Health System
+1735774878,Patricia,Chen,NP,Nephrology,Sound Health Associates,3273 Oak St,Olympia,WA,98501,(685) 709-3888,Yes,"Silver,Gold",Yes,English,Virginia Mason Medical Center
+1795016576,Maria,Hall,MD,Nephrology,Washington Medical Group,7524 Main Ave,Seattle,WA,98101,(253) 750-3881,Yes,"Bronze,Silver",Yes,English,Swedish Medical Center
+1836418338,Jennifer,Williams,MD,Pulmonology,Sound Health Associates,3356 Cedar St,Olympia,WA,98501,(312) 533-4731,Yes,"Bronze,Silver,Gold",Yes,"English,Tagalog",Providence Regional Medical Center
+1996311203,Sandra,Miller,MD,Pulmonology,Pacific Northwest Health Partners,7241 Park St,Redmond,WA,98052,(824) 665-3917,No,"Bronze,Silver",No,"English,Spanish",Virginia Mason Medical Center
+1610600292,Thomas,Moore,MD,Pulmonology,Cascade Specialists,2184 Main Way,Spokane,WA,99201,(261) 487-3236,Yes,Gold,No,English,Providence Regional Medical Center
+1092851105,Linda,Martinez,MD,Endocrinology,Northwest Medical Network,9571 Highland St,Bellevue,WA,98004,(621) 734-9015,Yes,"Silver,Gold",Yes,"English,Hindi",Swedish Medical Center
+1957587252,Thomas,Wilson,MD,Endocrinology,Sound Health Associates,7214 Broadway St,Bellevue,WA,98004,(805) 352-1083,No,"Silver,Gold",Yes,English,Providence Regional Medical Center
+1258247252,Jessica,Moore,NP,Endocrinology,Sound Health Associates,1705 Maple Rd,Seattle,WA,98101,(285) 771-1203,No,"Bronze,Silver,Gold",Yes,English,UW Medicine
+1626700279,Karen,Davis,MD,Oncology,Sound Health Associates,7624 Broadway Way,Tacoma,WA,98401,(224) 665-8598,Yes,Gold,Yes,English,UW Medicine
+1318461071,Linda,Anderson,PA-C,Oncology,Pacific Northwest Health Partners,5554 Highland Ave,Bellevue,WA,98004,(636) 970-5420,Yes,"Bronze,Silver,Gold",Yes,English,Providence Regional Medical Center
+1043888484,Richard,Moore,MD,Hematology,Cascade Specialists,6089 Maple Dr,Olympia,WA,98501,(574) 575-3871,Yes,"Bronze,Silver,Gold",Yes,English,MultiCare Health System
+1964148259,David,Jones,MD,Hematology,Northwest Medical Network,3793 Cedar Blvd,Redmond,WA,98052,(473) 715-7929,Yes,"Bronze,Silver,Gold",Yes,"English,French",Virginia Mason Medical Center
+1485308092,Patricia,Harris,PA-C,Psychiatry,Northwest Medical Network,8814 Highland Blvd,Tacoma,WA,98401,(835) 576-2075,Yes,"Bronze,Silver,Gold",No,English,MultiCare Health System
+1161596070,Robert,Thompson,MD,Psychiatry,Pacific Northwest Health Partners,1935 Park Rd,Seattle,WA,98101,(409) 733-1371,Yes,"Bronze,Silver,Gold",No,English,Swedish Medical Center
+1896518070,Michael,Kim,MD,OB/GYN,Sound Health Associates,1131 Main St,Olympia,WA,98501,(732) 860-6503,No,"Bronze,Silver,Gold",Yes,English,Overlake Medical Center
+1141684797,Yuki,Hall,MD,OB/GYN,Northwest Medical Network,7603 Pine Dr,Tacoma,WA,98401,(513) 375-5259,Yes,"Bronze,Silver,Gold",No,"English,Russian",Overlake Medical Center
+1188290663,Karen,Johnson,MD,OB/GYN,Cascade Specialists,8870 Pine St,Tacoma,WA,98401,(925) 909-3514,Yes,"Bronze,Silver",Yes,"English,Hindi",Swedish Medical Center
+1037247123,Maria,Martinez,MD,OB/GYN,Sound Health Associates,3461 Highland Way,Seattle,WA,98101,(881) 524-6633,Yes,Gold,No,English,Virginia Mason Medical Center
+1004610971,Linda,Chen,DO,Pediatrics,Pacific Northwest Health Partners,7604 Cedar St,Olympia,WA,98501,(956) 759-9313,Yes,"Bronze,Silver",Yes,"English,Hindi",UW Medicine
+1514302181,Karen,Kim,DO,Pediatrics,Washington Medical Group,5649 Oak Way,Redmond,WA,98052,(241) 342-2914,Yes,"Bronze,Silver,Gold",Yes,"English,Russian",MultiCare Health System
+1238525147,Ahmed,Davis,PA-C,Pediatrics,Pacific Northwest Health Partners,3297 Broadway Dr,Bellevue,WA,98004,(985) 484-4206,Yes,Gold,Yes,English,Swedish Medical Center
+1060180666,Omar,Allen,MD,Internal Medicine,Sound Health Associates,9982 Broadway Dr,Bellevue,WA,98004,(882) 569-7513,Yes,"Silver,Gold",Yes,English,MultiCare Health System
+1231600910,Patricia,Thompson,MD,Internal Medicine,Cascade Specialists,7400 Highland Ave,Bellevue,WA,98004,(945) 654-7809,No,Gold,No,English,UW Medicine
+1931498757,Kenji,White,MD,Internal Medicine,Northwest Medical Network,3504 Pine Rd,Spokane,WA,99201,(737) 543-2083,No,"Bronze,Silver,Gold",Yes,English,Virginia Mason Medical Center
+1199722870,Sandra,Hall,DO,Internal Medicine,Washington Medical Group,9404 Park St,Seattle,WA,98101,(590) 496-9037,Yes,"Bronze,Silver,Gold",No,English,Overlake Medical Center
+1702026333,Jessica,Chen,PA-C,Family Medicine,Pacific Northwest Health Partners,5017 Maple Ave,Tacoma,WA,98401,(881) 494-7834,Yes,"Bronze,Silver,Gold",No,English,Virginia Mason Medical Center
+1515917815,Yuki,Davis,MD,Family Medicine,Cascade Specialists,9912 Cedar Dr,Redmond,WA,98052,(779) 646-5225,No,"Bronze,Silver",Yes,"English,Mandarin",UW Medicine
+1145489216,Patricia,Patel,MD,Family Medicine,Cascade Specialists,5337 Maple Way,Seattle,WA,98101,(565) 367-1866,Yes,"Silver,Gold",No,"English,Hindi",UW Medicine
+1196760502,Yuki,Anderson,MD,Family Medicine,Cascade Specialists,8519 Lake Way,Bellevue,WA,98004,(983) 296-3738,Yes,"Bronze,Silver,Gold",No,"English,Mandarin",Swedish Medical Center
+1556381604,William,Allen,MD,Rheumatology,Northwest Medical Network,2454 Main St,Tacoma,WA,98401,(488) 581-8944,No,"Bronze,Silver,Gold",No,English,UW Medicine
+1591752891,Jennifer,Miller,MD,Rheumatology,Washington Medical Group,8712 Highland Way,Spokane,WA,99201,(919) 974-2867,No,"Silver,Gold",No,"English,Portuguese",MultiCare Health System
+1819898028,Jennifer,Jones,MD,Rheumatology,Cascade Specialists,7340 Broadway Dr,Seattle,WA,98101,(550) 376-5991,Yes,Gold,Yes,"English,Hindi",Overlake Medical Center
+1741760327,Susan,Jones,MD,Rheumatology,Washington Medical Group,2233 Oak Rd,Seattle,WA,98101,(981) 314-2273,Yes,Gold,No,English,Providence Regional Medical Center
+1071132564,David,Brown,MD,Urology,Northwest Medical Network,2048 Pine Ave,Seattle,WA,98101,(508) 883-1168,Yes,"Bronze,Silver,Gold",Yes,English,Providence Regional Medical Center
+1378175386,David,Rodriguez,MD,Urology,Cascade Specialists,4644 Broadway Blvd,Olympia,WA,98501,(364) 712-4962,Yes,"Bronze,Silver,Gold",Yes,English,Virginia Mason Medical Center
+1105962980,James,Patel,MD,Urology,Washington Medical Group,8900 Main Way,Olympia,WA,98501,(419) 716-8777,Yes,Gold,Yes,English,Providence Regional Medical Center
+1121166907,Thomas,Allen,MD,Infectious Disease,Cascade Specialists,8525 Lake Rd,Spokane,WA,99201,(979) 521-3025,No,"Bronze,Silver",Yes,English,Virginia Mason Medical Center
+1413155580,Michael,Kim,MD,Infectious Disease,Cascade Specialists,5475 Maple Ave,Olympia,WA,98501,(490) 667-6111,No,"Bronze,Silver,Gold",Yes,"English,Mandarin",Providence Regional Medical Center
+1527903421,Sandra,Taylor,MD,Infectious Disease,Pacific Northwest Health Partners,3037 Main Way,Olympia,WA,98501,(888) 307-7494,No,"Bronze,Silver",Yes,"English,Arabic",Virginia Mason Medical Center
+1213767380,Omar,Williams,MD,Infectious Disease,Sound Health Associates,2864 Oak Blvd,Redmond,WA,98052,(546) 405-7623,Yes,"Bronze,Silver",Yes,"English,Mandarin",Virginia Mason Medical Center
+1549127152,Jessica,Wilson,MD,Radiology,Cascade Specialists,9982 Elm Rd,Redmond,WA,98052,(485) 350-8448,Yes,"Bronze,Silver",Yes,English,MultiCare Health System
+1728112320,Jessica,Kim,MD,Radiology,Washington Medical Group,965 Oak Rd,Tacoma,WA,98401,(227) 383-7269,Yes,"Bronze,Silver,Gold",Yes,English,Providence Regional Medical Center
+1542019241,Ahmed,Walker,MD,Radiology,Northwest Medical Network,4909 Maple Rd,Tacoma,WA,98401,(467) 755-6629,Yes,"Bronze,Silver",Yes,"English,French",UW Medicine
+1923805264,Joseph,Harris,MD,Emergency Medicine,Sound Health Associates,2997 Highland Way,Seattle,WA,98101,(998) 510-3689,No,"Bronze,Silver",No,English,Overlake Medical Center
+1511005607,Karen,Young,MD,Emergency Medicine,Pacific Northwest Health Partners,8937 Broadway Rd,Spokane,WA,99201,(775) 360-9301,Yes,"Bronze,Silver,Gold",No,"English,Portuguese",Overlake Medical Center
+1137651619,Jessica,Rodriguez,MD,Emergency Medicine,Cascade Specialists,561 Broadway Ave,Tacoma,WA,98401,(575) 557-1440,Yes,Gold,No,English,MultiCare Health System
+1977522765,Patricia,Anderson,MD,General Surgery,Pacific Northwest Health Partners,5213 Broadway Ave,Bellevue,WA,98004,(904) 267-5995,Yes,"Silver,Gold",No,English,Swedish Medical Center
+1504336426,James,Chen,MD,General Surgery,Sound Health Associates,4468 Main Way,Spokane,WA,99201,(802) 222-6185,No,"Bronze,Silver",Yes,"English,Tagalog",UW Medicine
+1321608113,Carlos,Brown,PA-C,Vascular Surgery,Washington Medical Group,5663 Park Dr,Tacoma,WA,98401,(572) 646-4305,No,Gold,Yes,English,UW Medicine
+1098738972,Priya,Miller,DO,Vascular Surgery,Pacific Northwest Health Partners,3800 Broadway Way,Seattle,WA,98101,(934) 792-2552,Yes,Gold,No,"English,Tagalog",Swedish Medical Center
+1712381203,Carlos,Patel,PA-C,Vascular Surgery,Washington Medical Group,8368 Pine Rd,Seattle,WA,98101,(752) 520-4278,No,Gold,No,"English,Korean",Overlake Medical Center
+1684968212,Wei,Harris,NP,Plastic Surgery,Pacific Northwest Health Partners,3589 Maple Blvd,Olympia,WA,98501,(745) 829-8106,Yes,"Bronze,Silver,Gold",Yes,"English,Russian",Virginia Mason Medical Center
+1218568778,Patricia,Harris,MD,Plastic Surgery,Washington Medical Group,5320 Oak Way,Spokane,WA,99201,(622) 473-5702,Yes,Gold,No,"English,Tagalog",Virginia Mason Medical Center
+1521175333,Ahmed,Davis,MD,Plastic Surgery,Pacific Northwest Health Partners,4123 Pine Rd,Redmond,WA,98052,(773) 646-7914,Yes,"Silver,Gold",Yes,English,Virginia Mason Medical Center
+1922971289,Michael,Smith,DO,Speech Therapy,Northwest Medical Network,8060 Main Ave,Tacoma,WA,98401,(285) 521-5882,Yes,"Silver,Gold",No,"English,Spanish",Swedish Medical Center
+1713197718,Omar,Allen,MD,Speech Therapy,Washington Medical Group,8296 Oak Dr,Tacoma,WA,98401,(794) 993-9605,Yes,"Silver,Gold",No,English,Overlake Medical Center
+1114690674,Ahmed,Brown,MD,Physical Therapy,Northwest Medical Network,7028 Lake St,Spokane,WA,99201,(379) 419-5498,No,"Bronze,Silver",No,"English,French",Swedish Medical Center
+1264512739,Carlos,Johnson,PA-C,Physical Therapy,Cascade Specialists,7043 Maple Way,Tacoma,WA,98401,(484) 348-6947,No,"Bronze,Silver,Gold",Yes,English,MultiCare Health System
+1752281566,James,Hall,MD,Occupational Therapy,Pacific Northwest Health Partners,6402 Pine Way,Tacoma,WA,98401,(571) 901-2999,Yes,"Silver,Gold",No,English,UW Medicine
+1340574106,James,Thompson,DO,Occupational Therapy,Pacific Northwest Health Partners,2725 Maple Way,Bellevue,WA,98004,(985) 859-7656,Yes,"Silver,Gold",No,English,Swedish Medical Center
+1451906293,Jessica,Kim,MD,Occupational Therapy,Sound Health Associates,8395 Oak Blvd,Seattle,WA,98101,(816) 946-9973,Yes,"Bronze,Silver,Gold",No,"English,Korean",Swedish Medical Center
+1618270581,Maria,Hall,MD,Allergy & Immunology,Sound Health Associates,3378 Pine Blvd,Seattle,WA,98101,(284) 313-3585,Yes,"Silver,Gold",Yes,English,Providence Regional Medical Center
+1738161934,Yuki,Jones,MD,Allergy & Immunology,Sound Health Associates,2287 Pine St,Redmond,WA,98052,(807) 535-5616,Yes,Gold,Yes,English,Providence Regional Medical Center
+1657133384,Patricia,Garcia,MD,Allergy & Immunology,Northwest Medical Network,476 Highland Way,Bellevue,WA,98004,(841) 434-2457,No,"Silver,Gold",Yes,English,Overlake Medical Center
+1609072427,Ana,Garcia,MD,Allergy & Immunology,Northwest Medical Network,1559 Cedar St,Tacoma,WA,98401,(320) 214-9615,No,"Bronze,Silver",No,"English,Hindi",Overlake Medical Center
+1644333988,Jennifer,Davis,MD,Pain Management,Cascade Specialists,2233 Elm St,Bellevue,WA,98004,(420) 489-4102,No,Gold,Yes,"English,Tagalog",Virginia Mason Medical Center
+1734726187,Michael,Smith,DO,Pain Management,Washington Medical Group,4168 Cedar Dr,Bellevue,WA,98004,(862) 669-2404,Yes,"Bronze,Silver,Gold",No,English,Swedish Medical Center
+1063084820,Richard,Young,MD,Pain Management,Washington Medical Group,1296 Oak Dr,Spokane,WA,99201,(253) 540-4847,No,"Bronze,Silver",No,"English,Korean",Providence Regional Medical Center
+1958020313,Omar,Walker,MD,Pain Management,Cascade Specialists,6566 Cedar St,Olympia,WA,98501,(772) 242-3938,Yes,"Bronze,Silver,Gold",Yes,"English,Korean",UW Medicine
+1047418754,Richard,Harris,MD,Urgent Care,Cascade Specialists,4366 Oak Blvd,Bellevue,WA,98004,(330) 711-5603,Yes,"Bronze,Silver,Gold",No,English,UW Medicine
+1915937916,William,Walker,DO,Urgent Care,Cascade Specialists,8149 Park Dr,Tacoma,WA,98401,(873) 851-8208,Yes,"Bronze,Silver",Yes,"English,Arabic",MultiCare Health System
+1961187065,Maria,Davis,MD,Urgent Care,Sound Health Associates,7753 Elm Ave,Spokane,WA,99201,(706) 241-8233,Yes,Gold,Yes,English,UW Medicine
+1896524668,Jessica,Harris,PA-C,Urgent Care,Washington Medical Group,3437 Pine St,Olympia,WA,98501,(372) 967-9335,Yes,"Bronze,Silver,Gold",Yes,English,UW Medicine

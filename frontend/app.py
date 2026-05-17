@@ -177,27 +177,7 @@ with st.sidebar:
         st.rerun()
 
     st.markdown("---")
-    st.markdown(f"""
-        <a href="/dev-console" target="_blank" style="text-decoration: none;">
-            <button style="
-                width: 100%; 
-                background: linear-gradient(135deg, #4f46e5, #6366f1);
-                color: white; 
-                padding: 10px; 
-                border-radius: 8px; 
-                border: none; 
-                cursor: pointer;
-                font-weight: 600;
-                margin-bottom: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            ">
-                🚀 Open Developer Console
-            </button>
-        </a>
-    """, unsafe_allow_html=True)
+    st.link_button("🚀 Open Developer Console", "http://localhost:8000/dev-console", use_container_width=True, help="Requires password '2002'")
     st.markdown("---")
     
     # Example Queries
