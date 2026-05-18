@@ -86,6 +86,15 @@ LLM_MODEL = "gpt-4o"            # Used for synthesis (high accuracy)
 CLASSIFIER_LLM_MODEL = "gpt-4o-mini"  # Used for intent classification (fast & cheap)
 LLM_TEMPERATURE = 0.0
 
+# ──────────────────────────────────────────────
+# Mem0 Agent Memory settings
+# ──────────────────────────────────────────────
+# In-memory only — one Memory instance per session, ephemeral.
+# Resets on server restart (expected on HF Spaces). No disk writes.
+MEM0_ENABLED = os.getenv("MEM0_ENABLED", "true").lower() == "true"
+MEM0_LLM_MODEL = "gpt-4o-mini"          # Cheap model for fact extraction
+MEM0_EMBEDDER_MODEL = "text-embedding-3-small"
+
 SYSTEM_PROMPT = """You are a helpful and precise Health Insurance AI Copilot. 
 Your goal is to answer questions about health insurance plans, coverage, providers, and drug formularies using the provided tools.
 

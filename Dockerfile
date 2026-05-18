@@ -8,7 +8,10 @@ ENV PORT=7860
 ENV RUN_MONOLITH=true
 ENV USE_NGINX=true
 
-# Install system dependencies (including Graphviz for diagrams and Nginx for reverse proxy)
+# Disable Mem0 telemetry
+ENV MEM0_TELEMETRY=false
+
+# Install system dependencies (Graphviz for diagrams, Nginx for reverse proxy)
 RUN apt-get update && apt-get install -y \
     graphviz \
     libgraphviz-dev \
@@ -20,18 +23,23 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy requirements and install
+# Copy requirements and install Python deps
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application
 COPY . .
 
-# Create logs and storage directories
+# Create runtime directories
+# Note: storage/mem0_db is intentionally NOT created — Mem0 runs in-memory only
 RUN mkdir -p logs storage
 
 # Expose the port Hugging Face expects (7860)
 EXPOSE 7860
 
-# Run both uvicorn backend and nginx reverse proxy
-CMD ["sh", "-c", "mkdir -p /tmp/nginx_client_body /tmp/nginx_proxy /tmp/nginx_fastcgi /tmp/nginx_uwsgi /tmp/nginx_scgi && python3 -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 & nginx -c /app/nginx.conf -g 'daemon off;'"]
+# Run uvicorn backend + nginx reverse proxy
+# Streamlit frontend is launched as a sidecar by FastAPI startup event
+CMD ["sh", "-c", "\
+  mkdir -p /tmp/nginx_client_body /tmp/nginx_proxy /tmp/nginx_fastcgi /tmp/nginx_uwsgi /tmp/nginx_scgi && \
+  python3 -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 & \
+  nginx -c /app/nginx.conf -g 'daemon off;'"]

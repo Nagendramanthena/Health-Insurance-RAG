@@ -1,17 +1,20 @@
 """
 Health Insurance AI Copilot — LangGraph Sequential Chain Orchestrator.
 
-Architecture (3 nodes in a directed StateGraph):
+Architecture (5 nodes in a directed StateGraph):
 
     START
       │
       ▼
-  [1. classify_intent]
+  [1. memory_search]  ← NEW: Retrieve relevant past facts from Mem0
+      │
+      ▼
+  [2. classify_intent]
       Uses GPT-4o-mini to classify the query into one of four intents:
       SIMPLE_LOOKUP | POLICY_QUESTION | MULTI_HOP | COMPARISON
       │
       ▼
-  [2. retrieve]
+  [3. retrieve]
       Routes internally by intent to the right retrieval strategy:
       ┌─ SIMPLE_LOOKUP   → Graph entity lookup → Hybrid retrieval
       ├─ POLICY_QUESTION → Hybrid retrieval only
@@ -19,8 +22,11 @@ Architecture (3 nodes in a directed StateGraph):
       └─ COMPARISON      → Hybrid retrieval per plan tier (Bronze / Silver / Gold)
       │
       ▼
-  [3. synthesize]
+  [4. synthesize]
       Uses GPT-4o to generate a cited, safety-compliant final answer
+      │
+      ▼
+  [5. memory_add]     ← NEW: Persist Q&A facts to Mem0 for future sessions
       │
       ▼
     END
@@ -47,6 +53,7 @@ from config import (
 )
 from orchestration.tools import policy_search, relational_search, plan_comparison_search, prior_auth_search
 from orchestration.tracing import trace_log
+from orchestration.memory import search_memories, add_memory
 
 load_dotenv()
 console = Console()
@@ -62,8 +69,11 @@ class AgentState(TypedDict):
     Each node receives this dict and returns an updated copy.
     """
     query:             str          # Original user question
+    user_id:           str          # Session identifier (for logging)
     intent:            str          # Classified intent (set by classify_intent)
     retrieved_context: str          # All retrieved text (set by retrieve)
+    past_memories:     str          # Relevant session memories (set by memory_search)
+    memories_used:     List[str]    # Facts stored to Mem0 (set by memory_add)
     answer:            str          # Final answer (set by synthesize)
     chat_history:      List[tuple]  # [(role, message), ...] — last 5 turns
     steps_log:         List[str]    # Human-readable trace of what happened
@@ -92,7 +102,80 @@ def _synthesis_llm() -> ChatOpenAI:
 
 
 # ══════════════════════════════════════════════════════════════
-# 3.  NODE 1 — classify_intent
+# 3.  NODE 1 — memory_search  (NEW)
+# ══════════════════════════════════════════════════════════════
+
+def memory_search(state: AgentState) -> AgentState:
+    """NODE 1: Retrieve relevant past memories from Mem0 before classification."""
+    query   = state["query"]
+    user_id = state.get("user_id", "default")
+    log     = list(state.get("steps_log", []))
+
+    memories = search_memories(user_id=user_id, query=query)
+    if memories:
+        log.append(f"🧠 Mem0 recalled {memories.count(chr(10) + '  ')+1} memory fact(s) for user")
+    else:
+        log.append("🧠 Mem0: no relevant past memories found")
+
+    return {**state, "past_memories": memories, "steps_log": log}
+
+
+# ══════════════════════════════════════════════════════════════
+# 3.5 NODE 0 — translate_query (NEW)
+# ══════════════════════════════════════════════════════════════
+
+_TRANSLATE_SYSTEM = """You are a multilingual translation assistant for a Health Insurance AI.
+Analyze the user's input question.
+1. Identify the language (e.g., "English", "Spanish", "French", "Mandarin", "Hindi").
+2. Translate the query to English if it is not already in English.
+3. If it is already in English, output the exact query.
+Return your response in strict JSON format: {"language": "<Language Name>", "english_query": "<Translated Query>"}"""
+
+def translate_query(state: AgentState) -> AgentState:
+    """NODE 0: Detect language and translate query to English for accurate retrieval."""
+    llm   = _classifier_llm()
+    query = state["query"]
+    log   = list(state.get("steps_log", []))
+
+    try:
+        response = llm.invoke([
+            SystemMessage(content=_TRANSLATE_SYSTEM),
+            HumanMessage(content=query),
+        ])
+
+        import json
+        # Handle potential markdown formatting around JSON
+        raw = response.content.strip()
+        if raw.startswith("```json"):
+            raw = raw[7:-3].strip()
+        elif raw.startswith("```"):
+            raw = raw[3:-3].strip()
+
+        data = json.loads(raw)
+        lang = data.get("language", "English")
+        eng_query = data.get("english_query", query)
+
+        if lang.lower() != "english":
+            log.append(f"🌐 Query detected in {lang} → Translated to English for retrieval")
+        else:
+            log.append("🌐 Query detected in English")
+            eng_query = query
+    except Exception as e:
+        log.append("🌐 Language translation skipped (defaulting to English)")
+        lang = "English"
+        eng_query = query
+
+    return {
+        **state,
+        "original_query": query,
+        "query": eng_query,
+        "original_language": lang,
+        "steps_log": log
+    }
+
+
+# ══════════════════════════════════════════════════════════════
+# 4.  NODE 2 — classify_intent
 # ══════════════════════════════════════════════════════════════
 
 _INTENT_SYSTEM = """You are a query intent classifier for a Health Insurance AI assistant.
@@ -214,10 +297,14 @@ def retrieve(state: AgentState) -> AgentState:
 
 
 # ══════════════════════════════════════════════════════════════
-# 5.  NODE 3 — synthesize
+# 6.  NODE 4 — synthesize
 # ══════════════════════════════════════════════════════════════
 
 _SYNTHESIS_TEMPLATE = """{system_prompt}
+
+─── PAST USER MEMORIES (from previous sessions) ──────────────
+{past_memories}
+──────────────────────────────────────────────────────────────
 
 ─── RETRIEVED CONTEXT ────────────────────────────────────────
 {context}
@@ -228,6 +315,8 @@ _SYNTHESIS_TEMPLATE = """{system_prompt}
 ──────────────────────────────────────────────────────────────
 
 Using ONLY the retrieved context above, answer the user's question.
+IMPORTANT: You MUST also follow any user preferences (e.g., formatting, language, or specific plan details) found in the PAST USER MEMORIES section.
+CRITICAL LANGUAGE REQUIREMENT: The user's original question was in {language}. You MUST formulate your final answer entirely in {language}.
 If the user asks for entities with multiple criteria (e.g., "Specialist X in City Y"), you MUST verify that the same entity satisfies ALL criteria in the context. Do NOT assume an entity has a property just because it is listed in the context alongside another entity.
 Always cite the source file and page number for every fact you state.
 If the context does not contain enough information, say so explicitly — do NOT guess."""
@@ -244,10 +333,14 @@ def synthesize(state: AgentState) -> AgentState:
         for role, msg in (state.get("chat_history") or [])
     ) or "None"
 
+    past_memories = state.get("past_memories") or "None"
+
     system_content = _SYNTHESIS_TEMPLATE.format(
         system_prompt=SYSTEM_PROMPT,
+        past_memories=past_memories,
         context=state["retrieved_context"],
         history=history_str,
+        language=state.get("original_language", "English"),
     )
 
     response = llm.invoke([
@@ -260,47 +353,93 @@ def synthesize(state: AgentState) -> AgentState:
 
 
 # ══════════════════════════════════════════════════════════════
-# 6.  BUILD THE LANGGRAPH STATEGRAPH
-# ══════════════════════════════════════════════════════════════
-
-def build_graph():
-    builder = StateGraph(AgentState)
-
-    builder.add_node("classify_intent", classify_intent)
-    builder.add_node("retrieve",        retrieve)
-    builder.add_node("synthesize",      synthesize)
-
-    builder.set_entry_point("classify_intent")
-    builder.add_edge("classify_intent", "retrieve")
-    builder.add_edge("retrieve",        "synthesize")
-    builder.add_edge("synthesize",      END)
-
-    return builder.compile()
-
-
-# ══════════════════════════════════════════════════════════════
 # 7.  PUBLIC ORCHESTRATOR CLASS
 # ══════════════════════════════════════════════════════════════
 
 class Orchestrator:
-    def __init__(self):
+    def __init__(self, user_id: str = "default", mem=None):
+        """
+        Args:
+            user_id: The session ID — used for logging/tracing.
+            mem:     A pre-created Mem0 Memory instance (in-memory, per-session).
+                     Created by SessionManager alongside this Orchestrator.
+                     Pass None to disable memory features.
+        """
         if not os.getenv("OPENAI_API_KEY"):
             raise ValueError("OPENAI_API_KEY not found in environment.")
-        self.graph: any = build_graph()
+        self._mem = mem                      # Mem0 in-memory instance for this session
+        self.user_id: str = user_id
         self.chat_history: List[tuple] = []
         self.last_detailed_result: dict = {}
 
-    def ask(self, query: str, verbose: bool = False) -> str:
-        initial_state: AgentState = {
+        # Bind memory helpers to this session's Memory instance so nodes can call them
+        self._search_memories = lambda query: search_memories(self._mem, query)
+        self._add_memory       = lambda q, a:  add_memory(self._mem, q, a)
+
+        self.graph: any = self._build_graph()
+
+    # ── Build graph with closures over self._mem ──────────────────────────────
+
+    def _build_graph(self):
+        """Build the LangGraph StateGraph with memory nodes bound to this session."""
+        _search = self._search_memories
+        _add    = self._add_memory
+
+        def memory_search_node(state: AgentState) -> AgentState:
+            """NODE 1: Retrieve relevant facts from this session's Mem0."""
+            query = state["query"]
+            log   = list(state.get("steps_log", []))
+            memories = _search(query)
+            if memories:
+                count = memories.count("\n  ") + 1
+                log.append(f"🧠 Mem0 recalled {count} fact(s) from this session")
+            else:
+                log.append("🧠 Mem0: no relevant facts recalled yet")
+            return {**state, "past_memories": memories, "steps_log": log}
+
+        def memory_add_node(state: AgentState) -> AgentState:
+            """NODE 5: Persist Q&A facts back to this session's Mem0."""
+            stored = _add(state["query"], state["answer"])
+            log    = list(state.get("steps_log", []))
+            log.append(f"💾 Mem0 stored {len(stored)} fact(s) from this turn" if stored else "💾 Mem0: no new facts extracted")
+            return {**state, "memories_used": stored, "steps_log": log}
+
+        builder = StateGraph(AgentState)
+        builder.add_node("translate_query", translate_query)
+        builder.add_node("memory_search",   memory_search_node)
+        builder.add_node("classify_intent", classify_intent)
+        builder.add_node("retrieve",        retrieve)
+        builder.add_node("synthesize",      synthesize)
+        builder.add_node("memory_add",      memory_add_node)
+
+        builder.set_entry_point("translate_query")
+        builder.add_edge("translate_query", "memory_search")
+        builder.add_edge("memory_search",   "classify_intent")
+        builder.add_edge("classify_intent", "retrieve")
+        builder.add_edge("retrieve",        "synthesize")
+        builder.add_edge("synthesize",      "memory_add")
+        builder.add_edge("memory_add",      END)
+
+        return builder.compile()
+
+    def _base_state(self, query: str) -> AgentState:
+        """Build the initial AgentState for a new query."""
+        return {
             "query":             query,
+            "original_query":    query,
+            "original_language": "English",
+            "user_id":           self.user_id,
             "intent":            "",
             "retrieved_context": "",
+            "past_memories":     "",
+            "memories_used":     [],
             "answer":            "",
             "chat_history":      self.chat_history.copy(),
             "steps_log":         [],
         }
 
-        result = self.graph.invoke(initial_state)
+    def ask(self, query: str, verbose: bool = False) -> str:
+        result = self.graph.invoke(self._base_state(query))
 
         if verbose:
             console.print("\n[bold dim]📋 Orchestrator trace:[/bold dim]")
@@ -326,18 +465,10 @@ class Orchestrator:
                 "intent":            str,
                 "steps_log":         list[str],
                 "retrieved_context": str,
+                "memories_used":     list[str],
             }
         """
-        initial_state: AgentState = {
-            "query":             query,
-            "intent":            "",
-            "retrieved_context": "",
-            "answer":            "",
-            "chat_history":      self.chat_history.copy(),
-            "steps_log":         [],
-        }
-
-        result = self.graph.invoke(initial_state)
+        result = self.graph.invoke(self._base_state(query))
         answer = result["answer"]
 
         self.chat_history.append(("human", query))
@@ -351,6 +482,7 @@ class Orchestrator:
             "intent":            result.get("intent", "POLICY_QUESTION"),
             "steps_log":         result.get("steps_log", []),
             "retrieved_context": result.get("retrieved_context", ""),
+            "memories_used":     result.get("memories_used", []),
         }
         return self.last_detailed_result
 
@@ -359,17 +491,8 @@ class Orchestrator:
         Generator that yields intermediate AgentState updates as they happen.
         Useful for "Live" Developer Console views.
         """
-        initial_state: AgentState = {
-            "query":             query,
-            "intent":            "",
-            "retrieved_context": "",
-            "answer":            "",
-            "chat_history":      self.chat_history.copy(),
-            "steps_log":         [],
-        }
-
         # Use LangGraph's streaming mode
-        for event in self.graph.stream(initial_state):
+        for event in self.graph.stream(self._base_state(query)):
             # event is a dict like {"node_name": state_update}
             for node, state in event.items():
                 # We yield the current state and which node just finished

@@ -32,6 +32,7 @@ class ChatResponse(BaseModel):
     answer: str
     intent: str         # SIMPLE_LOOKUP | POLICY_QUESTION | MULTI_HOP | COMPARISON
     steps_log: List[str]
+    memories_used: List[str] = []   # Facts Mem0 extracted and stored from this turn
     timestamp: str
 
 
@@ -86,3 +87,16 @@ class WorkflowDiagramResponse(BaseModel):
     steps_log: List[str] | None = None
 
 
+# ── Memory Models ─────────────────────────────────────────────────────────────
+
+class MemoryFact(BaseModel):
+    id: Optional[str] = None
+    memory: str
+    created_at: Optional[str] = None
+
+
+class MemoryResponse(BaseModel):
+    session_id: str
+    memory_count: int
+    facts: List[MemoryFact]
+    note: str = "In-memory only — resets on server restart"

@@ -20,12 +20,14 @@ from starlette.responses import StreamingResponse as StarletteStreamingResponse
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from backend.models import (
-    ChatRequest, ChatResponse, HealthResponse, 
+    ChatRequest, ChatResponse, HealthResponse,
     SessionHistoryResponse, ChatMessage, ErrorResponse,
     WorkflowTraceResponse, WorkflowStep,
-    WorkflowDiagramResponse
+    WorkflowDiagramResponse,
+    MemoryFact, MemoryResponse,
 )
 from orchestration.tools import preload_retrievers
+from orchestration.memory import get_all_memories
 
 
 from backend.session_manager import manager
@@ -162,6 +164,7 @@ async def chat(request: ChatRequest):
             answer=result["answer"],
             intent=result["intent"],
             steps_log=result["steps_log"],
+            memories_used=result.get("memories_used", []),
             timestamp=datetime.now().isoformat()
         )
     except Exception as e:
@@ -267,9 +270,69 @@ async def get_history(session_id: str):
 
 @app.delete("/session/{session_id}")
 async def clear_session(session_id: str):
-    """Clear a session's history and state."""
+    """Clear a session's history, state, and in-memory Mem0 facts."""
     manager.clear_session(session_id)
-    return {"status": "success", "message": f"Session {session_id} cleared"}
+    return {"status": "success", "message": f"Session {session_id} cleared (including memory)"}
+
+
+@app.get("/memory/{session_id}", response_model=MemoryResponse)
+async def get_memory(session_id: str):
+    """
+    Inspect all facts Mem0 has stored for this session.
+    Useful for debugging — shows exactly what the agent remembers.
+    Note: ephemeral — resets when the server restarts.
+    """
+    try:
+        mem = manager.get_memory(session_id)
+        if mem is None:
+            return MemoryResponse(
+                session_id=session_id,
+                memory_count=0,
+                facts=[],
+                note="Session not found or memory disabled"
+            )
+        raw_facts = get_all_memories(mem)
+        facts = [
+            MemoryFact(
+                id=str(f.get("id", "")),
+                memory=f.get("memory", ""),
+                created_at=str(f.get("created_at", ""))
+            )
+            for f in raw_facts
+        ]
+        return MemoryResponse(
+            session_id=session_id,
+            memory_count=len(facts),
+            facts=facts
+        )
+    except Exception as e:
+        logger.error(f"Error fetching memory for {session_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/memory/{session_id}")
+async def clear_memory(session_id: str):
+    """
+    Wipe all Mem0 facts for this session without clearing the full session.
+    The session and chat history remain intact.
+    """
+    try:
+        mem = manager.get_memory(session_id)
+        if mem is None:
+            raise HTTPException(status_code=404, detail=f"Session {session_id} not found")
+        # Re-create a fresh memory instance for the session
+        from orchestration.memory import create_session_memory
+        orch = manager.get_orchestrator(session_id)
+        new_mem = create_session_memory()
+        orch._mem = new_mem
+        orch._search_memories = lambda query: __import__('orchestration.memory', fromlist=['search_memories']).search_memories(new_mem, query)
+        orch._add_memory       = lambda q, a:  __import__('orchestration.memory', fromlist=['add_memory']).add_memory(new_mem, q, a)
+        return {"status": "success", "message": f"Memory cleared for session {session_id}"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error clearing memory for {session_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Helper to turn steps into a Graphviz diagram (PNG bytes)
 def _steps_to_graphviz(query: str, intent: str, steps: list[str]) -> io.BytesIO:

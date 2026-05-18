@@ -223,13 +223,15 @@ const NW = 170, NH = 68;
 const NODES = [
   // Row 0 — pipeline entry
   {id:'user',        icon:'👤', title:'User Query',          sub:'input',                   x:20,   y:50},
-  {id:'fastapi',     icon:'⚡', title:'FastAPI',             sub:'/chat/stream',             x:220,  y:50},
-  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph state machine',  x:430,  y:50},
-  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini',              x:640,  y:50},
+  {id:'fastapi',     icon:'⚡', title:'FastAPI',             sub:'/chat/stream',             x:180,  y:50},
+  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph state machine',  x:340,  y:50},
+  {id:'translate',   icon:'🌐', title:'Translator',          sub:'Detect & translate',       x:500,  y:50},
+  {id:'mem_search',  icon:'🧠', title:'Memory Search',       sub:'Mem0 lookup',              x:660,  y:50},
+  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini',              x:820,  y:50},
 
   // Row 2 — retrieval agent
-  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Router by intent',         x:430,  y:220},
-  {id:'multiquery',     icon:'🧠', title:'Multi-Query',      sub:'Query rephrasing',         x:430,  y:305},
+  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Router by intent',         x:420,  y:220},
+  {id:'multiquery',     icon:'🧠', title:'Multi-Query',      sub:'Query rephrasing',         x:420,  y:305},
 
   // Row 3 — sub-retrieval nodes (7 nodes spread)
   {id:'graphdb',     icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:20,   y:390},
@@ -241,43 +243,46 @@ const NODES = [
   {id:'gold',        icon:'🥇', title:'Gold Plan',            sub:'Tier retrieval',           x:780,  y:490},
 
   // Row 4 — post-retrieval
+  {id:'ensemble',    icon:'🤝', title:'Ensemble Fusion',     sub:'BM25 + Vector scores',     x:305,  y:475},
   {id:'reranker',    icon:'⚖️', title:'Cross-Encoder',       sub:'Reranking & scoring',      x:210,  y:560},
-  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Assembling context',       x:430,  y:560},
+  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Assembling context',       x:420,  y:560},
 
-  // Row 5 — synthesis
-  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o cited answer',      x:430,  y:710},
+  // Row 5 — synthesis & memory add
+  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o cited answer',      x:420,  y:710},
+  {id:'mem_add',     icon:'💾', title:'Memory Save',         sub:'Extract new facts',        x:420,  y:810},
 
   // Row 6 — answer
-  {id:'answer',      icon:'💬', title:'Answer',              sub:'Streamed to user',          x:430,  y:860},
+  {id:'answer',      icon:'💬', title:'Answer',              sub:'Streamed to user',          x:420,  y:910},
 ];
 
 // Intent pills (not full nodes, rendered as small pills below intent_node)
 const INTENT_PILLS = [
-  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:860, y:30,  w:160, h:28},
-  {id:'i_policy',     label:'POLICY_QUESTION', x:860, y:68,  w:160, h:28},
-  {id:'i_multihop',   label:'MULTI_HOP',       x:860, y:106, w:160, h:28},
-  {id:'i_comparison', label:'COMPARISON',      x:860, y:144, w:160, h:28},
+  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:825, y:130, w:160, h:28},
+  {id:'i_policy',     label:'POLICY_QUESTION', x:825, y:168, w:160, h:28},
+  {id:'i_multihop',   label:'MULTI_HOP',       x:825, y:206, w:160, h:28},
+  {id:'i_comparison', label:'COMPARISON',      x:825, y:244, w:160, h:28},
 ];
 
 // Edges: [from, to]
 const EDGES = [
-  ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','intent_node'],
+  ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','translate'],['translate','mem_search'],['mem_search','intent_node'],
   ['intent_node','retrieve_agent'],['orchestrator','retrieve_agent'],
   ['retrieve_agent','multiquery'],
   ['multiquery','graphdb'],['multiquery','vectordb'],['multiquery','bm25'],
   ['retrieve_agent','priorauth'],
   ['retrieve_agent','bronze'],['retrieve_agent','silver'],['retrieve_agent','gold'],
-  ['graphdb','reranker'],['vectordb','reranker'],['bm25','reranker'],
+  ['vectordb','ensemble'],['bm25','ensemble'],
+  ['graphdb','reranker'],['ensemble','reranker'],
   ['priorauth','merger'],['bronze','merger'],['silver','merger'],['gold','merger'],
   ['reranker','merger'],
-  ['merger','synthesis'],['synthesis','answer'],
+  ['merger','synthesis'],['synthesis','mem_add'],['mem_add','answer'],
 ];
 
 // Which diagram nodes activate for each step-log text pattern
 const STEP_MAP = [
-  {pat:/Graph entity lookup/i,        nodes:['graphdb','vectordb','bm25']},
-  {pat:/Hybrid document retrieval/i,  nodes:['vectordb','bm25']},
-  {pat:/Hybrid policy retrieval/i,    nodes:['vectordb','bm25']},
+  {pat:/Graph entity lookup/i,        nodes:['graphdb','vectordb','bm25','ensemble']},
+  {pat:/Hybrid document retrieval/i,  nodes:['vectordb','bm25','ensemble']},
+  {pat:/Hybrid policy retrieval/i,    nodes:['vectordb','bm25','ensemble']},
   {pat:/Multi-Query/i,                nodes:['multiquery']},
   {pat:/Prior authorization/i,        nodes:['priorauth']},
   {pat:/Bronze/i,                     nodes:['bronze']},
@@ -285,14 +290,20 @@ const STEP_MAP = [
   {pat:/Gold/i,                       nodes:['gold']},
   {pat:/Intent classified/i,          nodes:['intent_node']},
   {pat:/Retrieved \d+/i,              nodes:['reranker','merger']},
-  {pat:/Answer synthesized/i,         nodes:['synthesis','answer']},
+  {pat:/Answer synthesized/i,         nodes:['synthesis']},
+  {pat:/Mem0 stored|Mem0: no new/i,   nodes:['mem_add']},
+  {pat:/Searching Mem0|Mem0 recalled/i,nodes:['mem_search']},
+  {pat:/Query detected|Language translation/i,nodes:['translate']},
 ];
 
 // LangGraph node → diagram nodes (for node_start events)
 const LG_START = {
+  translate_query: ['translate'],
+  memory_search:   ['mem_search'],
   classify_intent: ['intent_node'],
   retrieve:        ['retrieve_agent'],
   synthesize:      ['synthesis'],
+  memory_add:      ['mem_add'],
 };
 
 // ──────────────────────────────────────────────
@@ -515,7 +526,7 @@ async function run(){
       // Special startup chain
       if(node==='user'){setNode('user','active');activeNodeIds=['user'];activateEdge('user','fastapi');}
       else if(node==='fastapi'){setNode('fastapi','active');activeNodeIds=['fastapi'];activateEdge('fastapi','orchestrator');}
-      else if(node==='orchestrator'){setNode('orchestrator','active');activeNodeIds=['orchestrator'];activateEdge('orchestrator','intent_node');}
+      else if(node==='orchestrator'){setNode('orchestrator','active');activeNodeIds=['orchestrator'];activateEdge('orchestrator','translate');}
       else{
         diagramNodes.forEach(id=>{setNode(id,'active');activateEdge('orchestrator',id);});
         activeNodeIds=diagramNodes;
@@ -546,11 +557,18 @@ async function run(){
           if(el && el.getAttribute('class')==='n idle') setNode(id,'skip');
           else if(el) setNode(id,'done');
         });
-        setNode('reranker','active');activateEdge('graphdb','reranker');activateEdge('vectordb','reranker');activateEdge('bm25','reranker');
+        const ensembleEl = document.getElementById(`nd-ensemble`);
+        if(ensembleEl && ensembleEl.getAttribute('class')==='n idle') setNode('ensemble','skip');
+        else { setNode('ensemble','done'); activateEdge('ensemble','reranker'); }
+
+        setNode('reranker','active');activateEdge('graphdb','reranker');
       }
       if(node==='synthesize'){
-        setNode('reranker','done');setNode('merger','done');doneEdge('merger','synthesis');doneEdge('synthesis','answer');
-        setNode('synthesis','done');setNode('answer','active');
+        setNode('reranker','done');setNode('merger','done');doneEdge('merger','synthesis');
+      }
+      if(node==='memory_add'){
+        doneEdge('synthesis','mem_add');doneEdge('mem_add','answer');
+        setNode('mem_add','done');setNode('answer','active');
         if(answer){
           document.getElementById('answer-text').textContent=answer;
           document.getElementById('answer-card').style.display='block';
