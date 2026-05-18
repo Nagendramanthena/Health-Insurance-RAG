@@ -222,51 +222,51 @@ const NW = 170, NH = 68;
 
 const NODES = [
   // Row 0 — pipeline entry
-  {id:'user',        icon:'👤', title:'User Query',          sub:'input',                   x:20,   y:50},
-  {id:'fastapi',     icon:'⚡', title:'FastAPI',             sub:'/chat/stream',             x:180,  y:50},
-  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph state machine',  x:340,  y:50},
-  {id:'translate',   icon:'🌐', title:'Translator',          sub:'Detect & translate',       x:500,  y:50},
-  {id:'mem_search',  icon:'🧠', title:'Memory Search',       sub:'Mem0 lookup',              x:660,  y:50},
-  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini',              x:820,  y:50},
+  {id:'user',        icon:'👤', title:'User Query',          sub:'input',                   x:30,   y:50},
+  {id:'fastapi',     icon:'⚡', title:'FastAPI',             sub:'/chat/stream',             x:240,  y:50},
+  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph state machine',  x:450,  y:50},
+  {id:'translate',   icon:'🌐', title:'Translator',          sub:'Detect & translate',       x:660,  y:50},
+  {id:'mem_search',  icon:'🧠', title:'Memory Search',       sub:'Mem0 lookup',              x:870,  y:50},
+  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini',              x:1080, y:50},
 
   // Row 2 — retrieval agent
-  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Router by intent',         x:420,  y:220},
-  {id:'multiquery',     icon:'🧠', title:'Multi-Query',      sub:'Query rephrasing',         x:420,  y:305},
+  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Router by intent',         x:540,  y:200},
+  {id:'multiquery',     icon:'🧠', title:'Multi-Query',      sub:'Query rephrasing',         x:540,  y:300},
 
-  // Row 3 — sub-retrieval nodes (7 nodes spread)
-  {id:'graphdb',     icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:20,   y:390},
-  {id:'vectordb',    icon:'🗃️', title:'Vector Store',        sub:'ChromaDB semantic search', x:210,  y:390},
-  {id:'bm25',        icon:'🔤', title:'BM25 Search',          sub:'Keyword retrieval',        x:400,  y:390},
-  {id:'priorauth',   icon:'📋', title:'Prior Auth DB',        sub:'Authorization rules',      x:590,  y:390},
-  {id:'bronze',      icon:'🥉', title:'Bronze Plan',          sub:'Tier retrieval',           x:780,  y:290},
-  {id:'silver',      icon:'🥈', title:'Silver Plan',          sub:'Tier retrieval',           x:780,  y:390},
-  {id:'gold',        icon:'🥇', title:'Gold Plan',            sub:'Tier retrieval',           x:780,  y:490},
+  // Row 3 — sub-retrieval nodes (7 nodes spread beautifully)
+  {id:'graphdb',     icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:60,   y:410},
+  {id:'vectordb',    icon:'🗃️', title:'Vector Store',        sub:'ChromaDB semantic search', x:260,  y:410},
+  {id:'bm25',        icon:'🔤', title:'BM25 Search',          sub:'Keyword retrieval',        x:460,  y:410},
+  {id:'priorauth',   icon:'📋', title:'Prior Auth DB',        sub:'Authorization rules',      x:720,  y:410},
+  {id:'bronze',      icon:'🥉', title:'Bronze Plan',          sub:'Tier retrieval',           x:960,  y:330},
+  {id:'silver',      icon:'🥈', title:'Silver Plan',          sub:'Tier retrieval',           x:960,  y:420},
+  {id:'gold',        icon:'🥇', title:'Gold Plan',            sub:'Tier retrieval',           x:960,  y:510},
 
   // Row 4 — post-retrieval
-  {id:'ensemble',    icon:'🤝', title:'Ensemble Fusion',     sub:'BM25 + Vector scores',     x:305,  y:475},
-  {id:'reranker',    icon:'⚖️', title:'Cross-Encoder',       sub:'Reranking & scoring',      x:210,  y:560},
-  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Assembling context',       x:420,  y:560},
+  {id:'ensemble',    icon:'🤝', title:'Ensemble Fusion',     sub:'BM25 + Vector scores',     x:360,  y:510},
+  {id:'reranker',    icon:'⚖️', title:'Cross-Encoder',       sub:'Reranking & scoring',      x:210,  y:610},
+  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Assembling context',       x:540,  y:610},
 
   // Row 5 — synthesis & memory add
-  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o cited answer',      x:420,  y:710},
-  {id:'mem_add',     icon:'💾', title:'Memory Save',         sub:'Extract new facts',        x:420,  y:810},
+  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o cited answer',      x:540,  y:720},
+  {id:'mem_add',     icon:'💾', title:'Memory Save',         sub:'Extract new facts',        x:540,  y:820},
 
   // Row 6 — answer
-  {id:'answer',      icon:'💬', title:'Answer',              sub:'Streamed to user',          x:420,  y:910},
+  {id:'answer',      icon:'💬', title:'Answer',              sub:'Streamed to user',          x:540,  y:920},
 ];
 
-// Intent pills (not full nodes, rendered as small pills below intent_node)
+// Intent pills (rendered beautifully below intent classifier)
 const INTENT_PILLS = [
-  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:825, y:130, w:160, h:28},
-  {id:'i_policy',     label:'POLICY_QUESTION', x:825, y:168, w:160, h:28},
-  {id:'i_multihop',   label:'MULTI_HOP',       x:825, y:206, w:160, h:28},
-  {id:'i_comparison', label:'COMPARISON',      x:825, y:244, w:160, h:28},
+  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:1085, y:135, w:160, h:28},
+  {id:'i_policy',     label:'POLICY_QUESTION', x:1085, y:175, w:160, h:28},
+  {id:'i_multihop',   label:'MULTI_HOP',       x:1085, y:215, w:160, h:28},
+  {id:'i_comparison', label:'COMPARISON',      x:1085, y:255, w:160, h:28},
 ];
 
-// Edges: [from, to]
+// Edges: [from, to] (Removed duplicate diagonal line for much cleaner layout)
 const EDGES = [
   ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','translate'],['translate','mem_search'],['mem_search','intent_node'],
-  ['intent_node','retrieve_agent'],['orchestrator','retrieve_agent'],
+  ['intent_node','retrieve_agent'],
   ['retrieve_agent','multiquery'],
   ['multiquery','graphdb'],['multiquery','vectordb'],['multiquery','bm25'],
   ['retrieve_agent','priorauth'],
@@ -310,7 +310,7 @@ const LG_START = {
 // BUILD SVG
 // ──────────────────────────────────────────────
 const svg = d3.select('#diagram');
-const VW = 1050, VH = 980;
+const VW = 1280, VH = 1000;
 svg.attr('viewBox', `0 0 ${VW} ${VH}`);
 
 // Arrow marker
