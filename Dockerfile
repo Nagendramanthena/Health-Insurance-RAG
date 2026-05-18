@@ -30,25 +30,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Create dedicated non-root user 1000 with home directory (Hugging Face Spaces requirement)
-RUN useradd -m -u 1000 user
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH
-
-# Create runtime directories and grant full ownership/permissions to user 1000
-RUN mkdir -p logs storage && \
-    chown -R 1000:1000 /app /home/user && \
-    chmod -R 777 /app /home/user
-
-# Switch to non-root user 1000
-USER 1000
+# Create runtime directories and make everything writable for non-root user 1000 (Hugging Face requirement)
+RUN mkdir -p logs storage && chmod -R 777 /app
 
 # Expose the port Hugging Face expects (7860)
 EXPOSE 7860
 
-# Run uvicorn backend + streamlit frontend + nginx reverse proxy side-by-side
+# Run uvicorn backend + nginx reverse proxy
+# Streamlit frontend is launched as a sidecar by FastAPI startup event
 CMD ["sh", "-c", "\
   mkdir -p /tmp/nginx_client_body /tmp/nginx_proxy /tmp/nginx_fastcgi /tmp/nginx_uwsgi /tmp/nginx_scgi && \
   python3 -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 & \
-  streamlit run frontend/app.py --server.port 8501 --server.address 127.0.0.1 --server.headless true & \
   nginx -c /app/nginx.conf -g 'daemon off;'"]

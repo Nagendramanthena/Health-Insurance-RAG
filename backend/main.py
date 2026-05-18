@@ -98,7 +98,18 @@ async def startup_event():
     import threading
     logger.info("Initializing retrieval pipeline preload in background thread...")
     threading.Thread(target=preload_retrievers, daemon=True).start()
-    logger.info("Backend is fully ready.")
+    
+    if IS_MONOLITH:
+        logger.info("Starting Streamlit frontend sidecar on port 8501...")
+        subprocess.Popen([
+            "streamlit", "run", "frontend/app.py", 
+            "--server.port", "8501", 
+            "--server.address", "0.0.0.0",
+            "--server.headless", "true"
+        ])
+        logger.info("Backend and Frontend sidecar are fully ready.")
+    else:
+        logger.info("Backend is fully ready.")
 
 # Mount static frontend files
 _frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")
