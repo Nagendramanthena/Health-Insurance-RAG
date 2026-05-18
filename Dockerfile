@@ -30,9 +30,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Create runtime directories
-# Note: storage/mem0_db is intentionally NOT created — Mem0 runs in-memory only
-RUN mkdir -p logs storage
+# Create runtime directories and make everything writable for non-root user 1000 (Hugging Face requirement)
+RUN mkdir -p logs storage && chmod -R 777 /app
 
 # Expose the port Hugging Face expects (7860)
 EXPOSE 7860
