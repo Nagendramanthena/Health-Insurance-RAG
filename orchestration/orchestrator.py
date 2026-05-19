@@ -39,11 +39,30 @@ from typing import TypedDict, List
 # Ensure project root is on sys.path so `config` and sibling packages resolve
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# ── Load .env FIRST — before any LangSmith/LangChain imports ─────────────────
+# LANGCHAIN_TRACING_V2 must be in os.environ before langsmith is imported,
+# otherwise the SDK and our _TRACING_ENABLED flag will always read False.
 from dotenv import load_dotenv
+load_dotenv()
+
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, END
 from rich.console import Console
+
+# LangSmith observability — graceful no-ops if LANGCHAIN_TRACING_V2 is not set
+try:
+    from langsmith import traceable as _langsmith_traceable
+    _LANGSMITH_AVAILABLE = True
+except ImportError:
+    # If langsmith is not installed, create a passthrough decorator
+    def _langsmith_traceable(*args, **kwargs):  # type: ignore[misc]
+        def _decorator(fn):
+            return fn
+        return _decorator
+    _LANGSMITH_AVAILABLE = False
+
+from orchestration.langsmith_tracing import tag_current_run, get_run_id
 
 from config import (
     LLM_MODEL,
@@ -55,7 +74,6 @@ from orchestration.tools import policy_search, relational_search, plan_compariso
 from orchestration.tracing import trace_log
 from orchestration.memory import search_memories, add_memory
 
-load_dotenv()
 console = Console()
 
 
@@ -455,9 +473,12 @@ class Orchestrator:
 
         return answer
 
+    @_langsmith_traceable(name="health-insurance-rag-query", run_type="chain")  # type: ignore[misc]
     def ask_detailed(self, query: str) -> dict:
         """
         Like ask(), but returns the full result dict for the API layer.
+        Decorated with @traceable so every call creates a named top-level
+        LangSmith parent span that groups all 6 LangGraph node child spans.
 
         Returns:
             {
@@ -466,10 +487,22 @@ class Orchestrator:
                 "steps_log":         list[str],
                 "retrieved_context": str,
                 "memories_used":     list[str],
+                "run_id":            str | None,  # LangSmith trace UUID
             }
         """
         result = self.graph.invoke(self._base_state(query))
         answer = result["answer"]
+
+        # ── Tag the LangSmith trace with structured metadata ──────────────────
+        # Called after invoke so intent & language are already resolved.
+        tag_current_run(
+            session_id=self.user_id,
+            intent=result.get("intent", ""),
+            language=result.get("original_language", "English"),
+            extra_metadata={"query_length": len(query)},
+        )
+        # Capture run_id while still inside the @traceable scope
+        run_id = get_run_id()
 
         self.chat_history.append(("human", query))
         self.chat_history.append(("ai",    answer))
@@ -483,6 +516,7 @@ class Orchestrator:
             "steps_log":         result.get("steps_log", []),
             "retrieved_context": result.get("retrieved_context", ""),
             "memories_used":     result.get("memories_used", []),
+            "run_id":            run_id,   # None when tracing is disabled
         }
         return self.last_detailed_result
 

@@ -3,194 +3,658 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛠️ RAG Developer Console</title>
+<title>🛠️ RAG Agentic Developer Console</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#050d1e;color:#e2e8f0;font-family:'Inter',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-.header{display:flex;align-items:center;gap:12px;padding:12px 24px;background:#0a1628;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0}
-.header h1{font-size:1rem;font-weight:600;color:#fff}
-.badge{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;background:#6366f1;color:#fff;letter-spacing:.06em}
-.session-id{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#475569;background:rgba(255,255,255,0.04);padding:3px 10px;border-radius:12px;border:1px solid rgba(255,255,255,0.06)}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-.body{display:flex;flex:1;overflow:hidden}
+:root {
+  --glow-primary: rgba(99, 102, 241, 0.4);
+  --glow-active: rgba(139, 92, 246, 0.6);
+  --glow-success: rgba(16, 185, 129, 0.4);
+  --border-glow: rgba(255, 255, 255, 0.08);
+  --sidebar-bg: rgba(10, 17, 39, 0.95);
+  --main-bg: radial-gradient(circle at 50% 50%, #0d1527 0%, #060a16 100%);
+}
 
-/* LEFT PANEL */
-.left{width:320px;min-width:300px;border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;background:#07122a}
-.query-area{padding:16px;border-bottom:1px solid rgba(255,255,255,0.07)}
-.query-area label{display:block;font-size:.65rem;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.query-area textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;color:#e2e8f0;font-family:'Inter',sans-serif;font-size:.85rem;resize:none;outline:none;transition:border-color .2s}
-.query-area textarea:focus{border-color:#6366f1}
-.run-btn{width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,#6366f1,#818cf8);border:none;border-radius:8px;color:#fff;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
-.run-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,102,241,.4)}
-.run-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+body {
+  background: #060a16;
+  background-image: var(--main-bg);
+  color: #f1f5f9;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-.intent-display{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.07);display:none}
-.intent-display label{font-size:.65rem;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.08em}
-.intent-pill{display:inline-block;margin-top:6px;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:600;background:rgba(99,102,241,.2);color:#a5b4fc;border:1px solid rgba(99,102,241,.3)}
+/* ── HEADER ── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 28px;
+  background: rgba(10, 16, 36, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-glow);
+  flex-shrink: 0;
+  z-index: 10;
+}
+.header-logo {
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.header-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #4f46e5, #7c3aed);
+  color: #fff;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+  text-transform: uppercase;
+}
+.session-id {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 5px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
 
-.log-area{flex:1;overflow-y:auto;padding:12px 16px}
-.log-area label{font-size:.65rem;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:8px}
-.log-entry{display:flex;gap:8px;margin-bottom:8px;animation:slideIn .3s ease-out}
-@keyframes slideIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
-.log-icon{font-size:.85rem;flex-shrink:0}
-.log-text{font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.5;color:#94a3b8}
-.log-tag{font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:3px;margin-right:4px;text-transform:uppercase}
-.tag-classify{background:rgba(139,92,246,.2);color:#a78bfa}
-.tag-retrieve{background:rgba(245,158,11,.2);color:#fbbf24}
-.tag-synthesize{background:rgba(16,185,129,.2);color:#34d399}
-.tag-system{background:rgba(99,102,241,.15);color:#818cf8}
+.body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
 
-.answer-card{margin:12px 16px;padding:12px;background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:8px;display:none;animation:fadeUp .4s ease-out}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.answer-card .ans-label{font-size:.62rem;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.answer-card .ans-text{font-size:.78rem;line-height:1.6;color:#e2e8f0}
+/* ── LEFT PANEL (Controls & Logs) ── */
+.left {
+  width: 440px;
+  min-width: 420px;
+  border-right: 1px solid var(--border-glow);
+  display: flex;
+  flex-direction: column;
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(20px);
+  z-index: 5;
+}
 
-/* RIGHT PANEL */
-.right{flex:1;overflow:auto;padding:20px 24px;display:flex;flex-direction:column}
-.diagram-label{font-size:.65rem;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-#svg-wrap{width:100%;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.09);border-radius:18px;padding:16px}
-svg{width:100%;overflow:visible}
+.query-area {
+  padding: 24px;
+  border-bottom: 1px solid var(--border-glow);
+}
+.query-area label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.query-area textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.query-area textarea:focus {
+  border-color: #6366f1;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 
-/* Node styles */
-.n rect{stroke-width:2;transition:all .5s}
-.n.idle rect{fill:#0d1a36;stroke:rgba(255,255,255,0.18);rx:14;ry:14}
-.n.active rect{fill:rgba(99,102,241,.3);stroke:#818cf8;stroke-width:2.5;filter:drop-shadow(0 0 18px rgba(99,102,241,.65));rx:14;ry:14}
-.n.done rect{fill:rgba(16,185,129,.2);stroke:#34d399;stroke-width:2;rx:14;ry:14}
-.n.skip rect{fill:#07101f;stroke:rgba(255,255,255,0.05);opacity:.3;rx:14;ry:14}
-.n .icon{font-size:19px}
-.n .title{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;fill:#e2e8f0}
-.n .sub{font-family:'Inter',sans-serif;font-size:10px;fill:#64748b}
-.pulse{fill:none;stroke:#818cf8;stroke-width:2;opacity:0;pointer-events:none}
-.n.active .pulse{animation:pulse 1.3s ease-out infinite}
-@keyframes pulse{0%{r:26px;opacity:.7}100%{r:56px;opacity:0}}
+.run-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+}
+.run-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 25px rgba(99, 102, 241, 0.55);
+}
+.run-btn:active {
+  transform: translateY(1px);
+}
+.run-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.intent-display {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-glow);
+  display: none;
+  background: rgba(255, 255, 255, 0.01);
+}
+.intent-display label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.intent-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── TERMINAL LOGS ── */
+.log-area {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: rgba(5, 8, 20, 0.5);
+}
+.log-area label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.log-list-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  background: rgba(2, 4, 10, 0.7);
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+.log-entry {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  padding-bottom: 8px;
+  animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.log-icon {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+.log-text {
+  color: #f1f5f9;
+  font-weight: 450;
+}
+.log-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 8px;
+  text-transform: uppercase;
+  display: inline-block;
+  letter-spacing: 0.04em;
+}
+.tag-classify { background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
+.tag-retrieve { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
+.tag-synthesize { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25); }
+.tag-system { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.25); }
+.tag-error { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
+
+.answer-card {
+  margin: 16px 24px 24px 24px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 12px;
+  display: none;
+  animation: fadeUp 0.35s ease-out;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.answer-card .ans-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #34d399;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.answer-card .ans-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+
+/* ── RIGHT PANEL (Interactive Diagram) ── */
+.right {
+  flex: 1;
+  overflow: hidden;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+.diagram-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#svg-wrap {
+  flex: 1;
+  width: 100%;
+  background: rgba(10, 16, 36, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* ── Node Graph styling ── */
+.n rect {
+  stroke-width: 1.5;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  rx: 12;
+  ry: 12;
+}
+.n.idle rect {
+  fill: #0c1224;
+  stroke: rgba(255, 255, 255, 0.12);
+}
+.n.active rect {
+  fill: rgba(124, 58, 237, 0.25);
+  stroke: #a78bfa;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4));
+}
+.n.done rect {
+  fill: rgba(16, 185, 129, 0.15);
+  stroke: #10b981;
+  stroke-width: 1.8;
+}
+.n.skip rect {
+  fill: #050811;
+  stroke: rgba(255, 255, 255, 0.03);
+  opacity: 0.35;
+}
+.n .icon {
+  font-size: 18px;
+}
+.n .title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  fill: #e2e8f0;
+}
+.n .sub {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 9px;
+  fill: #64748b;
+  font-weight: 500;
+}
+
+/* LangSmith node distinct styling */
+#nd-langsmith.idle rect {
+  fill: rgba(6, 182, 212, 0.07);
+  stroke: rgba(6, 182, 212, 0.25);
+}
+#nd-langsmith.active rect {
+  fill: rgba(6, 182, 212, 0.22);
+  stroke: #22d3ee;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.5));
+}
+#nd-langsmith.done rect {
+  fill: rgba(6, 182, 212, 0.15);
+  stroke: #06b6d4;
+  stroke-width: 1.8;
+}
+
+.pulse {
+  fill: none;
+  stroke: #a78bfa;
+  stroke-width: 1.5;
+  opacity: 0;
+  pointer-events: none;
+}
+.n.active .pulse {
+  animation: pulseNode 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+@keyframes pulseNode {
+  0% { r: 35px; opacity: 0.8; }
+  100% { r: 75px; opacity: 0; }
+}
+
+/* Edge Lines */
+.edge {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.18);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  transition: all 0.3s ease;
+}
+.edge.active-edge {
+  stroke: #818cf8;
+  stroke-width: 3;
+  stroke-dasharray: 10 3;
+  animation: dash 1s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(129, 140, 248, 0.7));
+}
+.edge.done-edge {
+  stroke: #10b981;
+  stroke-width: 2;
+  stroke-dasharray: none;
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
 
 /* Intent pills in SVG */
-.intent-tag{font-family:'Inter',sans-serif;font-size:11px;font-weight:700}
-.intent-tag.active-intent{fill:rgba(99,102,241,.4);stroke:#818cf8;stroke-width:1.5}
-.intent-tag.inactive-intent{fill:rgba(255,255,255,.04);stroke:rgba(255,255,255,.1);stroke-width:1}
+.intent-tag {
+  rx: 8;
+  ry: 8;
+  transition: all 0.3s ease;
+}
+.intent-tag.active-intent {
+  fill: rgba(124, 58, 237, 0.25);
+  stroke: #a78bfa;
+  stroke-width: 1.5;
+}
+.intent-tag.inactive-intent {
+  fill: rgba(255, 255, 255, 0.02);
+  stroke: rgba(255, 255, 255, 0.06);
+}
 
-/* Edge */
-.edge{fill:none;stroke:rgba(148,163,184,.35);stroke-width:2.5;stroke-dasharray:8 5;transition:stroke .4s,stroke-width .4s,stroke-dasharray .4s}
-.edge.active-edge{stroke:#818cf8;stroke-width:3;stroke-dasharray:none;filter:drop-shadow(0 0 4px rgba(129,140,248,.6))}
-.edge.done-edge{stroke:#34d399;stroke-width:2.5;stroke-dasharray:none}
+/* ── STATUS BAR ── */
+.status {
+  padding: 12px 28px;
+  border-top: 1px solid var(--border-glow);
+  background: rgba(8, 14, 32, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: #64748b;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #64748b;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+.dot.running {
+  background: #6366f1;
+  box-shadow: 0 0 10px #6366f1;
+  animation: blink 1.5s infinite;
+}
+.dot.done {
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+@keyframes blink { 50% { opacity: 0.4; } }
 
-/* Status bar */
-.status{padding:8px 24px;border-top:1px solid rgba(255,255,255,.07);background:#07122a;display:flex;align-items:center;gap:8px;font-size:.72rem;color:#475569;flex-shrink:0}
-.dot{width:7px;height:7px;border-radius:50%;background:#475569;flex-shrink:0}
-.dot.running{background:#6366f1;animation:blink 1s infinite}
-.dot.done { background: #10b981; box-shadow: 0 0 10px #10b981; }
-
+/* Tooltip */
 #tooltip {
   position: absolute;
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba(79, 70, 229, 0.4);
+  background: rgba(10, 16, 36, 0.95);
+  border: 1px solid rgba(99, 102, 241, 0.4);
   border-radius: 12px;
-  padding: 15px;
-  color: #f8fafc;
-  font-size: 13px;
+  padding: 16px;
+  color: #e2e8f0;
+  font-size: 0.8rem;
   pointer-events: none;
   display: none;
   z-index: 2000;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  max-width: 350px;
-  line-height: 1.5;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  max-width: 320px;
+  line-height: 1.6;
 }
-#tooltip b { color: #818cf8; display: block; margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
-#tooltip div { margin-bottom: 6px; border-left: 2px solid #4f46e5; padding-left: 8px; }
+#tooltip b {
+  color: #a5b4fc;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+#tooltip div {
+  margin-bottom: 6px;
+  border-left: 2px solid #6366f1;
+  padding-left: 8px;
+}
 
-/* Login Overlay */
+/* ── CYBER SECURITY LOGIN ── */
 #login-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(7, 18, 42, 0.9);
-  backdrop-filter: blur(20px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 7, 16, 0.95);
+  backdrop-filter: blur(25px);
   z-index: 9999;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
+  transition: opacity 0.3s ease;
 }
 .login-box {
-  background: #0f172a;
-  border: 1px solid rgba(79, 70, 229, 0.4);
-  padding: 40px; border-radius: 20px;
-  text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-  width: 320px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  padding: 48px 40px;
+  border-radius: 24px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  width: 360px;
 }
-.login-box h2 { margin-bottom: 20px; color: #f8fafc; font-size: 1.5rem; }
+.login-box h2 {
+  margin-bottom: 8px;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+.login-box p {
+  color: #64748b;
+  font-size: 0.82rem;
+  margin-bottom: 24px;
+}
 .login-box input {
-  width: 100%; padding: 12px; border-radius: 8px;
-  background: #1e293b; border: 1px solid #334155;
-  color: white; font-size: 1.2rem; text-align: center;
-  margin-bottom: 20px; outline: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 24px;
+  outline: none;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.15em;
+  transition: all 0.3s ease;
 }
-.login-box input:focus { border-color: #6366f1; }
+.login-box input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+}
 .login-box button {
-  width: 100%; padding: 12px; border-radius: 8px;
-  background: #4f46e5; color: white; border: none;
-  font-weight: 600; cursor: pointer; transition: 0.2s;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
-.login-box button:hover { background: #4338ca; }
-.login-error { color: #ef4444; font-size: 0.8rem; margin-top: 10px; display: none; }
+.login-box button:hover {
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+}
+.login-error {
+  color: #ef4444;
+  font-size: 0.78rem;
+  margin-top: 14px;
+  display: none;
+  font-weight: 600;
+}
 
-@keyframes blink{50%{opacity:.2}}
-::-webkit-scrollbar{width:4px;background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:4px}
+::-webkit-scrollbar {
+  width: 5px;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
 </style>
 </head>
 <body>
 
 <div id="login-overlay">
   <div class="login-box">
-    <h2>Dev Console Login</h2>
-    <input type="password" id="pass-input" placeholder="Enter Password" maxlength="4">
+    <h2>Access Console</h2>
+    <p>Please enter the security passkey</p>
+    <input type="password" id="pass-input" placeholder="••••" maxlength="4">
     <button onclick="checkPass()">Unlock Console</button>
-    <div id="login-err" class="login-error">Incorrect password. Access denied.</div>
+    <div id="login-err" class="login-error">🔒 Invalid authorization code.</div>
   </div>
 </div>
+
 <div class="header">
-  <span style="font-size:1.2rem">🛡️</span>
-  <h1>Health Insurance RAG</h1>
-  <span class="badge">DEV CONSOLE</span>
+  <div class="header-logo">🛡️ HealthGuard</div>
+  <span class="header-badge">RAG DEV CONSOLE</span>
   <span class="session-id" id="sid">—</span>
 </div>
+
 <div class="body">
   <div class="left">
     <div class="query-area">
-      <label>Debug Query</label>
-      <textarea id="qinput" rows="3" placeholder="e.g. What are the prior auth rules for Humira?"></textarea>
-      <button class="run-btn" id="runbtn" onclick="run()">🚀 Run Live Trace</button>
+      <label>Run Pipeline Experiment</label>
+      <textarea id="qinput" rows="3" placeholder="e.g. Compare Bronze and Gold plan copays for Metformin"></textarea>
+      <button class="run-btn" id="runbtn" onclick="run()">🚀 Execute Live Trace</button>
     </div>
     <div class="intent-display" id="intent-display">
-      <label>Detected Intent</label>
+      <label>Extracted Intent</label>
       <div class="intent-pill" id="intent-pill">—</div>
     </div>
     <div class="log-area">
-      <label>⚡ Live Event Log</label>
-      <div id="loglist"></div>
+      <label>⚡ System Event Stream</label>
+      <div class="log-list-wrapper">
+        <div id="loglist"></div>
+      </div>
     </div>
     <div class="answer-card" id="answer-card">
-      <div class="ans-label">✅ Final Answer</div>
+      <div class="ans-label">✨ Pipeline Response</div>
       <div class="ans-text" id="answer-text"></div>
     </div>
   </div>
   <div class="right">
-    <div class="diagram-label">📊 Live Workflow — all nodes (dimmed = not invoked)</div>
+    <div class="diagram-label">📊 Interactive Orchestrator Workflow</div>
     <div id="svg-wrap"><svg id="diagram"></svg></div>
   </div>
 </div>
+
 <div id="tooltip"></div>
 <div class="status">
   <div class="dot" id="sdot"></div>
-  <span id="stxt">Ready — enter a query and click Run Live Trace</span>
+  <span id="stxt">Ready — Enter parameters to begin orchestrating trace events.</span>
 </div>
 
 <script>
 const API = '';
 let SID = localStorage.getItem('rag_sid') || crypto.randomUUID();
 localStorage.setItem('rag_sid', SID);
-document.getElementById('sid').textContent = 'session: ' + SID.slice(0,8) + '…';
+document.getElementById('sid').textContent = 'Session ID: ' + SID.slice(0,8) + '…';
 
 // ── Authentication ──
 if(sessionStorage.getItem('dev_auth') === 'true') {
@@ -215,57 +679,50 @@ let multiQueryVariants = [];
 const tt = document.getElementById('tooltip');
 
 // ──────────────────────────────────────────────
-// NODE DEFINITIONS
+// GRAPH LAYOUT & D3 VARIABLES
 // ──────────────────────────────────────────────
-// Layout: SVG viewBox 0 0 860 1020
-const NW = 170, NH = 68;
+const NW = 190, NH = 70;
 
 const NODES = [
-  // Row 0 — pipeline entry
-  {id:'user',        icon:'👤', title:'User Query',          sub:'input',                   x:30,   y:50},
-  {id:'fastapi',     icon:'⚡', title:'FastAPI',             sub:'/chat/stream',             x:240,  y:50},
-  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph state machine',  x:450,  y:50},
-  {id:'translate',   icon:'🌐', title:'Translator',          sub:'Detect & translate',       x:660,  y:50},
-  {id:'mem_search',  icon:'🧠', title:'Memory Search',       sub:'Mem0 lookup',              x:870,  y:50},
-  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini',              x:1080, y:50},
+  {id:'user',        icon:'👤', title:'User Query',          sub:'pipeline entry',           x:30,   y:50},
+  {id:'fastapi',     icon:'⚡', title:'FastAPI Host',        sub:'/chat/stream',             x:245,  y:50},
+  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph core',           x:460,  y:50},
+  {id:'translate',   icon:'🌐', title:'Translator',          sub:'Detect & translate',       x:665,  y:50},
+  {id:'mem_search',  icon:'🧠', title:'Memory Search',       sub:'Mem0 retrieval',           x:870,  y:50},
+  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini classify',     x:1080, y:50},
 
-  // Row 2 — retrieval agent
-  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Router by intent',         x:540,  y:200},
-  {id:'multiquery',     icon:'🧠', title:'Multi-Query',      sub:'Query rephrasing',         x:540,  y:300},
+  {id:'langsmith',   icon:'📡', title:'LangSmith Tracing',   sub:'Observability & traces',   x:460,  y:170},
 
-  // Row 3 — sub-retrieval nodes (7 nodes spread beautifully)
-  {id:'graphdb',     icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:60,   y:410},
-  {id:'vectordb',    icon:'🗃️', title:'Vector Store',        sub:'ChromaDB semantic search', x:260,  y:410},
-  {id:'bm25',        icon:'🔤', title:'BM25 Search',          sub:'Keyword retrieval',        x:460,  y:410},
-  {id:'priorauth',   icon:'📋', title:'Prior Auth DB',        sub:'Authorization rules',      x:720,  y:410},
-  {id:'bronze',      icon:'🥉', title:'Bronze Plan',          sub:'Tier retrieval',           x:960,  y:330},
-  {id:'silver',      icon:'🥈', title:'Silver Plan',          sub:'Tier retrieval',           x:960,  y:420},
-  {id:'gold',        icon:'🥇', title:'Gold Plan',            sub:'Tier retrieval',           x:960,  y:510},
+  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Task distributor',         x:540,  y:280},
+  {id:'multiquery',     icon:'🔮', title:'Multi-Query',      sub:'Query variation model',    x:540,  y:375},
 
-  // Row 4 — post-retrieval
-  {id:'ensemble',    icon:'🤝', title:'Ensemble Fusion',     sub:'BM25 + Vector scores',     x:360,  y:510},
-  {id:'reranker',    icon:'⚖️', title:'Cross-Encoder',       sub:'Reranking & scoring',      x:210,  y:610},
-  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Assembling context',       x:540,  y:610},
+  {id:'graphdb',     icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:40,   y:480},
+  {id:'vectordb',    icon:'🗃️', title:'Vector Store',        sub:'ChromaDB cosine sim',      x:240,  y:480},
+  {id:'bm25',        icon:'🔤', title:'BM25 Search',          sub:'Sparse lex search',        x:440,  y:480},
+  {id:'priorauth',   icon:'📋', title:'Prior Auth Rules',    sub:'Policy lookups',           x:720,  y:480},
+  {id:'bronze',      icon:'🥉', title:'Bronze Tier',         sub:'Benefit parameters',       x:960,  y:395},
+  {id:'silver',      icon:'🥈', title:'Silver Tier',         sub:'Benefit parameters',       x:960,  y:480},
+  {id:'gold',        icon:'🥇', title:'Gold Tier',           sub:'Benefit parameters',       x:960,  y:565},
 
-  // Row 5 — synthesis & memory add
-  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o cited answer',      x:540,  y:720},
-  {id:'mem_add',     icon:'💾', title:'Memory Save',         sub:'Extract new facts',        x:540,  y:820},
+  {id:'ensemble',    icon:'🤝', title:'Ensemble Fusion',     sub:'Rank weight fusion',       x:335,  y:580},
+  {id:'reranker',    icon:'⚖️', title:'BGE Reranker',         sub:'Cross-Encoder model',      x:180,  y:680},
+  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Clean & deduplicate',      x:540,  y:680},
 
-  // Row 6 — answer
-  {id:'answer',      icon:'💬', title:'Answer',              sub:'Streamed to user',          x:540,  y:920},
+  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o generator',         x:540,  y:790},
+  {id:'mem_add',     icon:'💾', title:'Memory Commit',       sub:'Mem0 fact extractor',      x:540,  y:890},
+  {id:'answer',      icon:'💬', title:'Response Output',     sub:'Client socket stream',     x:540,  y:985},
 ];
 
-// Intent pills (rendered beautifully below intent classifier)
 const INTENT_PILLS = [
-  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:1085, y:135, w:160, h:28},
-  {id:'i_policy',     label:'POLICY_QUESTION', x:1085, y:175, w:160, h:28},
-  {id:'i_multihop',   label:'MULTI_HOP',       x:1085, y:215, w:160, h:28},
-  {id:'i_comparison', label:'COMPARISON',      x:1085, y:255, w:160, h:28},
+  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:1085, y:125, w:165, h:26},
+  {id:'i_policy',     label:'POLICY_QUESTION', x:1085, y:160, w:165, h:26},
+  {id:'i_multihop',   label:'MULTI_HOP',       x:1085, y:195, w:165, h:26},
+  {id:'i_comparison', label:'COMPARISON',      x:1085, y:230, w:165, h:26},
 ];
 
-// Edges: [from, to] (Removed duplicate diagonal line for much cleaner layout)
 const EDGES = [
   ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','translate'],['translate','mem_search'],['mem_search','intent_node'],
+  ['orchestrator','langsmith'],
   ['intent_node','retrieve_agent'],
   ['retrieve_agent','multiquery'],
   ['multiquery','graphdb'],['multiquery','vectordb'],['multiquery','bm25'],
@@ -275,10 +732,9 @@ const EDGES = [
   ['graphdb','reranker'],['ensemble','reranker'],
   ['priorauth','merger'],['bronze','merger'],['silver','merger'],['gold','merger'],
   ['reranker','merger'],
-  ['merger','synthesis'],['synthesis','mem_add'],['mem_add','answer'],
+  ['merger','synthesis'],['synthesis','langsmith'],['synthesis','mem_add'],['mem_add','answer'],
 ];
 
-// Which diagram nodes activate for each step-log text pattern
 const STEP_MAP = [
   {pat:/Graph entity lookup/i,        nodes:['graphdb','vectordb','bm25','ensemble']},
   {pat:/Hybrid document retrieval/i,  nodes:['vectordb','bm25','ensemble']},
@@ -290,13 +746,13 @@ const STEP_MAP = [
   {pat:/Gold/i,                       nodes:['gold']},
   {pat:/Intent classified/i,          nodes:['intent_node']},
   {pat:/Retrieved \d+/i,              nodes:['reranker','merger']},
-  {pat:/Answer synthesized/i,         nodes:['synthesis']},
+  {pat:/Answer synthesized/i,         nodes:['synthesis','langsmith']},
+  {pat:/LangSmith|langsmith|trace/i,  nodes:['langsmith']},
   {pat:/Mem0 stored|Mem0: no new/i,   nodes:['mem_add']},
   {pat:/Searching Mem0|Mem0 recalled/i,nodes:['mem_search']},
   {pat:/Query detected|Language translation/i,nodes:['translate']},
 ];
 
-// LangGraph node → diagram nodes (for node_start events)
 const LG_START = {
   translate_query: ['translate'],
   memory_search:   ['mem_search'],
@@ -306,26 +762,21 @@ const LG_START = {
   memory_add:      ['mem_add'],
 };
 
-// ──────────────────────────────────────────────
-// BUILD SVG
-// ──────────────────────────────────────────────
+// ── BUILD D3 INTERACTIVE SVG ──
 const svg = d3.select('#diagram');
-const VW = 1280, VH = 1000;
+const VW = 1300, VH = 1090;
 svg.attr('viewBox', `0 0 ${VW} ${VH}`);
 
-// Arrow marker
 svg.append('defs').append('marker')
   .attr('id','arr').attr('viewBox','0 -6 12 12')
-  .attr('refX',10).attr('refY',0).attr('markerWidth',8).attr('markerHeight',8)
+  .attr('refX',12).attr('refY',0).attr('markerWidth',7).attr('markerHeight',7)
   .attr('orient','auto')
-  .append('path').attr('d','M0,-6L12,0L0,6').attr('fill','rgba(148,163,184,.5)');
+  .append('path').attr('d','M0,-5L10,0L0,5').attr('fill','rgba(148,163,184,0.3)');
 
-// Center x for a node
 const cx = n => n.x + NW/2;
 const cy = n => n.y + NH/2;
-const nm = {};  NODES.forEach(n=>nm[n.id]=n);
+const nm = {}; NODES.forEach(n=>nm[n.id]=n);
 
-// Edges
 const edgeG = svg.append('g');
 const edgeSel = {};
 EDGES.forEach(([f,t],i)=>{
@@ -337,33 +788,30 @@ EDGES.forEach(([f,t],i)=>{
     .attr('d',`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`)
     .attr('marker-end','url(#arr)');
   edgeSel[`${f}→${t}`]=p;
-  edgeSel[`${f}→${t}_i`]=i;
 });
 
-// Intent pills
 const pillG = svg.append('g');
 const pillSel={};
 INTENT_PILLS.forEach(p=>{
   const g=pillG.append('g').attr('id',`pill-${p.id}`);
   g.append('rect').attr('x',p.x).attr('y',p.y).attr('width',p.w).attr('height',p.h)
-   .attr('rx',10).attr('class','intent-tag inactive-intent');
+   .attr('class','intent-tag inactive-intent');
   g.append('text').attr('x',p.x+p.w/2).attr('y',p.y+p.h/2+4)
-   .attr('text-anchor','middle').attr('fill','#64748b')
-   .attr('font-family','Inter,sans-serif').attr('font-size',11).attr('font-weight',700)
+   .attr('text-anchor','middle').attr('fill','#475569')
+   .attr('font-family','\'Plus Jakarta Sans\',sans-serif').attr('font-size',10).attr('font-weight',700)
    .text(p.label);
   pillSel[p.id]=g;
 });
 
-// Nodes
 const nodeG = svg.append('g');
 const nodeSel = {};
 NODES.forEach(n=>{
   const g=nodeG.append('g').attr('id',`nd-${n.id}`).attr('class','n idle');
   g.append('rect').attr('x',n.x).attr('y',n.y).attr('width',NW).attr('height',NH);
   g.append('circle').attr('cx',n.x+NW/2).attr('cy',n.y+NH/2).attr('class','pulse');
-  g.append('text').attr('class','icon').attr('x',n.x+20).attr('y',n.y+NH/2+6).text(n.icon);
-  g.append('text').attr('class','title').attr('x',n.x+45).attr('y',n.y+NH/2-8).text(n.title);
-  g.append('text').attr('class','sub').attr('x',n.x+45).attr('y',n.y+NH/2+13).text(n.sub);
+  g.append('text').attr('class','icon').attr('x',n.x+16).attr('y',n.y+NH/2+6).text(n.icon);
+  g.append('text').attr('class','title').attr('x',n.x+42).attr('y',n.y+NH/2-7).text(n.title);
+  g.append('text').attr('class','sub').attr('x',n.x+42).attr('y',n.y+NH/2+12).text(n.sub);
   nodeSel[n.id]=g;
 
   if(n.id==='multiquery'){
@@ -371,7 +819,6 @@ NODES.forEach(n=>{
     g.on('mouseover', (e)=>{
       if(multiQueryVariants.length===0) return;
       tt.style.display='block';
-      // Deduplicate variants for a cleaner view
       const unique = [...new Set(multiQueryVariants)];
       tt.innerHTML = `<b>Generated Multi-Query Variants</b>` + 
         unique.map(v => `<div>${v}</div>`).join('');
@@ -386,9 +833,7 @@ NODES.forEach(n=>{
   }
 });
 
-// ──────────────────────────────────────────────
-// STATE HELPERS
-// ──────────────────────────────────────────────
+// ── ORCHESTRATION EVENT RUNNERS ──
 function setNode(id, state){
   const g=nodeSel[id]; if(!g) return;
   g.attr('class',`n ${state}`);
@@ -409,14 +854,13 @@ function setIntent(intentStr){
     g.select('rect').attr('class',`intent-tag ${active?'active-intent':'inactive-intent'}`);
     g.select('text').attr('fill', active?'#a5b4fc':'#475569');
   });
-  // show intent badge on left
   document.getElementById('intent-display').style.display='block';
-  const colors={SIMPLE_LOOKUP:'#7c3aed',POLICY_QUESTION:'#2563eb',MULTI_HOP:'#d97706',COMPARISON:'#059669'};
+  const colors={SIMPLE_LOOKUP:'#818cf8',POLICY_QUESTION:'#10b981',MULTI_HOP:'#a78bfa',COMPARISON:'#f59e0b'};
   const pill=document.getElementById('intent-pill');
-  pill.textContent=intentStr;
-  pill.style.background=`${colors[intentStr]||'#6366f1'}33`;
+  pill.textContent=intentStr.replace('_', ' ');
+  pill.style.background=`${colors[intentStr]||'#6366f1'}20`;
   pill.style.color=colors[intentStr]||'#a5b4fc';
-  pill.style.borderColor=`${colors[intentStr]||'#6366f1'}55`;
+  pill.style.borderColor=`${colors[intentStr]||'#6366f1'}40`;
 }
 
 function resetAll(){
@@ -446,7 +890,6 @@ function setStatus(txt,state=''){
   document.getElementById('sdot').className=`dot ${state}`;
 }
 
-// Map substep text → which retrieval nodes to activate
 function activateFromStep(step, lgNode){
   for(const m of STEP_MAP){
     if(m.pat.test(step)){
@@ -459,9 +902,6 @@ function activateFromStep(step, lgNode){
   }
 }
 
-// ──────────────────────────────────────────────
-// RUN TRACE
-// ──────────────────────────────────────────────
 async function run(){
   const q=document.getElementById('qinput').value.trim();
   if(!q){alert('Enter a query first!');return;}
@@ -469,7 +909,7 @@ async function run(){
   multiQueryVariants = [];
   const btn=document.getElementById('runbtn');
   btn.disabled=true;
-  setStatus('Connecting…','running');
+  setStatus('Connecting to local agent websocket…','running');
 
   let activeNodeIds=[];
   let currentIntent='';
@@ -491,10 +931,9 @@ async function run(){
         if(!line.startsWith('data: ')) continue;
         const raw=line.slice(6).trim();
         if(raw==='[DONE]'){
-          // Mark everything done
           activeNodeIds.forEach(id=>setNode(id,'done'));
           setNode('answer','done');
-          setStatus('✅ Workflow complete!','done');
+          setStatus('✅ Execution stream completed successfully.','done');
           break;
         }
         try{
@@ -505,14 +944,14 @@ async function run(){
       }
     }
   }catch(err){
-    setStatus('❌ Error: '+err.message,'');
-    addLog('❌','ERROR','tag-system',err.message);
+    setStatus('❌ Process crashed: '+err.message,'');
+    addLog('❌','ERROR','tag-error',err.message);
   }finally{
     btn.disabled=false;
   }
 
   function handleEvent(ev){
-    const {type,node,intent,step,msg,answer,steps}=ev;
+    const {type,node,intent,step,msg,answer}=ev;
 
     if(intent && intent!==currentIntent){
       currentIntent=intent;
@@ -521,9 +960,8 @@ async function run(){
 
     if(type==='node_start'){
       const diagramNodes=LG_START[node]||[];
-      // Mark previous as done, new as active
       activeNodeIds.forEach(id=>setNode(id,'done'));
-      // Special startup chain
+      
       if(node==='user'){setNode('user','active');activeNodeIds=['user'];activateEdge('user','fastapi');}
       else if(node==='fastapi'){setNode('fastapi','active');activeNodeIds=['fastapi'];activateEdge('fastapi','orchestrator');}
       else if(node==='orchestrator'){setNode('orchestrator','active');activeNodeIds=['orchestrator'];activateEdge('orchestrator','translate');}
@@ -533,7 +971,7 @@ async function run(){
       }
       const tagClass=node==='classify_intent'?'tag-classify':node==='retrieve'?'tag-retrieve':node==='synthesize'?'tag-synthesize':'tag-system';
       addLog('▶','START',tagClass,node+(msg?' — '+msg:''));
-      setStatus(`Running: ${node}…`,'running');
+      setStatus(`Executing node: [${node}]…`,'running');
     }
 
     if(type==='substep'){
@@ -541,7 +979,6 @@ async function run(){
       const tagClass=node==='retrieve'?'tag-retrieve':node==='synthesize'?'tag-synthesize':'tag-classify';
       addLog('→','STEP',tagClass,step||'');
       
-      // Store variants if found
       if(step && step.includes('🧠 Multi-Query Variant')){
         const variantText = step.split(':').slice(1).join(':').trim();
         multiQueryVariants.push(variantText);
@@ -550,7 +987,6 @@ async function run(){
 
     if(type==='node_done'){
       if(node==='retrieve'){
-        // Dim retrieval nodes that were NOT activated (skip state)
         const allRetrieval=['graphdb','vectordb','bm25','priorauth','bronze','silver','gold'];
         allRetrieval.forEach(id=>{
           const el=document.getElementById(`nd-${id}`);
@@ -565,6 +1001,8 @@ async function run(){
       }
       if(node==='synthesize'){
         setNode('reranker','done');setNode('merger','done');doneEdge('merger','synthesis');
+        setNode('langsmith','active');activateEdge('synthesis','langsmith');
+        setTimeout(()=>setNode('langsmith','done'), 600);
       }
       if(node==='memory_add'){
         doneEdge('synthesis','mem_add');doneEdge('mem_add','answer');
@@ -576,12 +1014,12 @@ async function run(){
       }
       if(node==='classify_intent') setNode('retrieve_agent','active');
       const tagClass=node==='synthesize'?'tag-synthesize':node==='retrieve'?'tag-retrieve':'tag-classify';
-      addLog('✅','DONE',tagClass,`${node} complete`+(answer?' — answer ready':''));
+      addLog('✅','DONE',tagClass,`${node} execution complete`);
     }
 
     if(type==='error'){
-      addLog('❌','ERROR','tag-system',msg);
-      setStatus('❌ Error: '+msg,'');
+      addLog('❌','ERROR','tag-error',msg);
+      setStatus('❌ Node Error: '+msg,'');
     }
   }
 }

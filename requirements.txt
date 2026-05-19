@@ -29,6 +29,9 @@ langchain-google-genai>=2.0.0
 langgraph>=0.2.0
 python-dotenv>=1.0.0
 
+# LangSmith Observability & Tracing
+langsmith>=0.1.0
+
 # Agent Memory (Mem0 — in-memory per session, no persistence needed)
 mem0ai>=0.1.0
 qdrant-client>=1.9.0   # used by Mem0 for in-memory vector store

@@ -165,7 +165,8 @@ async def chat(request: ChatRequest):
             intent=result["intent"],
             steps_log=result["steps_log"],
             memories_used=result.get("memories_used", []),
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
+            run_id=result.get("run_id"),   # LangSmith trace UUID (None if tracing off)
         )
     except Exception as e:
         logger.error(f"Error processing chat: {str(e)}")

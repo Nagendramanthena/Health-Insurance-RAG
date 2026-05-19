@@ -34,6 +34,7 @@ class ChatResponse(BaseModel):
     steps_log: List[str]
     memories_used: List[str] = []   # Facts Mem0 extracted and stored from this turn
     timestamp: str
+    run_id: Optional[str] = None    # LangSmith trace run ID (None if tracing disabled)
 
 
 class SessionHistoryResponse(BaseModel):
