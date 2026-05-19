@@ -241,8 +241,12 @@ def get_hybrid_retriever(
             for d, s in zip(documents, scores):
                 d.metadata["relevance_score"] = float(s)
 
-            scored   = sorted(documents, key=lambda x: x.metadata["relevance_score"], reverse=True)
-            filtered = [d for d in scored if d.metadata["relevance_score"] >= MIN_RELEVANCE_SCORE]
+            scored   = sorted(documents, key=lambda x: x.metadata.get("relevance_score", 0), reverse=True)
+            filtered = [
+                d for d in scored 
+                if d.metadata.get("doc_type") == "knowledge_graph" 
+                or d.metadata.get("relevance_score", 0) >= MIN_RELEVANCE_SCORE
+            ]
             return filtered[:self.top_n]
 
     compressor = ScoredReranker(model=cross_encoder, top_n=top_n)

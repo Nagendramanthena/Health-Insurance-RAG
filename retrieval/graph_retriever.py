@@ -69,7 +69,7 @@ class GraphRetriever:
             q = re.sub(rf'\b{re.escape(phrase)}\b', canonical, q, flags=re.IGNORECASE)
         return q
 
-    def _extract_entities(self, query: str, threshold: float = 0.7):
+    def _extract_entities(self, query: str, threshold: float = 0.85):
         """
         Entity extraction: first expands medical synonyms, then matches
         against node labels in the knowledge graph.
@@ -100,8 +100,9 @@ class GraphRetriever:
                     found_entities.append(node)
                     continue
 
-                # Fuzzy match for single-word tokens (typos)
-                matches = difflib.get_close_matches(node_lower, query_words, n=1, cutoff=threshold)
+                # Fuzzy match for single-word tokens (typos), only for words > 4 chars to prevent garbage matches
+                long_words = [w for w in query_words if len(w) > 4]
+                matches = difflib.get_close_matches(node_lower, long_words, n=1, cutoff=threshold)
                 if matches:
                     found_entities.append(node)
 
@@ -274,7 +275,7 @@ class GraphRetriever:
 
         return ""
 
-    def invoke(self, query: str, k: int = 3) -> list[Document]:
+    def invoke(self, query: str, k: int = 5) -> list[Document]:
         """Perform graph retrieval and return LangChain Documents."""
         entities = self._extract_entities(query)
         if not entities:
