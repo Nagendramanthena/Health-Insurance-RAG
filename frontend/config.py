@@ -22,7 +22,7 @@ EXAMPLE_QUERIES = [
     "What is the copay for Metformin on the Silver plan?",
     "Which cardiologists are in-network in New York?",
     "How do I file a claim for an out-of-network provider?",
-    "Does my plan require prior authorization for physical therapy?",
+    "Is eculizumab covered and does it require prior authorization?",
     "Compare the deductibles for Bronze and Gold plans."
 ]
 
