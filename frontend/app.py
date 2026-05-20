@@ -334,8 +334,11 @@ if "total_queries" not in st.session_state: st.session_state.total_queries = 0
 async def call_chat_api(query: str):
     async with httpx.AsyncClient(timeout=120.0) as client:
         try:
-            resp = await client.post(f"{API_BASE_URL}/chat",
-                                     json={"session_id": st.session_state.session_id, "query": query})
+            payload = {"session_id": st.session_state.session_id, "query": query}
+            if "plan_tier" in st.session_state:
+                payload["plan_tier"] = st.session_state.plan_tier
+                
+            resp = await client.post(f"{API_BASE_URL}/chat", json=payload)
             resp.raise_for_status()
             return resp.json()
         except Exception as e:
@@ -385,6 +388,13 @@ with st.sidebar:
         {st.session_state.session_id[:8]}…{st.session_state.session_id[-4:]}
     </div>
     """, unsafe_allow_html=True)
+    
+    st.selectbox(
+        "Plan Tier", 
+        ["Unknown", "Bronze", "Silver", "Gold"], 
+        index=0,
+        key="plan_tier"
+    )
 
     col_a, col_b = st.columns(2)
     with col_a:

@@ -12,6 +12,7 @@ from datetime import datetime
 class ChatRequest(BaseModel):
     session_id: str = Field(..., description="Unique session identifier (UUID)")
     query: str = Field(..., min_length=1, max_length=2000, description="User question")
+    plan_tier: Optional[str] = Field(None, description="User's selected plan tier")
 
 
 class ClearSessionRequest(BaseModel):

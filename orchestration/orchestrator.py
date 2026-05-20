@@ -138,59 +138,6 @@ def memory_search(state: AgentState) -> AgentState:
     return {**state, "past_memories": memories, "steps_log": log}
 
 
-# ══════════════════════════════════════════════════════════════
-# 3.5 NODE 0 — translate_query (NEW)
-# ══════════════════════════════════════════════════════════════
-
-_TRANSLATE_SYSTEM = """You are a multilingual translation assistant for a Health Insurance AI.
-Analyze the user's input question.
-1. Identify the language (e.g., "English", "Spanish", "French", "Mandarin", "Hindi").
-2. Translate the query to English if it is not already in English.
-3. If it is already in English, output the exact query.
-Return your response in strict JSON format: {"language": "<Language Name>", "english_query": "<Translated Query>"}"""
-
-def translate_query(state: AgentState) -> AgentState:
-    """NODE 0: Detect language and translate query to English for accurate retrieval."""
-    llm   = _classifier_llm()
-    query = state["query"]
-    log   = list(state.get("steps_log", []))
-
-    try:
-        response = llm.invoke([
-            SystemMessage(content=_TRANSLATE_SYSTEM),
-            HumanMessage(content=query),
-        ])
-
-        import json
-        # Handle potential markdown formatting around JSON
-        raw = response.content.strip()
-        if raw.startswith("```json"):
-            raw = raw[7:-3].strip()
-        elif raw.startswith("```"):
-            raw = raw[3:-3].strip()
-
-        data = json.loads(raw)
-        lang = data.get("language", "English")
-        eng_query = data.get("english_query", query)
-
-        if lang.lower() != "english":
-            log.append(f"🌐 Query detected in {lang} → Translated to English for retrieval")
-        else:
-            log.append("🌐 Query detected in English")
-            eng_query = query
-    except Exception as e:
-        log.append("🌐 Language translation skipped (defaulting to English)")
-        lang = "English"
-        eng_query = query
-
-    return {
-        **state,
-        "original_query": query,
-        "query": eng_query,
-        "original_language": lang,
-        "steps_log": log
-    }
-
 
 # ══════════════════════════════════════════════════════════════
 # 4.  NODE 2 — classify_intent
@@ -334,9 +281,8 @@ _SYNTHESIS_TEMPLATE = """{system_prompt}
 
 Using ONLY the retrieved context above, answer the user's question.
 IMPORTANT: You MUST also follow any user preferences (e.g., formatting, language, or specific plan details) found in the PAST USER MEMORIES section.
-CRITICAL LANGUAGE REQUIREMENT: The user's original question was in {language}. You MUST formulate your final answer entirely in {language}.
 If the user asks for entities with multiple criteria (e.g., "Specialist X in City Y"), you MUST verify that the same entity satisfies ALL criteria in the context. Do NOT assume an entity has a property just because it is listed in the context alongside another entity.
-Always cite the source file and page number for every fact you state.
+Always cite the source file and page number for every fact you state EXACTLY as it appears in the context (e.g., "(Source: filename.pdf, Page: 2)"). Failure to include the page number is a strict violation.
 If the context does not contain enough information, say so explicitly — do NOT guess."""
 
 
@@ -358,7 +304,6 @@ def synthesize(state: AgentState) -> AgentState:
         past_memories=past_memories,
         context=state["retrieved_context"],
         history=history_str,
-        language=state.get("original_language", "English"),
     )
 
     response = llm.invoke([
@@ -423,15 +368,13 @@ class Orchestrator:
             return {**state, "memories_used": stored, "steps_log": log}
 
         builder = StateGraph(AgentState)
-        builder.add_node("translate_query", translate_query)
         builder.add_node("memory_search",   memory_search_node)
         builder.add_node("classify_intent", classify_intent)
         builder.add_node("retrieve",        retrieve)
         builder.add_node("synthesize",      synthesize)
         builder.add_node("memory_add",      memory_add_node)
 
-        builder.set_entry_point("translate_query")
-        builder.add_edge("translate_query", "memory_search")
+        builder.set_entry_point("memory_search")
         builder.add_edge("memory_search",   "classify_intent")
         builder.add_edge("classify_intent", "retrieve")
         builder.add_edge("retrieve",        "synthesize")
@@ -444,8 +387,6 @@ class Orchestrator:
         """Build the initial AgentState for a new query."""
         return {
             "query":             query,
-            "original_query":    query,
-            "original_language": "English",
             "user_id":           self.user_id,
             "intent":            "",
             "retrieved_context": "",
@@ -498,7 +439,6 @@ class Orchestrator:
         tag_current_run(
             session_id=self.user_id,
             intent=result.get("intent", ""),
-            language=result.get("original_language", "English"),
             extra_metadata={"query_length": len(query)},
         )
         # Capture run_id while still inside the @traceable scope

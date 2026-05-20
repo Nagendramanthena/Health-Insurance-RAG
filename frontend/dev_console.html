@@ -38,10 +38,10 @@ body {
 .header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 28px;
-  background: rgba(10, 16, 36, 0.8);
-  backdrop-filter: blur(12px);
+  gap: 24px;
+  padding: 20px 32px;
+  background: rgba(10, 16, 36, 0.85);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-glow);
   flex-shrink: 0;
   z-index: 10;
@@ -86,18 +86,19 @@ body {
 
 /* ── LEFT PANEL (Controls & Logs) ── */
 .left {
-  width: 440px;
-  min-width: 420px;
+  width: 480px;
+  min-width: 460px;
   border-right: 1px solid var(--border-glow);
   display: flex;
   flex-direction: column;
   background: var(--sidebar-bg);
   backdrop-filter: blur(20px);
   z-index: 5;
+  overflow-y: auto;
 }
 
 .query-area {
-  padding: 24px;
+  padding: 32px;
   border-bottom: 1px solid var(--border-glow);
 }
 .query-area label {
@@ -162,8 +163,41 @@ body {
   box-shadow: none;
 }
 
+/* Theme toggle button */
+.theme-toggle {
+  margin-left: 10px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #f1f5f9;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background 0.3s ease;
+}
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Glass‑morphism panel backgrounds */
+.left, .right, .header {
+  background: var(--glass-bg, rgba(255,255,255,0.08));
+  backdrop-filter: blur(12px);
+}
+/* Dark / Light mode */
+body.dark-mode {
+  --main-bg: radial-gradient(circle at 50% 50%, #0d1527 0%, #060a16 100%);
+  --sidebar-bg: rgba(10, 17, 39, 0.95);
+  --glow-primary: rgba(99, 102, 241, 0.4);
+}
+body.light-mode {
+  --main-bg: radial-gradient(circle at 50% 50%, #f0f4ff 0%, #e0e7ff 100%);
+  --sidebar-bg: rgba(255,255,255,0.9);
+  --glow-primary: rgba(99, 102, 241, 0.2);
+}
+
 .intent-display {
-  padding: 16px 24px;
+  padding: 24px 32px;
   border-bottom: 1px solid var(--border-glow);
   display: none;
   background: rgba(255, 255, 255, 0.01);
@@ -197,8 +231,10 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: 32px;
   background: rgba(5, 8, 20, 0.5);
+  min-height: 350px;
+  flex-shrink: 0;
 }
 .log-area label {
   font-size: 0.7rem;
@@ -216,9 +252,9 @@ body {
   flex: 1;
   overflow-y: auto;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
+  border-radius: 16px;
   background: rgba(2, 4, 10, 0.7);
-  padding: 16px;
+  padding: 20px;
   font-family: 'JetBrains Mono', monospace;
   box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.4);
 }
@@ -261,14 +297,15 @@ body {
 .tag-error { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
 
 .answer-card {
-  margin: 16px 24px 24px 24px;
-  padding: 16px;
+  margin: 0 32px 32px 32px;
+  padding: 24px;
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  border-radius: 12px;
+  border-radius: 16px;
   display: none;
   animation: fadeUp 0.35s ease-out;
   box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+  flex-shrink: 0;
 }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
@@ -295,7 +332,7 @@ body {
 .right {
   flex: 1;
   overflow: hidden;
-  padding: 24px;
+  padding: 32px 40px;
   display: flex;
   flex-direction: column;
 }
@@ -316,7 +353,7 @@ body {
   background: rgba(10, 16, 36, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
-  padding: 20px;
+  padding: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,8 +369,8 @@ svg {
 .n rect {
   stroke-width: 1.5;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  rx: 12;
-  ry: 12;
+  rx: 16;
+  ry: 16;
 }
 .n.idle rect {
   fill: #0c1224;
@@ -356,17 +393,17 @@ svg {
   opacity: 0.35;
 }
 .n .icon {
-  font-size: 18px;
+  font-size: 16px;
 }
 .n .title {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   fill: #e2e8f0;
 }
 .n .sub {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 9px;
+  font-size: 8.5px;
   fill: #64748b;
   font-weight: 500;
 }
@@ -447,7 +484,7 @@ svg {
 
 /* ── STATUS BAR ── */
 .status {
-  padding: 12px 28px;
+  padding: 16px 32px;
   border-top: 1px solid var(--border-glow);
   background: rgba(8, 14, 32, 0.9);
   display: flex;
@@ -527,11 +564,11 @@ svg {
 .login-box {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(99, 102, 241, 0.2);
-  padding: 48px 40px;
-  border-radius: 24px;
+  padding: 56px 48px;
+  border-radius: 32px;
   text-align: center;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-  width: 360px;
+  width: 400px;
 }
 .login-box h2 {
   margin-bottom: 8px;
@@ -614,6 +651,7 @@ svg {
   <div class="header-logo">🛡️ HealthGuard</div>
   <span class="header-badge">RAG DEV CONSOLE</span>
   <span class="session-id" id="sid">—</span>
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
 </div>
 
 <div class="body">
@@ -673,6 +711,17 @@ function checkPass() {
     document.getElementById('pass-input').value = '';
   }
 }
+
+function toggleTheme() {
+  const body = document.body;
+  if(body.classList.contains('dark-mode')) {
+    body.classList.remove('dark-mode');
+    body.classList.add('light-mode');
+  } else {
+    body.classList.remove('light-mode');
+    body.classList.add('dark-mode');
+  }
+}
 document.getElementById('pass-input').addEventListener('keydown', e => { if(e.key === 'Enter') checkPass(); });
 
 let multiQueryVariants = [];
@@ -681,47 +730,46 @@ const tt = document.getElementById('tooltip');
 // ──────────────────────────────────────────────
 // GRAPH LAYOUT & D3 VARIABLES
 // ──────────────────────────────────────────────
-const NW = 190, NH = 70;
+const NW = 170, NH = 56;
 
 const NODES = [
-  {id:'user',        icon:'👤', title:'User Query',          sub:'pipeline entry',           x:30,   y:50},
-  {id:'fastapi',     icon:'⚡', title:'FastAPI Host',        sub:'/chat/stream',             x:245,  y:50},
-  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph core',           x:460,  y:50},
-  {id:'translate',   icon:'🌐', title:'Translator',          sub:'Detect & translate',       x:665,  y:50},
-  {id:'mem_search',  icon:'🧠', title:'Memory Search',       sub:'Mem0 retrieval',           x:870,  y:50},
-  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini classify',     x:1080, y:50},
+  {id:'user',        icon:'👤', title:'User Query',          sub:'pipeline entry',           x:20,   y:30},
+  {id:'fastapi',     icon:'⚡', title:'FastAPI Host',        sub:'/chat/stream',             x:220,  y:30},
+  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph core',           x:420,  y:30},
+  {id:'mem_search',  icon:'🧠', title:'Memory Search',       sub:'Mem0 retrieval',           x:620,  y:30},
+  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini classify',     x:820,  y:30},
 
-  {id:'langsmith',   icon:'📡', title:'LangSmith Tracing',   sub:'Observability & traces',   x:460,  y:170},
+  {id:'langsmith',   icon:'📡', title:'LangSmith Tracing',   sub:'Observability & traces',   x:420,  y:632},
 
-  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Task distributor',         x:540,  y:280},
-  {id:'multiquery',     icon:'🔮', title:'Multi-Query',      sub:'Query variation model',    x:540,  y:375},
+  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Task distributor',         x:820,  y:116},
+  {id:'multiquery',     icon:'🔮', title:'Multi-Query',      sub:'Query variation model',    x:220,  y:202},
 
-  {id:'graphdb',     icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:40,   y:480},
-  {id:'vectordb',    icon:'🗃️', title:'Vector Store',        sub:'ChromaDB cosine sim',      x:240,  y:480},
-  {id:'bm25',        icon:'🔤', title:'BM25 Search',          sub:'Sparse lex search',        x:440,  y:480},
-  {id:'priorauth',   icon:'📋', title:'Prior Auth Rules',    sub:'Policy lookups',           x:720,  y:480},
-  {id:'bronze',      icon:'🥉', title:'Bronze Tier',         sub:'Benefit parameters',       x:960,  y:395},
-  {id:'silver',      icon:'🥈', title:'Silver Tier',         sub:'Benefit parameters',       x:960,  y:480},
-  {id:'gold',        icon:'🥇', title:'Gold Tier',           sub:'Benefit parameters',       x:960,  y:565},
+  {id:'graphdb',     icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:20,   y:374},
+  {id:'vectordb',    icon:'🗃️', title:'Vector Store',        sub:'ChromaDB cosine sim',      x:220,  y:374},
+  {id:'bm25',        icon:'🔤', title:'BM25 Search',          sub:'Sparse lex search',        x:420,  y:374},
+  {id:'priorauth',   icon:'📋', title:'Prior Auth Rules',    sub:'Policy lookups',           x:620,  y:202},
+  {id:'bronze',      icon:'🥉', title:'Bronze Tier',         sub:'Benefit parameters',       x:820,  y:202},
+  {id:'silver',      icon:'🥈', title:'Silver Tier',         sub:'Benefit parameters',       x:820,  y:288},
+  {id:'gold',        icon:'🥇', title:'Gold Tier',           sub:'Benefit parameters',       x:820,  y:374},
 
-  {id:'ensemble',    icon:'🤝', title:'Ensemble Fusion',     sub:'Rank weight fusion',       x:335,  y:580},
-  {id:'reranker',    icon:'⚖️', title:'BGE Reranker',         sub:'Cross-Encoder model',      x:180,  y:680},
-  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Clean & deduplicate',      x:540,  y:680},
+  {id:'ensemble',    icon:'🤝', title:'Ensemble Fusion',     sub:'Rank weight fusion',       x:420,  y:460},
+  {id:'reranker',    icon:'⚖️', title:'BGE Reranker',         sub:'Cross-Encoder model',      x:220,  y:546},
+  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Clean & deduplicate',      x:620,  y:546},
 
-  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o generator',         x:540,  y:790},
-  {id:'mem_add',     icon:'💾', title:'Memory Commit',       sub:'Mem0 fact extractor',      x:540,  y:890},
-  {id:'answer',      icon:'💬', title:'Response Output',     sub:'Client socket stream',     x:540,  y:985},
+  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o generator',         x:620,  y:632},
+  {id:'mem_add',     icon:'💾', title:'Memory Commit',       sub:'Mem0 fact extractor',      x:820,  y:632},
+  {id:'answer',      icon:'💬', title:'Response Output',     sub:'Client socket stream',     x:1020, y:632},
 ];
 
 const INTENT_PILLS = [
-  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:1085, y:125, w:165, h:26},
-  {id:'i_policy',     label:'POLICY_QUESTION', x:1085, y:160, w:165, h:26},
-  {id:'i_multihop',   label:'MULTI_HOP',       x:1085, y:195, w:165, h:26},
-  {id:'i_comparison', label:'COMPARISON',      x:1085, y:230, w:165, h:26},
+  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:1020, y:30,  w:140, h:24},
+  {id:'i_policy',     label:'POLICY_QUESTION', x:1020, y:60,  w:140, h:24},
+  {id:'i_multihop',   label:'MULTI_HOP',       x:1020, y:90,  w:140, h:24},
+  {id:'i_comparison', label:'COMPARISON',      x:1020, y:120, w:140, h:24},
 ];
 
 const EDGES = [
-  ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','translate'],['translate','mem_search'],['mem_search','intent_node'],
+  ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','mem_search'],['mem_search','intent_node'],
   ['orchestrator','langsmith'],
   ['intent_node','retrieve_agent'],
   ['retrieve_agent','multiquery'],
@@ -750,11 +798,9 @@ const STEP_MAP = [
   {pat:/LangSmith|langsmith|trace/i,  nodes:['langsmith']},
   {pat:/Mem0 stored|Mem0: no new/i,   nodes:['mem_add']},
   {pat:/Searching Mem0|Mem0 recalled/i,nodes:['mem_search']},
-  {pat:/Query detected|Language translation/i,nodes:['translate']},
 ];
 
 const LG_START = {
-  translate_query: ['translate'],
   memory_search:   ['mem_search'],
   classify_intent: ['intent_node'],
   retrieve:        ['retrieve_agent'],
@@ -764,7 +810,7 @@ const LG_START = {
 
 // ── BUILD D3 INTERACTIVE SVG ──
 const svg = d3.select('#diagram');
-const VW = 1300, VH = 1090;
+const VW = 1250, VH = 720;
 svg.attr('viewBox', `0 0 ${VW} ${VH}`);
 
 svg.append('defs').append('marker')
@@ -809,9 +855,9 @@ NODES.forEach(n=>{
   const g=nodeG.append('g').attr('id',`nd-${n.id}`).attr('class','n idle');
   g.append('rect').attr('x',n.x).attr('y',n.y).attr('width',NW).attr('height',NH);
   g.append('circle').attr('cx',n.x+NW/2).attr('cy',n.y+NH/2).attr('class','pulse');
-  g.append('text').attr('class','icon').attr('x',n.x+16).attr('y',n.y+NH/2+6).text(n.icon);
-  g.append('text').attr('class','title').attr('x',n.x+42).attr('y',n.y+NH/2-7).text(n.title);
-  g.append('text').attr('class','sub').attr('x',n.x+42).attr('y',n.y+NH/2+12).text(n.sub);
+  g.append('text').attr('class','icon').attr('x',n.x+12).attr('y',n.y+NH/2+5).text(n.icon);
+  g.append('text').attr('class','title').attr('x',n.x+36).attr('y',n.y+NH/2-5).text(n.title);
+  g.append('text').attr('class','sub').attr('x',n.x+36).attr('y',n.y+NH/2+10).text(n.sub);
   nodeSel[n.id]=g;
 
   if(n.id==='multiquery'){
@@ -964,7 +1010,7 @@ async function run(){
       
       if(node==='user'){setNode('user','active');activeNodeIds=['user'];activateEdge('user','fastapi');}
       else if(node==='fastapi'){setNode('fastapi','active');activeNodeIds=['fastapi'];activateEdge('fastapi','orchestrator');}
-      else if(node==='orchestrator'){setNode('orchestrator','active');activeNodeIds=['orchestrator'];activateEdge('orchestrator','translate');}
+      else if(node==='orchestrator'){setNode('orchestrator','active');activeNodeIds=['orchestrator'];activateEdge('orchestrator','mem_search');}
       else{
         diagramNodes.forEach(id=>{setNode(id,'active');activateEdge('orchestrator',id);});
         activeNodeIds=diagramNodes;

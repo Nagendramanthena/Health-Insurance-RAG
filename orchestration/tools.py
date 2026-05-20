@@ -62,7 +62,12 @@ def policy_search(query: str) -> str:
     Uses the full hybrid pipeline: BM25 + Vector + MultiQuery + CrossEncoder Reranker + Graph.
     """
     hybrid, _ = _get_retrievers()
-    docs = hybrid.invoke(query)
+    
+    if "claim" in query.lower() or "diagnosis" in query.lower() or "eligib" in query.lower():
+        docs = hybrid.invoke(f"claim submission eligibility diagnosis {query}")
+    else:
+        docs = hybrid.invoke(query)
+        
     result = _format_docs(docs)
     return result if result else "No relevant policy information found."
 
@@ -93,18 +98,18 @@ def plan_comparison_search(query: str, tier: str) -> str:
     """
     hybrid, _ = _get_retrievers()
 
-    tier_query = f"{tier} plan {query}"
-    docs = hybrid.invoke(tier_query)
+    docs = hybrid.invoke(query)
 
     tier_docs = [
         d for d in docs
-        if d.metadata.get("plan_tier", "").lower() == tier.lower()
+        if d.metadata.get("plan_tier", "").lower() in [tier.lower(), "all"]
         or tier.lower() in d.page_content.lower()
+        or d.metadata.get("doc_type") == "sbc"
     ]
     if not tier_docs:
         tier_docs = docs
 
-    result = _format_docs(tier_docs, max_per_tool=3)
+    result = _format_docs(tier_docs, max_per_tool=5)
     return result if result else f"No {tier} plan information found for this query."
 
 

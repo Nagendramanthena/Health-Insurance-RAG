@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from rich.console import Console
 
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_community.retrievers import BM25Retriever
 from langchain_classic.retrievers import EnsembleRetriever, ContextualCompressionRetriever
@@ -111,10 +111,8 @@ class SimpleMultiQueryRetriever(Runnable):
 
 def _load_vectorstore() -> Chroma:
     """Load the persisted ChromaDB vector store."""
-    embeddings = HuggingFaceEmbeddings(
-        model_name=EMBEDDING_MODEL,
-        model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True},
+    embeddings = OpenAIEmbeddings(
+        model=EMBEDDING_MODEL,
     )
     vectorstore = Chroma(
         collection_name=COLLECTION_NAME,

@@ -95,9 +95,8 @@ if IS_MONOLITH and os.getenv("USE_NGINX", "false").lower() != "true":
 
 @app.on_event("startup")
 async def startup_event():
-    import threading
-    logger.info("Initializing retrieval pipeline preload in background thread...")
-    threading.Thread(target=preload_retrievers, daemon=True).start()
+    logger.info("Initializing retrieval pipeline preload synchronously...")
+    preload_retrievers()
     
     if IS_MONOLITH:
         logger.info("Starting Streamlit frontend sidecar on port 8501...")
@@ -153,7 +152,12 @@ async def chat(request: ChatRequest):
         
         # Execute query using the detailed method we added
         start_time = time.time()
-        result = orch.ask_detailed(request.query)
+        
+        final_query = request.query
+        if request.plan_tier and request.plan_tier.lower() != "unknown":
+            final_query = f"I am on the {request.plan_tier} plan. {request.query}"
+            
+        result = orch.ask_detailed(final_query)
         duration = time.time() - start_time
         
         logger.info(f"Query processed in {duration:.2f}s for session {request.session_id}")
@@ -176,12 +180,31 @@ async def chat(request: ChatRequest):
         )
 
 @app.get("/chat/stream")
-async def chat_stream(session_id: str, query: str):
+async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
     """
     Streamed version of the chat process for the Developer Console.
     Emits granular JSON chunks: startup nodes, then per-step events within each LangGraph node.
     """
+    import threading
     orch = manager.get_orchestrator(session_id)
+    queue = asyncio.Queue()
+    loop = asyncio.get_running_loop()
+    
+    final_query = query
+    if plan_tier and plan_tier.lower() != "unknown":
+        final_query = f"I am on the {plan_tier} plan. {query}"
+
+    def run_stream():
+        try:
+            for event in orch.stream_detailed(final_query):
+                loop.call_soon_threadsafe(queue.put_nowait, {"type": "event", "data": event})
+            loop.call_soon_threadsafe(queue.put_nowait, {"type": "done"})
+        except Exception as e:
+            loop.call_soon_threadsafe(queue.put_nowait, {"type": "error", "error": e})
+
+    # Start the LangGraph execution in a background thread so it doesn't block the main event loop
+    thread = threading.Thread(target=run_stream, daemon=True)
+    thread.start()
 
     async def event_generator():
         def emit(data: dict) -> str:
@@ -201,7 +224,21 @@ async def chat_stream(session_id: str, query: str):
 
         # ── Stream LangGraph events ───────────────────────────────
         try:
-            for event in orch.stream_detailed(query):
+            while True:
+                try:
+                    # Wait for 2.0s for the next event, if none, send keepalive
+                    item = await asyncio.wait_for(queue.get(), timeout=2.0)
+                except asyncio.TimeoutError:
+                    # SSE keepalive comment to keep the connection alive through reverse proxies
+                    yield ": keepalive\n\n"
+                    continue
+
+                if item["type"] == "done":
+                    break
+                elif item["type"] == "error":
+                    raise item["error"]
+
+                event = item["data"]
                 node  = event["node"]
                 state = event["state"]
                 current_steps = state.get("steps_log", [])

@@ -49,7 +49,7 @@ CSV_CHUNK_SIZE = 10         # rows per chunk for CSV files (better for context)
 # ──────────────────────────────────────────────
 # Embedding model
 # ──────────────────────────────────────────────
-EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+EMBEDDING_MODEL = "text-embedding-3-small"
 
 # ──────────────────────────────────────────────
 # Reranker model

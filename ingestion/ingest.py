@@ -24,7 +24,7 @@ from transformers import AutoTokenizer
 from langchain_docling import DoclingLoader
 from langchain_docling.loader import ExportType
 from docling.chunking import HybridChunker
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from rich.console import Console
@@ -218,8 +218,9 @@ def load_and_chunk_documents() -> list[Document]:
     csv_files = sorted(glob.glob(os.path.join(DOCUMENTS_DIR, "*.csv")))
     all_chunks = []
 
-    console.print(f"\n⚙️  Configuring Docling with {EMBEDDING_MODEL} tokenizer...")
-    tokenizer = AutoTokenizer.from_pretrained(EMBEDDING_MODEL)
+    console.print("\n⚙️  Configuring Docling tokenizer...")
+    # Use a standard tokenizer for chunking since OpenAI models don't have HF tokenizers
+    tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
     chunker = HybridChunker(
         tokenizer=tokenizer,
         max_tokens=MAX_TOKENS_PER_CHUNK,
@@ -300,10 +301,8 @@ def build_vector_store(chunks: list[Document]) -> Chroma:
     """Embed chunks and persist to ChromaDB."""
     chunks = filter_complex_metadata(chunks)
 
-    embeddings = HuggingFaceEmbeddings(
-        model_name=EMBEDDING_MODEL,
-        model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True},
+    embeddings = OpenAIEmbeddings(
+        model=EMBEDDING_MODEL,
     )
 
     if os.path.exists(CHROMA_PERSIST_DIR):
