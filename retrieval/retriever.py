@@ -72,9 +72,10 @@ class SimpleMultiQueryRetriever(Runnable):
 
     def _generate_variants(self, query: str) -> list[str]:
         prompt = (
-            f"You are a medical search expert. Generate {self.num_variants} different search queries "
+            f"You are a medical search expert. Generate {self.num_variants} simplified, keyword-focused search queries "
             f"to retrieve relevant documents for: '{query}'.\n"
-            "Include variations using synonyms for conditions, symptoms, or drug classes (e.g., 'headache' -> 'pain', 'acid reflux' -> 'GERD').\n"
+            "Strip away conversational filler (e.g., 'Compare the', 'What is the'). Focus ONLY on the core entities, plan tiers, and metrics (e.g., 'Bronze deductible', 'Gold copay').\n"
+            "Include variations using synonyms if necessary.\n"
             "Return ONLY the queries, one per line."
         )
         response = self.llm.invoke(prompt)
@@ -109,17 +110,23 @@ class SimpleMultiQueryRetriever(Runnable):
 # Vector Store Helpers
 # ══════════════════════════════════════════════════════════════
 
+_global_vectorstore = None
+
 def _load_vectorstore() -> Chroma:
-    """Load the persisted ChromaDB vector store."""
+    """Load the persisted ChromaDB vector store (singleton to avoid concurrency crashes)."""
+    global _global_vectorstore
+    if _global_vectorstore is not None:
+        return _global_vectorstore
+
     embeddings = OpenAIEmbeddings(
         model=EMBEDDING_MODEL,
     )
-    vectorstore = Chroma(
+    _global_vectorstore = Chroma(
         collection_name=COLLECTION_NAME,
         persist_directory=CHROMA_PERSIST_DIR,
         embedding_function=embeddings,
     )
-    return vectorstore
+    return _global_vectorstore
 
 
 def _get_all_documents(vectorstore: Chroma) -> list[Document]:

@@ -98,7 +98,18 @@ def plan_comparison_search(query: str, tier: str) -> str:
     """
     hybrid, _ = _get_retrievers()
 
-    docs = hybrid.invoke(query)
+    # Augment the query with the specific tier to force relevant documents up the ranking
+    tier_query = f"{tier} plan {query}"
+    docs = hybrid.invoke(tier_query)
+
+    # Guarantee tier-specific documents (like the SBC deductibles table) are included
+    try:
+        from retrieval.retriever import _load_vectorstore
+        vs = _load_vectorstore()
+        tier_specific_docs = vs.similarity_search(query, k=3, filter={"plan_tier": tier.capitalize()})
+        docs = tier_specific_docs + docs
+    except Exception as e:
+        pass
 
     tier_docs = [
         d for d in docs
