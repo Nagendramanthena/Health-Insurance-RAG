@@ -35,6 +35,8 @@ Architecture (5 nodes in a directed StateGraph):
 import os
 import sys
 from typing import TypedDict, List
+import concurrent.futures
+import contextvars
 
 # Ensure project root is on sys.path so `config` and sibling packages resolve
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -202,17 +204,23 @@ def retrieve(state: AgentState) -> AgentState:
     internal_logs = []
     token = trace_log.set(internal_logs)
 
+    def _run_tool(tool_func, kwargs):
+        return contextvars.copy_context().run(tool_func, kwargs)
+
     # ── SIMPLE_LOOKUP ────────────────────────────────────────────
     if intent == "SIMPLE_LOOKUP":
-        log.append("📊 [SIMPLE_LOOKUP] Step 1 — Graph entity lookup")
-        graph_ctx = relational_search.invoke({"query": query})
-        if graph_ctx and "No structured" not in graph_ctx:
-            parts.append(f"[STRUCTURED GRAPH FACTS]\n{graph_ctx}")
-
-        log.append("📄 [SIMPLE_LOOKUP] Step 2 — Hybrid document retrieval")
-        policy_ctx = policy_search.invoke({"query": query})
-        if policy_ctx and "No relevant" not in policy_ctx:
-            parts.append(f"[POLICY DOCUMENTS]\n{policy_ctx}")
+        log.append("📊 [SIMPLE_LOOKUP] Executing Graph & Hybrid retrieval concurrently")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            fut_g = executor.submit(_run_tool, relational_search.invoke, {"query": query})
+            fut_p = executor.submit(_run_tool, policy_search.invoke, {"query": query})
+            
+            graph_ctx = fut_g.result()
+            if graph_ctx and "No structured" not in graph_ctx:
+                parts.append(f"[STRUCTURED GRAPH FACTS]\n{graph_ctx}")
+                
+            policy_ctx = fut_p.result()
+            if policy_ctx and "No relevant" not in policy_ctx:
+                parts.append(f"[POLICY DOCUMENTS]\n{policy_ctx}")
 
     # ── POLICY_QUESTION ──────────────────────────────────────────
     elif intent == "POLICY_QUESTION":
@@ -223,28 +231,36 @@ def retrieve(state: AgentState) -> AgentState:
 
     # ── MULTI_HOP ────────────────────────────────────────────────
     elif intent == "MULTI_HOP":
-        log.append("🔗 [MULTI_HOP] Step 1 — Graph entity lookup")
-        graph_ctx = relational_search.invoke({"query": query})
-        if graph_ctx and "No structured" not in graph_ctx:
-            parts.append(f"[STRUCTURED GRAPH FACTS]\n{graph_ctx}")
-
-        log.append("🔗 [MULTI_HOP] Step 2 — Hybrid policy retrieval")
-        policy_ctx = policy_search.invoke({"query": query})
-        if policy_ctx and "No relevant" not in policy_ctx:
-            parts.append(f"[POLICY DOCUMENTS]\n{policy_ctx}")
-
-        log.append("🔗 [MULTI_HOP] Step 3 — Prior authorization check")
-        auth_ctx = prior_auth_search.invoke({"query": query})
-        if auth_ctx and "No prior authorization" not in auth_ctx:
-            parts.append(f"[PRIOR AUTHORIZATION RULES]\n{auth_ctx}")
+        log.append("🔗 [MULTI_HOP] Executing Graph, Policy, and Prior-Auth retrievals concurrently")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+            fut_g = executor.submit(_run_tool, relational_search.invoke, {"query": query})
+            fut_p = executor.submit(_run_tool, policy_search.invoke, {"query": query})
+            fut_a = executor.submit(_run_tool, prior_auth_search.invoke, {"query": query})
+            
+            graph_ctx = fut_g.result()
+            if graph_ctx and "No structured" not in graph_ctx:
+                parts.append(f"[STRUCTURED GRAPH FACTS]\n{graph_ctx}")
+                
+            policy_ctx = fut_p.result()
+            if policy_ctx and "No relevant" not in policy_ctx:
+                parts.append(f"[POLICY DOCUMENTS]\n{policy_ctx}")
+                
+            auth_ctx = fut_a.result()
+            if auth_ctx and "No prior authorization" not in auth_ctx:
+                parts.append(f"[PRIOR AUTHORIZATION RULES]\n{auth_ctx}")
 
     # ── COMPARISON ───────────────────────────────────────────────
     elif intent == "COMPARISON":
-        for tier in ("Bronze", "Silver", "Gold"):
-            log.append(f"⚖️  [COMPARISON] Retrieving {tier} plan context")
-            tier_ctx = plan_comparison_search.invoke({"query": query, "tier": tier})
-            if tier_ctx and f"No {tier}" not in tier_ctx:
-                parts.append(f"[{tier.upper()} PLAN]\n{tier_ctx}")
+        log.append(f"⚖️  [COMPARISON] Retrieving Bronze, Silver, and Gold plan contexts concurrently")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+            futures = {
+                tier: executor.submit(_run_tool, plan_comparison_search.invoke, {"query": query, "tier": tier})
+                for tier in ("Bronze", "Silver", "Gold")
+            }
+            for tier in ("Bronze", "Silver", "Gold"):
+                tier_ctx = futures[tier].result()
+                if tier_ctx and f"No {tier}" not in tier_ctx:
+                    parts.append(f"[{tier.upper()} PLAN]\n{tier_ctx}")
 
     separator   = "\n\n" + "─" * 60 + "\n\n"
     full_context = separator.join(parts) if parts else "No relevant context found."

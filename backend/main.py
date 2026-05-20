@@ -253,7 +253,7 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
                 # Emit individual sub-steps (each line from steps_log) with a small delay
                 for step in new_steps:
                     yield emit({"type": "substep", "node": node, "intent": intent, "step": step, "all_steps": current_steps})
-                    await asyncio.sleep(0.45)   # pause between sub-steps so the user can see each node light up
+                    await asyncio.sleep(0.05)   # minimal pause for smooth UI without blocking stream
 
                 # Signal node completion
                 final_answer = state.get("answer", "")
