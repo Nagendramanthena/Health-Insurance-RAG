@@ -217,10 +217,16 @@ def retrieve(state: AgentState) -> AgentState:
             graph_ctx = fut_g.result()
             if graph_ctx and "No structured" not in graph_ctx:
                 parts.append(f"[STRUCTURED GRAPH FACTS]\n{graph_ctx}")
+                log.append("🕸️ Graph entity lookup completed")
+            else:
+                log.append("🕸️ Graph entity lookup — no structured results")
                 
             policy_ctx = fut_p.result()
             if policy_ctx and "No relevant" not in policy_ctx:
                 parts.append(f"[POLICY DOCUMENTS]\n{policy_ctx}")
+                log.append("📄 Hybrid policy retrieval completed")
+            else:
+                log.append("📄 Hybrid policy retrieval — no relevant results")
 
     # ── POLICY_QUESTION ──────────────────────────────────────────
     elif intent == "POLICY_QUESTION":
@@ -240,14 +246,23 @@ def retrieve(state: AgentState) -> AgentState:
             graph_ctx = fut_g.result()
             if graph_ctx and "No structured" not in graph_ctx:
                 parts.append(f"[STRUCTURED GRAPH FACTS]\n{graph_ctx}")
+                log.append("🕸️ Graph entity lookup completed")
+            else:
+                log.append("🕸️ Graph entity lookup — no structured results")
                 
             policy_ctx = fut_p.result()
             if policy_ctx and "No relevant" not in policy_ctx:
                 parts.append(f"[POLICY DOCUMENTS]\n{policy_ctx}")
+                log.append("📄 Hybrid policy retrieval completed")
+            else:
+                log.append("📄 Hybrid policy retrieval — no relevant results")
                 
             auth_ctx = fut_a.result()
             if auth_ctx and "No prior authorization" not in auth_ctx:
                 parts.append(f"[PRIOR AUTHORIZATION RULES]\n{auth_ctx}")
+                log.append("📋 Prior authorization rules retrieved")
+            else:
+                log.append("📋 Prior authorization — no relevant rules found")
 
     # ── COMPARISON ───────────────────────────────────────────────
     elif intent == "COMPARISON":
@@ -261,6 +276,9 @@ def retrieve(state: AgentState) -> AgentState:
                 tier_ctx = futures[tier].result()
                 if tier_ctx and f"No {tier}" not in tier_ctx:
                     parts.append(f"[{tier.upper()} PLAN]\n{tier_ctx}")
+                    log.append(f"🥇 [{tier} Tier] Retrieved plan context successfully")
+                else:
+                    log.append(f"⚠️ [{tier} Tier] No relevant context found")
 
     separator   = "\n\n" + "─" * 60 + "\n\n"
     full_context = separator.join(parts) if parts else "No relevant context found."

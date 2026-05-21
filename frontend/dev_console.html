@@ -784,11 +784,23 @@ const EDGES = [
 ];
 
 const STEP_MAP = [
+  // ── Intent patterns from orchestrator steps_log ──
+  {pat:/SIMPLE_LOOKUP/i,              nodes:['graphdb','vectordb','bm25','ensemble','multiquery']},
+  {pat:/POLICY_QUESTION/i,            nodes:['vectordb','bm25','ensemble','multiquery']},
+  {pat:/MULTI_HOP.*Graph.*Policy.*Prior/i, nodes:['graphdb','vectordb','bm25','ensemble','multiquery','priorauth']},
+  {pat:/MULTI_HOP/i,                  nodes:['graphdb','vectordb','bm25','ensemble','multiquery','priorauth']},
+  {pat:/COMPARISON/i,                 nodes:['bronze','silver','gold','vectordb','bm25','ensemble','multiquery']},
+  // ── Per-tier retrieval patterns (from COMPARISON) ──
+  {pat:/Bronze Tier/i,                nodes:['bronze']},
+  {pat:/Silver Tier/i,                nodes:['silver']},
+  {pat:/Gold Tier/i,                  nodes:['gold']},
+  // ── Individual retrieval component patterns ──
   {pat:/Graph entity lookup/i,        nodes:['graphdb','vectordb','bm25','ensemble']},
   {pat:/Hybrid document retrieval/i,  nodes:['vectordb','bm25','ensemble']},
   {pat:/Hybrid policy retrieval/i,    nodes:['vectordb','bm25','ensemble']},
+  {pat:/Multi-Query Variant/i,        nodes:['multiquery','vectordb','bm25','ensemble','graphdb']},
   {pat:/Multi-Query/i,                nodes:['multiquery']},
-  {pat:/Prior authorization/i,        nodes:['priorauth']},
+  {pat:/Prior.?auth/i,                nodes:['priorauth']},
   {pat:/Bronze/i,                     nodes:['bronze']},
   {pat:/Silver/i,                     nodes:['silver']},
   {pat:/Gold/i,                       nodes:['gold']},
@@ -797,7 +809,7 @@ const STEP_MAP = [
   {pat:/Answer synthesized/i,         nodes:['synthesis','langsmith']},
   {pat:/LangSmith|langsmith|trace/i,  nodes:['langsmith']},
   {pat:/Mem0 stored|Mem0: no new/i,   nodes:['mem_add']},
-  {pat:/Searching Mem0|Mem0 recalled/i,nodes:['mem_search']},
+  {pat:/Searching Mem0|Mem0 recalled|Mem0: no relevant/i, nodes:['mem_search']},
 ];
 
 const LG_START = {
@@ -937,13 +949,30 @@ function setStatus(txt,state=''){
 }
 
 function activateFromStep(step, lgNode){
+  let matched = false;
   for(const m of STEP_MAP){
     if(m.pat.test(step)){
       m.nodes.forEach(id=>{
         setNode(id,'active');
-        activateEdge(lgNode==='retrieve'?'retrieve_agent':lgNode, id);
+        // Activate edge from retrieve_agent for retrieval nodes, or from the current lgNode
+        const fromNode = lgNode==='retrieve' ? 'retrieve_agent' : lgNode;
+        activateEdge(fromNode, id);
+        // Activate internal edges between retrieval pipeline components
+        if(id==='ensemble')    { activateEdge('vectordb','ensemble'); activateEdge('bm25','ensemble'); }
+        if(id==='multiquery')  { activateEdge('retrieve_agent','multiquery'); }
+        if(id==='graphdb')     { activateEdge('multiquery','graphdb'); }
+        if(id==='vectordb')    { activateEdge('multiquery','vectordb'); }
+        if(id==='bm25')        { activateEdge('multiquery','bm25'); }
+        // Activate tier/priorauth → merger edges
+        if(id==='bronze')      { activateEdge('retrieve_agent','bronze');  activateEdge('bronze','merger'); }
+        if(id==='silver')      { activateEdge('retrieve_agent','silver');  activateEdge('silver','merger'); }
+        if(id==='gold')        { activateEdge('retrieve_agent','gold');    activateEdge('gold','merger'); }
+        if(id==='priorauth')   { activateEdge('retrieve_agent','priorauth'); activateEdge('priorauth','merger'); }
+        if(id==='reranker')    { activateEdge('ensemble','reranker'); activateEdge('graphdb','reranker'); }
+        if(id==='merger')      { activateEdge('reranker','merger'); }
       });
-      break;
+      matched = true;
+      break;  // break on first match to use the most specific pattern
     }
   }
 }
@@ -1033,17 +1062,16 @@ async function run(){
 
     if(type==='node_done'){
       if(node==='retrieve'){
-        const allRetrieval=['graphdb','vectordb','bm25','priorauth','bronze','silver','gold'];
+        const allRetrieval=['graphdb','vectordb','bm25','ensemble','multiquery','priorauth','bronze','silver','gold'];
         allRetrieval.forEach(id=>{
           const el=document.getElementById(`nd-${id}`);
           if(el && el.getAttribute('class')==='n idle') setNode(id,'skip');
           else if(el) setNode(id,'done');
         });
-        const ensembleEl = document.getElementById(`nd-ensemble`);
-        if(ensembleEl && ensembleEl.getAttribute('class')==='n idle') setNode('ensemble','skip');
-        else { setNode('ensemble','done'); activateEdge('ensemble','reranker'); }
 
-        setNode('reranker','active');activateEdge('graphdb','reranker');
+        // Activate reranker to show scoring phase, then transition edges
+        activateEdge('ensemble','reranker'); activateEdge('graphdb','reranker');
+        setNode('reranker','active');
       }
       if(node==='synthesize'){
         setNode('reranker','done');setNode('merger','done');doneEdge('merger','synthesis');
