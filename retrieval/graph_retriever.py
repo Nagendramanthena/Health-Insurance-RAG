@@ -17,6 +17,7 @@ from langchain_core.documents import Document
 from rich.console import Console
 
 from config import GRAPH_DATA_PATH
+from orchestration.tracing import log_event
 
 # ── Medical synonym expansion map ────────────────────────────
 # Maps colloquial / lay terms → canonical specialty names in the graph
@@ -114,6 +115,7 @@ class GraphRetriever:
             return ""
         data = self.G.nodes[node]
         node_type = data.get("type", "Unknown")
+        node_display = data.get("name", str(node))
 
         context = f"### GRAPH ENTITY: {node} ({node_type})\n"
         props = [f"{k}: {v}" for k, v in data.items() if k != "type"]
@@ -129,6 +131,9 @@ class GraphRetriever:
                 target_data = self.G.nodes[target]
                 target_type = target_data.get("type", "")
                 target_name = target_data.get("name", "")
+                
+                target_display = target_name if target_name else str(target)
+                log_event(f"[GraphDB-Edge] {node_display}|||{rel}|||{target_display}")
                 
                 display_target = f"{target_name} ({target})" if target_name else str(target)
                 context += f"  - [{rel}] -> {display_target} ({target_type})"
@@ -164,6 +169,9 @@ class GraphRetriever:
                 source_data = self.G.nodes[source]
                 source_type = source_data.get("type", "")
                 source_name = source_data.get("name", "")
+                
+                source_display = source_name if source_name else str(source)
+                log_event(f"[GraphDB-Edge] {source_display}|||{rel}|||{node_display}")
                 
                 display_source = f"{source_name} (NPI: {source})" if source_name and source_type == "Provider" else str(source)
                 context += f"  - {display_source} ({source_type}) -> [{rel}] -> [THIS ENTITY]"
@@ -249,7 +257,10 @@ class GraphRetriever:
                 context += f"Note: No in-network {spec_label} providers found in {city}. "
                 context += f"Showing the closest in-network options in {state}:\n\n"
                 for npi, d in same_state[:8]:
-                    context += (f"- {d.get('name','Unknown')} | {d.get('specialty','')} | "
+                    provider_name = d.get('name', str(npi))
+                    log_event(f"[GraphDB-Edge] {provider_name}|||located in|||{d.get('state','')}")
+                    log_event(f"[GraphDB-Edge] {provider_name}|||specializes in|||{d.get('specialty','')}")
+                    context += (f"- {provider_name} | {d.get('specialty','')} | "
                                f"{d.get('city','')}, {d.get('state','')} (NPI: {npi})\n")
                 return context
 
@@ -269,7 +280,10 @@ class GraphRetriever:
             for st, providers in list(by_state.items())[:5]:
                 context += f"**{st}:**\n"
                 for npi, d in providers[:4]:
-                    context += (f"  - {d.get('name','Unknown')} | {d.get('specialty','')} | "
+                    provider_name = d.get('name', str(npi))
+                    log_event(f"[GraphDB-Edge] {provider_name}|||located in|||{st}")
+                    log_event(f"[GraphDB-Edge] {provider_name}|||specializes in|||{d.get('specialty','')}")
+                    context += (f"  - {provider_name} | {d.get('specialty','')} | "
                                f"{d.get('city','')}, {st} (NPI: {npi})\n")
             return context
 
@@ -279,8 +293,10 @@ class GraphRetriever:
         """Perform graph retrieval and return LangChain Documents."""
         entities = self._extract_entities(query)
         if not entities:
+            log_event("[GraphDB] No entities matched.")
             return []
 
+        log_event(f"[GraphDB] Retrieved entities: {', '.join(entities)}")
         docs = []
         
         # 1. Add intersection context if multiple entities found

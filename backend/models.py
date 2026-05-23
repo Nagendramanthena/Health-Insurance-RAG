@@ -31,11 +31,15 @@ class ChatResponse(BaseModel):
     session_id: str
     query: str
     answer: str
-    intent: str         # SIMPLE_LOOKUP | POLICY_QUESTION | MULTI_HOP | COMPARISON
+    intent: str              # SIMPLE_LOOKUP | POLICY_QUESTION | MULTI_HOP | COMPARISON
     steps_log: List[str]
     memories_used: List[str] = []   # Facts Mem0 extracted and stored from this turn
     timestamp: str
-    run_id: Optional[str] = None    # LangSmith trace run ID (None if tracing disabled)
+    run_id: Optional[str] = None         # LangSmith trace run ID (None if tracing disabled)
+    confidence: Optional[str] = None    # HIGH | MEDIUM | LOW | BLOCKED (new confidence scorer)
+    confidence_reason: Optional[str] = None  # Human-readable confidence explanation
+    blocked: bool = False                # True if query_guard blocked the query
+    sub_questions: List[str] = []       # Sub-questions from query_decomposer (MULTI_HOP)
 
 
 class SessionHistoryResponse(BaseModel):

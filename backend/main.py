@@ -28,6 +28,7 @@ from backend.models import (
 )
 from orchestration.tools import preload_retrievers
 from orchestration.memory import get_all_memories
+from orchestration.semantic_cache import cache_manager
 
 
 from backend.session_manager import manager
@@ -157,10 +158,45 @@ async def chat(request: ChatRequest):
         if request.plan_tier and request.plan_tier.lower() != "unknown":
             final_query = f"I am on the {request.plan_tier} plan. {request.query}"
             
+        # Check Semantic Cache
+        cached_result = cache_manager.check(final_query, plan_tier=request.plan_tier or "Unknown")
+        if cached_result:
+            if len(orch.chat_history) == 0 or orch.chat_history[-1] != ("ai", cached_result["answer"]):
+                orch.chat_history.append(("human", request.query))
+                orch.chat_history.append(("ai",    cached_result["answer"]))
+            
+            # Sync orchestrator trace for downstream requests (diagram, trace endpoints)
+            orch.last_detailed_result = cached_result.copy()
+            
+            # Prepend a step identifying the cache hit
+            display_steps = [
+                "⚡ Semantic Cache HIT!",
+                f"Matched with cached query: '{cached_result.get('matched_query', '')}'",
+                f"Similarity Score: {cached_result.get('cache_similarity', 0)}%"
+            ] + cached_result.get("steps_log", [])
+            
+            return ChatResponse(
+                session_id=request.session_id,
+                query=request.query,
+                answer=cached_result["answer"],
+                intent=cached_result["intent"],
+                steps_log=display_steps,
+                memories_used=cached_result.get("memories_used", []),
+                timestamp=datetime.now().isoformat(),
+                run_id=cached_result.get("run_id"),
+                confidence=cached_result.get("confidence", "HIGH"),
+                confidence_reason=cached_result.get("confidence_reason", "") + " (Cached)",
+                blocked=cached_result.get("blocked", False),
+                sub_questions=cached_result.get("sub_questions", []),
+            )
+            
         result = orch.ask_detailed(final_query)
         duration = time.time() - start_time
         
         logger.info(f"Query processed in {duration:.2f}s for session {request.session_id}")
+        
+        # Save to semantic cache
+        cache_manager.store(final_query, result, plan_tier=request.plan_tier or "Unknown")
         
         return ChatResponse(
             session_id=request.session_id,
@@ -170,7 +206,11 @@ async def chat(request: ChatRequest):
             steps_log=result["steps_log"],
             memories_used=result.get("memories_used", []),
             timestamp=datetime.now().isoformat(),
-            run_id=result.get("run_id"),   # LangSmith trace UUID (None if tracing off)
+            run_id=result.get("run_id"),
+            confidence=result.get("confidence", ""),
+            confidence_reason=result.get("confidence_reason", ""),
+            blocked=result.get("blocked", False),
+            sub_questions=result.get("sub_questions", []),
         )
     except Exception as e:
         logger.error(f"Error processing chat: {str(e)}")
@@ -187,13 +227,74 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
     """
     import threading
     orch = manager.get_orchestrator(session_id)
-    queue = asyncio.Queue()
-    loop = asyncio.get_running_loop()
     
     final_query = query
     if plan_tier and plan_tier.lower() != "unknown":
         final_query = f"I am on the {plan_tier} plan. {query}"
 
+    # Check Semantic Cache
+    cached_result = cache_manager.check(final_query, plan_tier=plan_tier)
+    if cached_result:
+        # Sync orchestrator history & trace
+        if len(orch.chat_history) == 0 or orch.chat_history[-1] != ("ai", cached_result["answer"]):
+            orch.chat_history.append(("human", query))
+            orch.chat_history.append(("ai",    cached_result["answer"]))
+        orch.last_detailed_result = cached_result.copy()
+
+        async def cache_hit_event_generator():
+            def emit(data: dict) -> str:
+                return f"data: {json.dumps(data)}\n\n"
+
+            # ── Startup handshake events ──────────────────────────────
+            yield emit({"type": "node_start", "node": "user",         "msg": query})
+            await asyncio.sleep(0.15)
+            yield emit({"type": "node_start", "node": "fastapi",      "msg": "POST /chat/stream received"})
+            await asyncio.sleep(0.15)
+            yield emit({"type": "node_start", "node": "semantic_cache", "msg": "Checking semantic cache…"})
+            await asyncio.sleep(0.2)
+            
+            sim_score = cached_result.get('cache_similarity', 0.0)
+            matched_q = cached_result.get('matched_query', '')
+            
+            steps = [
+                "⚡ Semantic Cache HIT!",
+                f"Matched cached query: '{matched_q}'",
+                f"Similarity Score: {sim_score}%",
+                "Bypassing intent classifier, hybrid retrievers, and synthesis LLM.",
+                "Retrieving cached answer payload from Redis."
+            ]
+            
+            for step in steps:
+                yield emit({
+                    "type": "substep", 
+                    "node": "semantic_cache", 
+                    "intent": cached_result.get("intent", "POLICY_QUESTION"), 
+                    "step": step, 
+                    "all_steps": steps
+                })
+                await asyncio.sleep(0.08)
+
+            # Signal cache node completion
+            yield emit({
+                "type":              "node_done",
+                "node":              "semantic_cache",
+                "intent":            cached_result.get("intent", "POLICY_QUESTION"),
+                "steps":             steps + cached_result.get("steps_log", []),
+                "answer":            cached_result["answer"],
+                "confidence":        cached_result.get("confidence", "HIGH"),
+                "confidence_reason": cached_result.get("confidence_reason", "") + " (Cached)",
+                "blocked":           cached_result.get("blocked", False),
+                "sub_questions":     cached_result.get("sub_questions", []),
+            })
+            await asyncio.sleep(0.1)
+            yield "data: [DONE]\n\n"
+
+        return StreamingResponse(cache_hit_event_generator(), media_type="text/event-stream")
+
+    # Cache Miss: run full LangGraph pipeline
+    queue = asyncio.Queue()
+    loop = asyncio.get_running_loop()
+    
     def run_stream():
         try:
             for event in orch.stream_detailed(final_query):
@@ -202,7 +303,6 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
         except Exception as e:
             loop.call_soon_threadsafe(queue.put_nowait, {"type": "error", "error": e})
 
-    # Start the LangGraph execution in a background thread so it doesn't block the main event loop
     thread = threading.Thread(target=run_stream, daemon=True)
     thread.start()
 
@@ -221,15 +321,14 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
         prev_steps: list[str] = []
         final_answer = ""
         last_intent  = ""
+        last_state = None
 
         # ── Stream LangGraph events ───────────────────────────────
         try:
             while True:
                 try:
-                    # Wait for 2.0s for the next event, if none, send keepalive
                     item = await asyncio.wait_for(queue.get(), timeout=2.0)
                 except asyncio.TimeoutError:
-                    # SSE keepalive comment to keep the connection alive through reverse proxies
                     yield ": keepalive\n\n"
                     continue
 
@@ -241,31 +340,32 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
                 event = item["data"]
                 node  = event["node"]
                 state = event["state"]
+                last_state = state
                 current_steps = state.get("steps_log", [])
-                new_steps     = current_steps[len(prev_steps):]   # only new lines
+                new_steps     = current_steps[len(prev_steps):]
                 intent        = state.get("intent", last_intent)
                 last_intent   = intent
 
-                # Tell the frontend the LangGraph node just started
                 yield emit({"type": "node_start", "node": node, "intent": intent, "msg": f"Node '{node}' executing…"})
                 await asyncio.sleep(0.15)
 
-                # Emit individual sub-steps (each line from steps_log) with a small delay
                 for step in new_steps:
                     yield emit({"type": "substep", "node": node, "intent": intent, "step": step, "all_steps": current_steps})
-                    await asyncio.sleep(0.05)   # minimal pause for smooth UI without blocking stream
+                    await asyncio.sleep(0.05)
 
-                # Signal node completion
                 final_answer = state.get("answer", "")
                 yield emit({
-                    "type":   "node_done",
-                    "node":   node,
-                    "intent": intent,
-                    "steps":  current_steps,
-                    "answer": final_answer,
+                    "type":              "node_done",
+                    "node":              node,
+                    "intent":            intent,
+                    "steps":             current_steps,
+                    "answer":            final_answer,
+                    "confidence":        state.get("confidence", ""),
+                    "confidence_reason": state.get("confidence_reason", ""),
+                    "blocked":           state.get("blocked", False),
+                    "sub_questions":     state.get("sub_questions", []),
                 })
 
-                # Persist completed state for trace/graph endpoints
                 if node == "synthesize":
                     if len(orch.chat_history) == 0 or orch.chat_history[-1] != ("ai", final_answer):
                         orch.chat_history.append(("human", query))
@@ -280,6 +380,24 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
 
                 prev_steps = current_steps
                 await asyncio.sleep(0.1)
+                
+            # Stream finished successfully, store result in cache
+            if last_state:
+                cache_payload = {
+                    "query":             query,
+                    "answer":            last_state.get("answer", ""),
+                    "intent":            last_state.get("intent", "POLICY_QUESTION"),
+                    "steps_log":         last_state.get("steps_log", []),
+                    "retrieved_context": last_state.get("retrieved_context", ""),
+                    "memories_used":     last_state.get("memories_used", []),
+                    "run_id":            orch.last_detailed_result.get("run_id", "") if orch.last_detailed_result else "",
+                    "blocked":           last_state.get("blocked", False),
+                    "confidence":        last_state.get("confidence", ""),
+                    "confidence_reason": last_state.get("confidence_reason", ""),
+                    "sub_questions":     last_state.get("sub_questions", []),
+                }
+                cache_manager.store(final_query, cache_payload, plan_tier=plan_tier)
+                
         except Exception as e:
             logger.error(f"Error in chat_stream: {str(e)}")
             yield emit({"type": "error", "msg": f"Backend Error: {str(e)}"})
@@ -376,66 +494,108 @@ async def clear_memory(session_id: str):
 def _steps_to_graphviz(query: str, intent: str, steps: list[str]) -> io.BytesIO:
     """Generate a PNG image of the workflow using Graphviz.
     Nodes: FastAPI, Orchestrator, Intent, Retrieval, Synthesis, Answer.
-    Detailed steps are added as chained nodes attached to Retrieval.
+    If cached, bypasses all retrieval nodes and shows a direct link via Redis Cache.
     """
+    is_cached = any("Cache HIT" in s for s in steps)
     dot = Digraph(comment='Workflow')
     dot.attr(rankdir='LR')
-    # Core nodes
-    dot.node('A', 'FastAPI Endpoint')
-    dot.node('B', 'Orchestrator')
-    dot.node('C', 'Intent Classification')
-    dot.node('D', 'Retrieval Pipeline')
-    dot.node('E', 'Synthesis Agent')
-    dot.node('F', 'Answer')
-    # Edges
-    dot.edge('A', 'B')
-    dot.edge('B', 'C')
-    dot.edge('C', 'D')
-    dot.edge('D', 'E')
-    dot.edge('E', 'F')
-    # Detailed steps subgraph
-    if steps:
-        with dot.subgraph(name='cluster_details') as c:
-            c.attr(label='Retrieval Details')
-            prev = None
-            for i, s in enumerate(steps, start=1):
-                node_id = f'S{i}'
-                safe = s.replace('"', '\\"')
-                c.node(node_id, safe, shape='box')
-                if i == 1:
-                    dot.edge('D', node_id)
-                else:
-                    c.edge(prev, node_id)
-                prev = node_id
+    
+    if is_cached:
+        # Pruned cache hit nodes
+        dot.node('A', 'FastAPI Endpoint')
+        dot.node('R', 'Redis Semantic Cache')
+        dot.node('F', 'Answer')
+        # Edges
+        dot.edge('A', 'R')
+        dot.edge('R', 'F')
+        
+        # Detailed steps subgraph
+        if steps:
+            with dot.subgraph(name='cluster_details') as c:
+                c.attr(label='Cache Hit Details')
+                prev = None
+                for i, s in enumerate(steps, start=1):
+                    node_id = f'S{i}'
+                    safe = s.replace('"', '\\"')
+                    c.node(node_id, safe, shape='box')
+                    if i == 1:
+                        dot.edge('R', node_id)
+                    else:
+                        c.edge(prev, node_id)
+                    prev = node_id
+    else:
+        # Core nodes
+        dot.node('A', 'FastAPI Endpoint')
+        dot.node('B', 'Orchestrator')
+        dot.node('C', 'Intent Classification')
+        dot.node('D', 'Retrieval Pipeline')
+        dot.node('E', 'Synthesis Agent')
+        dot.node('F', 'Answer')
+        # Edges
+        dot.edge('A', 'B')
+        dot.edge('B', 'C')
+        dot.edge('C', 'D')
+        dot.edge('D', 'E')
+        dot.edge('E', 'F')
+        
+        # Detailed steps subgraph
+        if steps:
+            with dot.subgraph(name='cluster_details') as c:
+                c.attr(label='Retrieval Details')
+                prev = None
+                for i, s in enumerate(steps, start=1):
+                    node_id = f'S{i}'
+                    safe = s.replace('"', '\\"')
+                    c.node(node_id, safe, shape='box')
+                    if i == 1:
+                        dot.edge('D', node_id)
+                    else:
+                        c.edge(prev, node_id)
+                    prev = node_id
+                    
     # Render to PNG in memory
     png_bytes = dot.pipe(format='png')
     return io.BytesIO(png_bytes)
 
 def _steps_to_mermaid(query: str, intent: str, steps: list[str]) -> str:
     """Generate a simple mermaid diagram describing the workflow.
-    The diagram will have the form:
-        FastAPI --> Orchestrator --> Intent --> Retrieval --> Synthesis
-    and then each step from steps will be added as a sub‑node.
+    If cached, bypasses all retrieval nodes and shows a direct link via Redis Cache.
     """
+    is_cached = any("Cache HIT" in s for s in steps)
     lines = ["graph LR"]
-    lines.append('    A[FastAPI Endpoint] --> B[Orchestrator]')
-    lines.append('    B --> C[Intent Classification]')
-    lines.append('    C --> D[Retrieval Pipeline]')
-    lines.append('    D --> E[Synthesis Agent]')
-    lines.append('    E --> F[Answer]')
-    # Add detailed steps as a vertical sub‑graph attached to D
-    if steps:
-        lines.append('    subgraph Details [Retrieval Details]')
-        for i, s in enumerate(steps, start=1):
-            # sanitize characters that break mermaid syntax
-            safe = s.replace('"', '\\"')
-            node_id = f"S{i}"
-            lines.append(f'        {node_id}["{safe}"]')
-            if i == 1:
-                lines.append(f'        D --> {node_id}')
-            else:
-                lines.append(f'        S{i-1} --> {node_id}')
-        lines.append('    end')
+    
+    if is_cached:
+        lines.append('    A[FastAPI Endpoint] --> R[Redis Semantic Cache]')
+        lines.append('    R --> F[Answer]')
+        if steps:
+            lines.append('    subgraph Details [Cache Hit Details]')
+            for i, s in enumerate(steps, start=1):
+                safe = s.replace('"', '\\"')
+                node_id = f"S{i}"
+                lines.append(f'        {node_id}["{safe}"]')
+                if i == 1:
+                    lines.append(f'        R --> {node_id}')
+                else:
+                    lines.append(f'        S{i-1} --> {node_id}')
+            lines.append('    end')
+    else:
+        lines.append('    A[FastAPI Endpoint] --> B[Orchestrator]')
+        lines.append('    B --> C[Intent Classification]')
+        lines.append('    C --> D[Retrieval Pipeline]')
+        lines.append('    D --> E[Synthesis Agent]')
+        lines.append('    E --> F[Answer]')
+        if steps:
+            lines.append('    subgraph Details [Retrieval Details]')
+            for i, s in enumerate(steps, start=1):
+                safe = s.replace('"', '\\"')
+                node_id = f"S{i}"
+                lines.append(f'        {node_id}["{safe}"]')
+                if i == 1:
+                    lines.append(f'        D --> {node_id}')
+                else:
+                    lines.append(f'        S{i-1} --> {node_id}')
+            lines.append('    end')
+            
     return "\n".join(lines)
 
 @app.get("/session/{session_id}/diagram", response_model=WorkflowDiagramResponse)

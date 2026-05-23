@@ -180,6 +180,43 @@ def get_hybrid_retriever(
 
     console.print("\n⚙️  Building retrieval pipeline...", style="bold cyan")
 
+    class LoggingRetriever(Runnable):
+        def __init__(self, base_retriever, name):
+            self.base_retriever = base_retriever
+            self.name = name
+
+        def invoke(self, query: str, *args, **kwargs) -> list[Document]:
+            # Custom logic to extract scores for visualization
+            if self.name == "VectorDB":
+                # base_retriever is VectorStoreRetriever
+                docs_and_scores = self.base_retriever.vectorstore.similarity_search_with_score(query, **self.base_retriever.search_kwargs)
+                docs = []
+                for d, score in docs_and_scores:
+                    d.metadata["score"] = score
+                    docs.append(d)
+            elif self.name == "BM25":
+                # base_retriever is BM25Retriever
+                docs = self.base_retriever.invoke(query, *args, **kwargs)
+                try:
+                    q_tokens = self.base_retriever.preprocess_func(query)
+                    scores = self.base_retriever.vectorizer.get_scores(q_tokens)
+                    # Assign the corresponding score based on the original document index
+                    for d in docs:
+                        idx = self.base_retriever.docs.index(d)
+                        d.metadata["score"] = scores[idx]
+                except Exception:
+                    pass
+            else:
+                docs = self.base_retriever.invoke(query, *args, **kwargs)
+
+            for i, d in enumerate(docs[:4]):
+                source = d.metadata.get("source_file", "unknown")
+                page = d.metadata.get("page", "?")
+                score = d.metadata.get("score", 0.0)
+                # Format: [Name] Retrieved: source | Score: 1.23 | Content: ...
+                log_event(f"[{self.name}] Retrieved: {source} (Page: {page})|{score:.4f}|{d.page_content[:40]}...")
+            return docs
+
     # ── Stage 1: Vector Retriever ───────────────────────────────
     console.print("  📦 Loading ChromaDB vector store...")
     vectorstore = _load_vectorstore()
@@ -187,17 +224,19 @@ def get_hybrid_retriever(
         search_type="similarity",
         search_kwargs={"k": k},
     )
+    logging_vector_retriever = LoggingRetriever(vector_retriever, "VectorDB")
     console.print(f"    ✅ Vector retriever ready (k={k})")
 
     # ── Stage 2: BM25 Retriever ─────────────────────────────────
     console.print("  📝 Building BM25 index from stored documents...")
     all_docs = _get_all_documents(vectorstore)
     bm25_retriever = BM25Retriever.from_documents(all_docs, k=k)
+    logging_bm25_retriever = LoggingRetriever(bm25_retriever, "BM25")
     console.print(f"    ✅ BM25 retriever ready (k={k}, {len(all_docs)} documents indexed)")
 
     # ── Stage 3: Ensemble Retriever ─────────────────────────────
     ensemble_retriever = EnsembleRetriever(
-        retrievers=[bm25_retriever, vector_retriever],
+        retrievers=[logging_bm25_retriever, logging_vector_retriever],
         weights=weights,
     )
     console.print(f"    ✅ Ensemble retriever ready (weights: BM25={weights[0]}, Vector={weights[1]})")

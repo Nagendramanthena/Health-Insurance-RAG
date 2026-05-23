@@ -111,3 +111,12 @@ GUIDELINES:
    - Use 'policy_search' for general coverage rules, FAQs, and procedures.
    - Use 'relational_search' for specific data like copays for a drug, provider lookups, or plan-specific relational details.
 """
+
+# ──────────────────────────────────────────────
+# Redis Semantic Cache Settings
+# ──────────────────────────────────────────────
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+# Cosine similarity threshold for cache hits (1 - cosine_distance).
+# 0.85 is a standard threshold for text-embedding-3-small semantic similarity.
+SEMANTIC_CACHE_THRESHOLD = float(os.getenv("SEMANTIC_CACHE_THRESHOLD", "0.85"))
+SEMANTIC_CACHE_COLLECTION = "semantic_cache"

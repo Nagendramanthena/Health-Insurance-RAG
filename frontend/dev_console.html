@@ -3,30 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛠️ RAG Agentic Developer Console</title>
+<title>🛠️ HealthGuard RAG — Developer Console v2</title>
+<meta name="description" content="Live developer console for the Health Insurance RAG pipeline — real-time orchestration tracing, latency profiling, and memory inspection.">
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --glow-primary: rgba(99, 102, 241, 0.4);
-  --glow-active: rgba(139, 92, 246, 0.6);
-  --glow-success: rgba(16, 185, 129, 0.4);
-  --border-glow: rgba(255, 255, 255, 0.08);
-  --sidebar-bg: rgba(10, 17, 39, 0.95);
-  --main-bg: radial-gradient(circle at 50% 50%, #0d1527 0%, #060a16 100%);
+  --glow-primary: rgba(99,102,241,0.4);
+  --glow-success: rgba(16,185,129,0.4);
+  --border-glow: rgba(255,255,255,0.08);
+  --sidebar-bg: rgba(10,17,39,0.97);
+  --main-bg: radial-gradient(ellipse at 30% 20%, #0f1a3a 0%, #060a16 60%, #03050f 100%);
+  --glass: rgba(255,255,255,0.04);
+  --text-primary: #f1f5f9;
+  --text-muted: #64748b;
+  --accent: #6366f1;
+  --success: #10b981;
+  --warn: #f59e0b;
+  --danger: #ef4444;
 }
 
 body {
   background: #060a16;
   background-image: var(--main-bg);
-  color: #f1f5f9;
+  color: var(--text-primary);
   font-family: 'Plus Jakarta Sans', sans-serif;
   height: 100vh;
   display: flex;
@@ -38,740 +42,874 @@ body {
 .header {
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding: 20px 32px;
-  background: rgba(10, 16, 36, 0.85);
-  backdrop-filter: blur(16px);
+  gap: 16px;
+  padding: 14px 28px;
+  background: rgba(8,14,32,0.9);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-glow);
   flex-shrink: 0;
   z-index: 10;
 }
 .header-logo {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   background: linear-gradient(135deg, #818cf8, #c084fc);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  white-space: nowrap;
 }
 .header-badge {
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 3px 10px;
+  font-size: 0.6rem; font-weight: 800; padding: 3px 9px;
   border-radius: 20px;
   background: linear-gradient(90deg, #4f46e5, #7c3aed);
-  color: #fff;
-  letter-spacing: 0.08em;
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
-  text-transform: uppercase;
+  color: #fff; letter-spacing: 0.08em; text-transform: uppercase;
+  box-shadow: 0 0 12px rgba(99,102,241,0.4);
 }
-.session-id {
-  margin-left: auto;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
+.header-badge.v2 {
+  background: linear-gradient(90deg, #059669, #0891b2);
+  box-shadow: 0 0 12px rgba(6,182,212,0.4);
+}
+
+/* ── Health chips ── */
+.health-strip {
+  display: flex; gap: 8px; margin-left: 4px;
+}
+.hchip {
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 0.65rem; font-weight: 700;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
   color: #94a3b8;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 5px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s;
+  cursor: default;
 }
+.hchip .dot { width: 6px; height: 6px; border-radius: 50%; background: #475569; flex-shrink: 0; }
+.hchip.ok { border-color: rgba(16,185,129,0.3); color: #6ee7b7; }
+.hchip.ok .dot { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.hchip.err { border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+.hchip.err .dot { background: #ef4444; }
 
-.body {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
+.session-id {
+  margin-left: auto; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: #94a3b8;
+  background: rgba(255,255,255,0.04);
+  padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border-glow);
+  white-space: nowrap;
 }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.hbtn {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+  color: #cbd5e1; padding: 5px 11px; border-radius: 7px; cursor: pointer;
+  font-size: 0.68rem; font-weight: 600; transition: all 0.2s;
+  font-family: inherit;
+}
+.hbtn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.hbtn.kbd { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; }
 
-/* ── LEFT PANEL (Controls & Logs) ── */
+/* ── BODY ── */
+.body { display: flex; flex: 1; overflow: hidden; }
+
+/* ── LEFT PANEL ── */
 .left {
-  width: 480px;
-  min-width: 460px;
+  width: 460px; min-width: 440px;
   border-right: 1px solid var(--border-glow);
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
   background: var(--sidebar-bg);
   backdrop-filter: blur(20px);
-  z-index: 5;
-  overflow-y: auto;
+  z-index: 5; overflow-y: auto;
 }
 
-.query-area {
-  padding: 32px;
-  border-bottom: 1px solid var(--border-glow);
-}
+/* ── Query area ── */
+.query-area { padding: 24px 28px; border-bottom: 1px solid var(--border-glow); }
 .query-area label {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 8px;
+  display: block; font-size: 0.67rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
 }
 .query-area textarea {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 14px;
-  color: #fff;
-  font-family: inherit;
-  font-size: 0.88rem;
-  line-height: 1.5;
-  resize: none;
-  outline: none;
-  transition: all 0.3s ease;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%; background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+  padding: 12px; color: #fff; font-family: inherit; font-size: 0.85rem;
+  line-height: 1.5; resize: none; outline: none; transition: all 0.3s;
 }
 .query-area textarea:focus {
-  border-color: #6366f1;
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-color: var(--accent);
+  box-shadow: 0 0 14px rgba(99,102,241,0.15);
 }
+
+/* Preset queries */
+.presets { margin-top: 8px; }
+.presets-toggle {
+  width: 100%; background: none; border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 8px; color: #64748b; font-size: 0.72rem; font-family: inherit;
+  padding: 6px; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 6px; transition: all 0.2s;
+}
+.presets-toggle:hover { border-color: rgba(99,102,241,0.4); color: #818cf8; }
+.preset-list {
+  display: none; flex-direction: column; gap: 4px; margin-top: 8px;
+}
+.preset-list.open { display: flex; }
+.preset-item {
+  padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07); cursor: pointer; font-size: 0.78rem;
+  color: #cbd5e1; transition: all 0.2s; display: flex; gap: 8px; align-items: flex-start;
+}
+.preset-item:hover { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3); color: #a5b4fc; }
+.preset-icon { flex-shrink: 0; margin-top: 1px; }
 
 .run-btn {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+  width: 100%; margin-top: 10px; padding: 11px; border: none; border-radius: 9px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff;
+  font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all 0.25s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 18px rgba(99,102,241,0.35); font-family: inherit;
 }
-.run-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 25px rgba(99, 102, 241, 0.55);
-}
-.run-btn:active {
-  transform: translateY(1px);
-}
-.run-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
+.run-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(99,102,241,0.55); }
+.run-btn:active { transform: translateY(1px); }
+.run-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* Theme toggle button */
-.theme-toggle {
-  margin-left: 10px;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #f1f5f9;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.75rem;
-  transition: background 0.3s ease;
+/* ── Intent + Confidence ── */
+.meta-row {
+  padding: 16px 28px; border-bottom: 1px solid var(--border-glow);
+  display: none; gap: 12px; align-items: center; flex-wrap: wrap;
 }
-.theme-toggle:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-/* Glass‑morphism panel backgrounds */
-.left, .right, .header {
-  background: var(--glass-bg, rgba(255,255,255,0.08));
-  backdrop-filter: blur(12px);
-}
-/* Dark / Light mode */
-body.dark-mode {
-  --main-bg: radial-gradient(circle at 50% 50%, #0d1527 0%, #060a16 100%);
-  --sidebar-bg: rgba(10, 17, 39, 0.95);
-  --glow-primary: rgba(99, 102, 241, 0.4);
-}
-body.light-mode {
-  --main-bg: radial-gradient(circle at 50% 50%, #f0f4ff 0%, #e0e7ff 100%);
-  --sidebar-bg: rgba(255,255,255,0.9);
-  --glow-primary: rgba(99, 102, 241, 0.2);
-}
-
-.intent-display {
-  padding: 24px 32px;
-  border-bottom: 1px solid var(--border-glow);
-  display: none;
-  background: rgba(255, 255, 255, 0.01);
-}
-.intent-display label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.meta-row.visible { display: flex; }
+.intent-label, .conf-label {
+  font-size: 0.66rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-right: 4px;
 }
 .intent-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 8px;
-  padding: 6px 14px;
-  border-radius: 30px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  background: rgba(99, 102, 241, 0.15);
-  color: #a5b4fc;
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 700;
+  background: rgba(99,102,241,0.15); color: #a5b4fc;
+  border: 1px solid rgba(99,102,241,0.3); text-transform: uppercase; letter-spacing: 0.05em;
 }
+.conf-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 700;
+  border: 1px solid; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.conf-badge.HIGH  { background: rgba(16,185,129,0.15); color:#34d399; border-color:rgba(16,185,129,0.3); }
+.conf-badge.MEDIUM{ background: rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.3); }
+.conf-badge.LOW   { background: rgba(239,68,68,0.15);  color:#f87171; border-color:rgba(239,68,68,0.3); }
+.conf-badge.BLOCKED{background: rgba(100,116,139,0.15);color:#94a3b8; border-color:rgba(100,116,139,0.3);}
 
-/* ── TERMINAL LOGS ── */
+/* ── Log area ── */
 .log-area {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: 32px;
-  background: rgba(5, 8, 20, 0.5);
-  min-height: 350px;
-  flex-shrink: 0;
+  flex: 1; display: flex; flex-direction: column;
+  padding: 20px 28px; min-height: 260px; flex-shrink: 0;
 }
-.log-area label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 12px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.log-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px; flex-shrink: 0;
 }
-.log-list-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  background: rgba(2, 4, 10, 0.7);
-  padding: 20px;
-  font-family: 'JetBrains Mono', monospace;
-  box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.4);
+.log-header label {
+  font-size: 0.67rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  display: flex; align-items: center; gap: 6px;
 }
-.log-entry {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  font-size: 0.75rem;
-  line-height: 1.6;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-  padding-bottom: 8px;
-  animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.log-controls { display: flex; gap: 6px; align-items: center; }
+.log-search {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px; padding: 4px 8px; color: #cbd5e1; font-size: 0.7rem;
+  outline: none; font-family: 'JetBrains Mono', monospace; width: 120px;
+  transition: all 0.2s;
 }
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.log-icon {
-  flex-shrink: 0;
-  font-size: 0.85rem;
-}
-.log-text {
-  color: #f1f5f9;
-  font-weight: 450;
-}
-.log-tag {
-  font-size: 0.62rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-right: 8px;
-  text-transform: uppercase;
-  display: inline-block;
+.log-search:focus { border-color: var(--accent); width: 150px; }
+.filter-btn {
+  padding: 3px 8px; border-radius: 5px; font-size: 0.62rem; font-weight: 700;
+  cursor: pointer; border: 1px solid; background: transparent;
+  transition: all 0.15s; font-family: inherit; text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-.tag-classify { background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
-.tag-retrieve { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
-.tag-synthesize { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25); }
-.tag-system { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.25); }
-.tag-error { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
+.filter-btn.ALL     { color:#94a3b8; border-color:rgba(148,163,184,0.2); }
+.filter-btn.ALL.active { background: rgba(148,163,184,0.15); color:#e2e8f0; }
+.filter-btn.CLASSIFY { color:#c084fc; border-color:rgba(139,92,246,0.2); }
+.filter-btn.CLASSIFY.active { background:rgba(139,92,246,0.15); }
+.filter-btn.RETRIEVE { color:#fbbf24; border-color:rgba(245,158,11,0.2); }
+.filter-btn.RETRIEVE.active { background:rgba(245,158,11,0.15); }
+.filter-btn.SYNTH   { color:#34d399; border-color:rgba(16,185,129,0.2); }
+.filter-btn.SYNTH.active { background:rgba(16,185,129,0.15); }
+.filter-btn.ERROR   { color:#f87171; border-color:rgba(239,68,68,0.2); }
+.filter-btn.ERROR.active { background:rgba(239,68,68,0.15); }
 
+.log-list-wrapper {
+  flex: 1; overflow-y: auto;
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+  background: rgba(2,4,10,0.7); padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: inset 0 4px 15px rgba(0,0,0,0.4);
+}
+.log-entry {
+  display: flex; gap: 8px; margin-bottom: 8px; font-size: 0.72rem; line-height: 1.5;
+  border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px;
+  animation: slideIn 0.2s ease-out forwards;
+  transition: opacity 0.2s;
+}
+.log-entry.hidden { display: none; }
+@keyframes slideIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.log-icon { flex-shrink: 0; font-size: 0.82rem; }
+.log-text { color: #e2e8f0; flex: 1; word-break: break-word; }
+.log-tag {
+  font-size: 0.6rem; font-weight: 700; padding: 1px 5px; border-radius: 3px;
+  margin-right: 6px; text-transform: uppercase; display: inline-block; letter-spacing: 0.04em;
+}
+.tag-guard    { background: rgba(100,116,139,0.2); color:#94a3b8; border:1px solid rgba(100,116,139,0.3); }
+.tag-classify { background: rgba(139,92,246,0.2);  color:#c084fc; border:1px solid rgba(139,92,246,0.3); }
+.tag-retrieve { background: rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.25); }
+.tag-synthesize{background: rgba(16,185,129,0.15); color:#34d399; border:1px solid rgba(16,185,129,0.25); }
+.tag-critique { background: rgba(59,130,246,0.15); color:#93c5fd; border:1px solid rgba(59,130,246,0.25); }
+.tag-system   { background: rgba(99,102,241,0.15); color:#818cf8; border:1px solid rgba(99,102,241,0.25); }
+.tag-error    { background: rgba(239,68,68,0.15);  color:#f87171; border:1px solid rgba(239,68,68,0.25); }
+
+/* ── Answer card ── */
 .answer-card {
-  margin: 0 32px 32px 32px;
-  padding: 24px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  border-radius: 16px;
-  display: none;
-  animation: fadeUp 0.35s ease-out;
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
-  flex-shrink: 0;
+  margin: 0 28px 24px; padding: 20px;
+  background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.02) 100%);
+  border: 1px solid rgba(16,185,129,0.3); border-radius: 14px;
+  display: none; animation: fadeUp 0.3s ease-out;
+  box-shadow: 0 4px 18px rgba(16,185,129,0.08); flex-shrink: 0;
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.answer-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.ans-label { font-size:0.67rem; font-weight:800; color:#34d399; text-transform:uppercase; letter-spacing:0.08em; display:flex; align-items:center; gap:5px; }
+.copy-btn {
+  background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.25);
+  color: #34d399; padding: 4px 10px; border-radius: 6px; font-size: 0.65rem;
+  font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s;
 }
-.answer-card .ans-label {
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: #34d399;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.copy-btn:hover { background: rgba(52,211,153,0.2); }
+.ans-text {
+  font-size: 0.82rem; line-height: 1.7; color: #e2e8f0;
 }
-.answer-card .ans-text {
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: #e2e8f0;
-}
+/* Markdown rendering inside answer */
+.ans-text h1,.ans-text h2,.ans-text h3 { color:#a5b4fc; margin:10px 0 5px; font-size:0.9rem; }
+.ans-text p { margin-bottom:8px; }
+.ans-text ul,.ans-text ol { padding-left:16px; margin-bottom:8px; }
+.ans-text li { margin-bottom:4px; }
+.ans-text strong { color:#e2e8f0; }
+.ans-text code { background:rgba(255,255,255,0.06); padding:1px 5px; border-radius:3px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; }
+.ans-text blockquote { border-left:2px solid #6366f1; padding-left:10px; color:#94a3b8; margin:8px 0; }
 
-/* ── RIGHT PANEL (Interactive Diagram) ── */
+/* ── Memory inspector ── */
+.memory-panel {
+  margin: 0 28px 16px; padding: 16px;
+  background: rgba(6,182,212,0.05); border: 1px solid rgba(6,182,212,0.2);
+  border-radius: 12px; display: none; flex-shrink: 0;
+}
+.memory-panel.open { display: block; }
+.mem-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.mem-label { font-size:0.67rem; font-weight:800; color:#22d3ee; text-transform:uppercase; letter-spacing:0.08em; }
+.mem-actions { display:flex; gap:6px; }
+.mem-btn {
+  padding: 3px 9px; border-radius: 6px; font-size: 0.65rem; font-weight:700;
+  cursor:pointer; font-family:inherit; border: 1px solid; transition: all 0.2s;
+}
+.mem-refresh { background:rgba(6,182,212,0.1); border-color:rgba(6,182,212,0.3); color:#22d3ee; }
+.mem-refresh:hover { background:rgba(6,182,212,0.2); }
+.mem-wipe { background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.3); color:#f87171; }
+.mem-wipe:hover { background:rgba(239,68,68,0.2); }
+.mem-facts { display:flex; flex-direction:column; gap:5px; max-height:120px; overflow-y:auto; }
+.mem-fact {
+  padding: 6px 10px; border-radius: 7px; background: rgba(6,182,212,0.07);
+  border: 1px solid rgba(6,182,212,0.15); font-size:0.72rem; color:#a5f3fc;
+  font-family:'JetBrains Mono',monospace; line-height:1.4;
+}
+.mem-empty { font-size:0.72rem; color:#475569; font-style:italic; }
+
+/* ── RIGHT PANEL ── */
 .right {
-  flex: 1;
-  overflow: hidden;
-  padding: 32px 40px;
-  display: flex;
-  flex-direction: column;
+  flex: 1; overflow: hidden; padding: 24px 32px;
+  display: flex; flex-direction: column;
 }
 .diagram-label {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-size: 0.68rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
 }
+.diagram-actions { display:flex; gap:8px; margin-left:auto; }
+.diag-btn {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+  color:#94a3b8; padding:4px 10px; border-radius:6px; font-size:0.65rem;
+  font-weight:600; cursor:pointer; font-family:inherit; transition:all 0.2s;
+}
+.diag-btn:hover { background:rgba(255,255,255,0.09); color:#fff; }
 #svg-wrap {
-  flex: 1;
-  width: 100%;
-  background: rgba(10, 16, 36, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 4px 30px rgba(0, 0, 0, 0.3);
+  flex: 1; width: 100%;
+  background: rgba(8,14,32,0.5); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px; padding: 20px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 4px 30px rgba(0,0,0,0.3);
+  overflow: hidden;
 }
-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
+svg { width:100%; height:100%; overflow:visible; }
 
 /* ── Node Graph styling ── */
-.n rect {
-  stroke-width: 1.5;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  rx: 16;
-  ry: 16;
-}
-.n.idle rect {
-  fill: #0c1224;
-  stroke: rgba(255, 255, 255, 0.12);
-}
-.n.active rect {
-  fill: rgba(124, 58, 237, 0.25);
-  stroke: #a78bfa;
-  stroke-width: 2;
-  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4));
-}
-.n.done rect {
-  fill: rgba(16, 185, 129, 0.15);
-  stroke: #10b981;
-  stroke-width: 1.8;
-}
-.n.skip rect {
-  fill: #050811;
-  stroke: rgba(255, 255, 255, 0.03);
-  opacity: 0.35;
-}
-.n .icon {
-  font-size: 16px;
-}
-.n .title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  fill: #e2e8f0;
-}
-.n .sub {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 8.5px;
-  fill: #64748b;
-  font-weight: 500;
-}
+.n rect { stroke-width:1.5; transition:all 0.35s cubic-bezier(0.16,1,0.3,1); rx:14; ry:14; }
+.n.idle rect { fill:#080e22; stroke:rgba(255,255,255,0.1); }
+.n.active rect { fill:rgba(124,58,237,0.25); stroke:#a78bfa; stroke-width:2; filter:drop-shadow(0 0 10px rgba(139,92,246,0.5)); }
+.n.done rect { fill:rgba(16,185,129,0.13); stroke:#10b981; stroke-width:1.8; }
+.n.skip rect { fill:#050811; stroke:rgba(255,255,255,0.03); opacity:0.3; }
+.n .icon { font-size:14px; }
+.n .title { font-family:'Plus Jakarta Sans',sans-serif; font-size:10px; font-weight:700; fill:#e2e8f0; }
+.n .sub   { font-family:'Plus Jakarta Sans',sans-serif; font-size:8px; fill:#64748b; font-weight:500; }
+/* Latency badge on nodes */
+.n .lat-badge { font-family:'JetBrains Mono',monospace; font-size:7.5px; font-weight:700; }
 
-/* LangSmith node distinct styling */
-#nd-langsmith.idle rect {
-  fill: rgba(6, 182, 212, 0.07);
-  stroke: rgba(6, 182, 212, 0.25);
-}
-#nd-langsmith.active rect {
-  fill: rgba(6, 182, 212, 0.22);
-  stroke: #22d3ee;
-  stroke-width: 2;
-  filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.5));
-}
-#nd-langsmith.done rect {
-  fill: rgba(6, 182, 212, 0.15);
-  stroke: #06b6d4;
-  stroke-width: 1.8;
-}
+/* Special node colors */
+#nd-langsmith.idle rect  { fill:rgba(6,182,212,0.06); stroke:rgba(6,182,212,0.2); }
+#nd-langsmith.active rect{ fill:rgba(6,182,212,0.22); stroke:#22d3ee; stroke-width:2; filter:drop-shadow(0 0 10px rgba(6,182,212,0.5)); }
+#nd-langsmith.done rect  { fill:rgba(6,182,212,0.13); stroke:#06b6d4; stroke-width:1.8; }
+#nd-query_guard.active rect { fill:rgba(239,68,68,0.18); stroke:#f87171; stroke-width:2; filter:drop-shadow(0 0 10px rgba(239,68,68,0.4)); }
+#nd-query_guard.done rect   { fill:rgba(239,68,68,0.08); stroke:rgba(239,68,68,0.5); }
+#nd-context_check.active rect{ fill:rgba(59,130,246,0.2); stroke:#93c5fd; stroke-width:2; filter:drop-shadow(0 0 10px rgba(59,130,246,0.4)); }
+#nd-context_check.done rect  { fill:rgba(59,130,246,0.1); stroke:rgba(59,130,246,0.5); }
+#nd-self_critique.active rect{ fill:rgba(245,158,11,0.18); stroke:#fbbf24; stroke-width:2; filter:drop-shadow(0 0 10px rgba(245,158,11,0.4)); }
+#nd-self_critique.done rect  { fill:rgba(245,158,11,0.08); stroke:rgba(245,158,11,0.5); }
+#nd-confidence.active rect   { fill:rgba(16,185,129,0.2); stroke:#34d399; stroke-width:2; filter:drop-shadow(0 0 10px rgba(16,185,129,0.4)); }
+#nd-confidence.done rect     { fill:rgba(16,185,129,0.1); stroke:rgba(16,185,129,0.5); }
 
-.pulse {
-  fill: none;
-  stroke: #a78bfa;
-  stroke-width: 1.5;
-  opacity: 0;
-  pointer-events: none;
-}
-.n.active .pulse {
-  animation: pulseNode 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-}
-@keyframes pulseNode {
-  0% { r: 35px; opacity: 0.8; }
-  100% { r: 75px; opacity: 0; }
-}
+.pulse { fill:none; stroke:#a78bfa; stroke-width:1.5; opacity:0; pointer-events:none; }
+.n.active .pulse { animation: pulseNode 1.8s ease-out infinite; }
+@keyframes pulseNode { 0%{r:30px;opacity:0.7;} 100%{r:65px;opacity:0;} }
 
-/* Edge Lines */
-.edge {
-  fill: none;
-  stroke: rgba(148, 163, 184, 0.18);
-  stroke-width: 2;
-  stroke-dasharray: 6 4;
-  transition: all 0.3s ease;
-}
-.edge.active-edge {
-  stroke: #818cf8;
-  stroke-width: 3;
-  stroke-dasharray: 10 3;
-  animation: dash 1s linear infinite;
-  filter: drop-shadow(0 0 5px rgba(129, 140, 248, 0.7));
-}
-.edge.done-edge {
-  stroke: #10b981;
-  stroke-width: 2;
-  stroke-dasharray: none;
-}
-@keyframes dash {
-  to {
-    stroke-dashoffset: -20;
-  }
-}
+.edge { fill:none; stroke:rgba(148,163,184,0.15); stroke-width:1.8; stroke-dasharray:5 4; transition:all 0.3s; }
+.edge.active-edge { stroke:#818cf8; stroke-width:2.5; stroke-dasharray:8 3; animation:dash 0.9s linear infinite; filter:drop-shadow(0 0 4px rgba(129,140,248,0.6)); }
+.edge.done-edge { stroke:#10b981; stroke-width:1.8; stroke-dasharray:none; }
+.edge.retry-edge { stroke:#f59e0b; stroke-dasharray:6 4; }
+.edge.retry-edge.active-edge { stroke:#fbbf24; }
+@keyframes dash { to { stroke-dashoffset:-20; } }
 
-/* Intent pills in SVG */
-.intent-tag {
-  rx: 8;
-  ry: 8;
-  transition: all 0.3s ease;
-}
-.intent-tag.active-intent {
-  fill: rgba(124, 58, 237, 0.25);
-  stroke: #a78bfa;
-  stroke-width: 1.5;
-}
-.intent-tag.inactive-intent {
-  fill: rgba(255, 255, 255, 0.02);
-  stroke: rgba(255, 255, 255, 0.06);
-}
+.intent-tag { rx:6; ry:6; transition:all 0.3s; }
+.intent-tag.active-intent { fill:rgba(124,58,237,0.25); stroke:#a78bfa; stroke-width:1.5; }
+.intent-tag.inactive-intent { fill:rgba(255,255,255,0.02); stroke:rgba(255,255,255,0.06); }
 
 /* ── STATUS BAR ── */
 .status {
-  padding: 16px 32px;
-  border-top: 1px solid var(--border-glow);
-  background: rgba(8, 14, 32, 0.9);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.78rem;
-  color: #64748b;
-  flex-shrink: 0;
-  font-weight: 500;
+  padding: 12px 28px; border-top: 1px solid var(--border-glow);
+  background: rgba(8,14,32,0.9); display: flex; align-items: center;
+  gap: 10px; font-size: 0.75rem; color: #64748b; flex-shrink: 0; font-weight: 500;
 }
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #64748b;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-.dot.running {
-  background: #6366f1;
-  box-shadow: 0 0 10px #6366f1;
-  animation: blink 1.5s infinite;
-}
-.dot.done {
-  background: #10b981;
-  box-shadow: 0 0 10px #10b981;
-}
-@keyframes blink { 50% { opacity: 0.4; } }
+.dot { width:7px; height:7px; border-radius:50%; background:#475569; flex-shrink:0; transition:all 0.3s; }
+.dot.running { background:#6366f1; box-shadow:0 0 8px #6366f1; animation:blink 1.2s infinite; }
+.dot.done    { background:#10b981; box-shadow:0 0 8px #10b981; }
+.dot.error   { background:#ef4444; box-shadow:0 0 8px #ef4444; }
+@keyframes blink { 50%{ opacity:0.4; } }
+.elapsed { margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:#475569; }
 
-/* Tooltip */
+/* ── TOOLTIP ── */
 #tooltip {
-  position: absolute;
-  background: rgba(10, 16, 36, 0.95);
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  border-radius: 12px;
-  padding: 16px;
-  color: #e2e8f0;
-  font-size: 0.8rem;
-  pointer-events: none;
-  display: none;
-  z-index: 2000;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(12px);
-  max-width: 320px;
-  line-height: 1.6;
+  position:absolute; background:rgba(8,14,32,0.97);
+  border:1px solid rgba(99,102,241,0.4); border-radius:10px; padding:14px;
+  color:#e2e8f0; font-size:0.78rem; pointer-events:none; display:none;
+  z-index:2000; box-shadow:0 10px 30px rgba(0,0,0,0.6); backdrop-filter:blur(12px);
+  max-width:300px; line-height:1.6;
 }
-#tooltip b {
-  color: #a5b4fc;
-  display: block;
-  margin-bottom: 8px;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-#tooltip div {
-  margin-bottom: 6px;
-  border-left: 2px solid #6366f1;
-  padding-left: 8px;
-}
+#tooltip b { color:#a5b4fc; display:block; margin-bottom:6px; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; }
+#tooltip .lat-info { font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#34d399; margin-bottom:4px; }
+#tooltip div { margin-bottom:4px; border-left:2px solid #6366f1; padding-left:8px; }
 
-/* ── CYBER SECURITY LOGIN ── */
+/* ── LOGIN OVERLAY ── */
 #login-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(4, 7, 16, 0.95);
-  backdrop-filter: blur(25px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  transition: opacity 0.3s ease;
+  position:fixed; inset:0;
+  background:rgba(4,7,16,0.97); backdrop-filter:blur(30px);
+  z-index:9999; display:flex; align-items:center; justify-content:center;
+  flex-direction:column; transition:opacity 0.3s;
 }
 .login-box {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  padding: 56px 48px;
-  border-radius: 32px;
-  text-align: center;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-  width: 400px;
+  background:rgba(15,23,42,0.7); border:1px solid rgba(99,102,241,0.2);
+  padding:52px 44px; border-radius:28px; text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.7); width:380px;
 }
-.login-box h2 {
-  margin-bottom: 8px;
-  color: #fff;
-  font-size: 1.4rem;
-  font-weight: 800;
-}
-.login-box p {
-  color: #64748b;
-  font-size: 0.82rem;
-  margin-bottom: 24px;
-}
+.login-logo { font-size:2.5rem; margin-bottom:12px; }
+.login-box h2 { color:#fff; font-size:1.35rem; font-weight:800; margin-bottom:6px; }
+.login-box p { color:#64748b; font-size:0.8rem; margin-bottom:24px; }
 .login-box input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 1.3rem;
-  text-align: center;
-  margin-bottom: 24px;
-  outline: none;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.15em;
-  transition: all 0.3s ease;
+  width:100%; padding:14px; border-radius:10px;
+  background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1);
+  color:#fff; font-size:1.4rem; text-align:center; margin-bottom:18px;
+  outline:none; font-family:'JetBrains Mono',monospace; letter-spacing:0.2em; transition:all 0.3s;
 }
-.login-box input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
-}
+.login-box input:focus { border-color:#6366f1; box-shadow:0 0 14px rgba(99,102,241,0.25); }
 .login-box button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  color: white;
-  border: none;
-  font-weight: 700;
-  font-size: 0.92rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  width:100%; padding:13px; border-radius:10px;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed); color:#fff;
+  border:none; font-weight:700; font-size:0.9rem; cursor:pointer;
+  transition:all 0.25s; box-shadow:0 4px 14px rgba(99,102,241,0.4);
+  font-family:inherit;
 }
-.login-box button:hover {
-  background: linear-gradient(135deg, #4338ca, #6d28d9);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-}
-.login-error {
-  color: #ef4444;
-  font-size: 0.78rem;
-  margin-top: 14px;
-  display: none;
-  font-weight: 600;
-}
+.login-box button:hover { box-shadow:0 6px 20px rgba(99,102,241,0.6); }
+.login-error { color:#ef4444; font-size:0.76rem; margin-top:12px; display:none; font-weight:600; }
 
-::-webkit-scrollbar {
-  width: 5px;
-  background: transparent;
+/* ── CMD-K PALETTE ── */
+#palette-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px);
+  z-index:8888; display:none; align-items:flex-start; justify-content:center; padding-top:18vh;
 }
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+#palette-overlay.open { display:flex; }
+.palette-box {
+  background:rgba(12,20,42,0.98); border:1px solid rgba(99,102,241,0.3);
+  border-radius:16px; width:520px; overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,0.8);
+}
+.palette-title {
+  padding:18px 20px 10px; font-size:0.68rem; font-weight:700; color:#64748b;
+  text-transform:uppercase; letter-spacing:0.08em; border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.palette-item {
+  display:flex; align-items:center; gap:14px; padding:13px 20px;
+  cursor:pointer; transition:background 0.15s; font-size:0.83rem;
+}
+.palette-item:hover { background:rgba(99,102,241,0.1); }
+.palette-key {
+  font-family:'JetBrains Mono',monospace; font-size:0.68rem; font-weight:700;
+  padding:2px 8px; border-radius:5px; background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.12); color:#94a3b8; min-width:36px; text-align:center;
+}
+.palette-desc { color:#cbd5e1; }
+.palette-close { padding:10px 20px; text-align:right; border-top:1px solid rgba(255,255,255,0.06); }
+.palette-close span { font-size:0.7rem; color:#475569; cursor:pointer; }
+.palette-close span:hover { color:#94a3b8; }
+
+/* Scrollbars */
+::-webkit-scrollbar { width:4px; background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.07); border-radius:10px; }
+
+/* ── NODE DETAIL MODAL ── */
+#node-modal-backdrop {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.55); backdrop-filter:blur(8px);
+  z-index:5000; display:none; align-items:center; justify-content:center;
+}
+#node-modal-backdrop.open { display:flex; }
+.node-modal {
+  background:rgba(10,18,40,0.97);
+  border:1px solid rgba(99,102,241,0.35);
+  border-radius:20px; padding:28px 30px;
+  width:480px; max-height:75vh; overflow-y:auto;
+  box-shadow:0 24px 70px rgba(0,0,0,0.75);
+  animation: modalIn 0.22s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes modalIn { from{opacity:0;transform:scale(0.93) translateY(12px);} to{opacity:1;transform:scale(1) translateY(0);} }
+.nm-header {
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;
+}
+.nm-title { font-size:1rem; font-weight:800; color:#e2e8f0; display:flex; align-items:center; gap:8px; }
+.nm-badge {
+  font-size:0.6rem; font-weight:800; padding:2px 8px; border-radius:10px;
+  background:rgba(99,102,241,0.2); color:#818cf8;
+  border:1px solid rgba(99,102,241,0.3); text-transform:uppercase; letter-spacing:0.06em;
+}
+.nm-badge.new { background:rgba(16,185,129,0.15); color:#34d399; border-color:rgba(16,185,129,0.3); }
+.nm-close {
+  width:28px; height:28px; border-radius:8px; border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.05); color:#94a3b8; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:0.9rem;
+  transition:all 0.2s;
+}
+.nm-close:hover { background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.3); }
+.nm-desc { font-size:0.78rem; color:#64748b; margin-bottom:18px; line-height:1.6; }
+.nm-section { margin-bottom:16px; }
+.nm-section-title {
+  font-size:0.65rem; font-weight:800; color:#475569;
+  text-transform:uppercase; letter-spacing:0.09em; margin-bottom:8px;
+  display:flex; align-items:center; gap:5px;
+}
+.nm-stat-row {
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;
+}
+.nm-stat {
+  padding:6px 12px; border-radius:8px;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  font-size:0.73rem; color:#cbd5e1;
+}
+.nm-stat span { font-family:'JetBrains Mono',monospace; color:#a5b4fc; font-weight:700; }
+.nm-card {
+  padding:10px 14px; border-radius:10px;
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+  font-size:0.75rem; color:#e2e8f0; line-height:1.5;
+  margin-bottom:6px; font-family:'JetBrains Mono',monospace;
+  border-left:3px solid;
+}
+.nm-card.variant  { border-left-color:#6366f1; }
+.nm-card.subq     { border-left-color:#a78bfa; }
+.nm-card.check    { border-left-color:#10b981; }
+.nm-card.warning  { border-left-color:#f59e0b; }
+.nm-card.good     { border-left-color:#10b981; }
+.nm-card.bad      { border-left-color:#ef4444; }
+.nm-card.memory   { border-left-color:#22d3ee; }
+.nm-card.info     { border-left-color:#818cf8; }
+.nm-empty { font-size:0.75rem; color:#475569; font-style:italic; }
+.nm-lat {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:5px 12px; border-radius:8px;
+  background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25);
+  font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:#34d399; font-weight:700;
+  margin-bottom:14px;
 }
 </style>
 </head>
 <body>
 
+<!-- ── LOGIN OVERLAY ── -->
 <div id="login-overlay">
   <div class="login-box">
-    <h2>Access Console</h2>
-    <p>Please enter the security passkey</p>
-    <input type="password" id="pass-input" placeholder="••••" maxlength="4">
-    <button onclick="checkPass()">Unlock Console</button>
+    <div class="login-logo">🛡️</div>
+    <h2>HealthGuard Console</h2>
+    <p>Enter your developer passkey to proceed</p>
+    <input type="password" id="pass-input" placeholder="••••" maxlength="4" autocomplete="off">
+    <button onclick="checkPass()">Unlock Console ⚡</button>
     <div id="login-err" class="login-error">🔒 Invalid authorization code.</div>
   </div>
 </div>
 
+<!-- ── CMD-K PALETTE ── -->
+<div id="palette-overlay">
+  <div class="palette-box">
+    <div class="palette-title">⌨️ Command Palette</div>
+    <div class="palette-item" onclick="closePalette();run()"><span class="palette-key">R</span><span class="palette-desc">Run current query</span></div>
+    <div class="palette-item" onclick="closePalette();clearAll()"><span class="palette-key">C</span><span class="palette-desc">Clear logs & reset diagram</span></div>
+    <div class="palette-item" onclick="closePalette();toggleMemory()"><span class="palette-key">M</span><span class="palette-desc">Toggle memory inspector</span></div>
+    <div class="palette-item" onclick="closePalette();downloadTrace()"><span class="palette-key">E</span><span class="palette-desc">Export trace as JSON</span></div>
+    <div class="palette-item" onclick="closePalette();togglePresets()"><span class="palette-key">P</span><span class="palette-desc">Show preset queries</span></div>
+    <div class="palette-item" onclick="closePalette()"><span class="palette-key">Esc</span><span class="palette-desc">Close palette</span></div>
+    <div class="palette-close"><span onclick="closePalette()">Close ✕</span></div>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
 <div class="header">
   <div class="header-logo">🛡️ HealthGuard</div>
   <span class="header-badge">RAG DEV CONSOLE</span>
+  <span class="header-badge v2">v2.0</span>
+  <div class="health-strip">
+    <div class="hchip" id="hc-openai"><span class="dot"></span>OPENAI</div>
+    <div class="hchip" id="hc-vector"><span class="dot"></span>VECTOR DB</div>
+    <div class="hchip" id="hc-graph"><span class="dot"></span>GRAPH</div>
+    <div class="hchip" id="hc-sessions"><span class="dot"></span>SESSIONS: —</div>
+  </div>
   <span class="session-id" id="sid">—</span>
-  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+  <div class="header-actions">
+    <button class="hbtn kbd" onclick="openPalette()">⌘K</button>
+    <button class="hbtn" onclick="downloadTrace()">⬇ Trace</button>
+    <button class="hbtn" onclick="toggleMemory()">🧠 Memory</button>
+    <button class="hbtn" onclick="clearAll()">↺ Reset</button>
+  </div>
 </div>
 
+<!-- ── BODY ── -->
 <div class="body">
   <div class="left">
+
+    <!-- Query area -->
     <div class="query-area">
       <label>Run Pipeline Experiment</label>
       <textarea id="qinput" rows="3" placeholder="e.g. Compare Bronze and Gold plan copays for Metformin"></textarea>
+
+      <!-- Preset queries -->
+      <div class="presets">
+        <button class="presets-toggle" id="presets-toggle" onclick="togglePresets()">
+          📌 Load demo query <span id="preset-arrow">▾</span>
+        </button>
+        <div class="preset-list" id="preset-list">
+          <div class="preset-item" onclick="loadPreset(0)"><span class="preset-icon">⚖️</span>Compare Bronze and Gold plan copays for Metformin</div>
+          <div class="preset-item" onclick="loadPreset(1)"><span class="preset-icon">🔗</span>Is Metformin covered and do I need prior authorization for it?</div>
+          <div class="preset-item" onclick="loadPreset(2)"><span class="preset-icon">👨‍⚕️</span>Which cardiologists are in-network in Chicago?</div>
+          <div class="preset-item" onclick="loadPreset(3)"><span class="preset-icon">📋</span>What are the prior authorization requirements for MRI scans?</div>
+          <div class="preset-item" onclick="loadPreset(4)"><span class="preset-icon">🏥</span>What preventive care is covered at no cost on the Silver plan?</div>
+          <div class="preset-item" onclick="loadPreset(5)"><span class="preset-icon">💊</span>What is the out-of-pocket maximum on the Gold plan and which diabetes drugs are covered?</div>
+        </div>
+      </div>
+
       <button class="run-btn" id="runbtn" onclick="run()">🚀 Execute Live Trace</button>
     </div>
-    <div class="intent-display" id="intent-display">
-      <label>Extracted Intent</label>
+
+    <!-- Intent + Confidence row -->
+    <div class="meta-row" id="meta-row">
+      <span class="intent-label">Intent</span>
       <div class="intent-pill" id="intent-pill">—</div>
+      <span class="conf-label" style="margin-left:8px">Confidence</span>
+      <div class="conf-badge" id="conf-badge">—</div>
     </div>
+
+    <!-- Memory inspector -->
+    <div class="memory-panel" id="memory-panel">
+      <div class="mem-header">
+        <span class="mem-label">🧠 Session Memory (Mem0)</span>
+        <div class="mem-actions">
+          <button class="mem-btn mem-refresh" onclick="loadMemory()">↻ Refresh</button>
+          <button class="mem-btn mem-wipe" onclick="wipeMemory()">🗑 Wipe</button>
+        </div>
+      </div>
+      <div class="mem-facts" id="mem-facts"><span class="mem-empty">No facts stored yet.</span></div>
+    </div>
+
+    <!-- Log area -->
     <div class="log-area">
-      <label>⚡ System Event Stream</label>
+      <div class="log-header">
+        <label>⚡ System Event Stream</label>
+        <div class="log-controls">
+          <input class="log-search" id="log-search" placeholder="filter…" oninput="filterLogs()">
+          <button class="filter-btn ALL active" id="fb-ALL"      onclick="setFilter('ALL')">ALL</button>
+          <button class="filter-btn CLASSIFY"   id="fb-CLASSIFY" onclick="setFilter('CLASSIFY')">CLS</button>
+          <button class="filter-btn RETRIEVE"   id="fb-RETRIEVE" onclick="setFilter('RETRIEVE')">RET</button>
+          <button class="filter-btn SYNTH"      id="fb-SYNTH"    onclick="setFilter('SYNTH')">SYN</button>
+          <button class="filter-btn ERROR"      id="fb-ERROR"    onclick="setFilter('ERROR')">ERR</button>
+        </div>
+      </div>
       <div class="log-list-wrapper">
         <div id="loglist"></div>
       </div>
     </div>
+
+    <!-- Answer card -->
     <div class="answer-card" id="answer-card">
-      <div class="ans-label">✨ Pipeline Response</div>
+      <div class="answer-header">
+        <div class="ans-label">✨ Pipeline Response</div>
+        <button class="copy-btn" onclick="copyAnswer()">📋 Copy</button>
+      </div>
       <div class="ans-text" id="answer-text"></div>
     </div>
-  </div>
+
+  </div><!-- /left -->
+
   <div class="right">
-    <div class="diagram-label">📊 Interactive Orchestrator Workflow</div>
+    <div class="diagram-label">
+      📊 Interactive Orchestrator Workflow
+      <div class="diagram-actions">
+        <button class="diag-btn" onclick="resetZoom()">⊞ Fit</button>
+        <button class="diag-btn" id="toggle-new" onclick="toggleNewNodes()">✦ New Nodes</button>
+      </div>
+    </div>
     <div id="svg-wrap"><svg id="diagram"></svg></div>
   </div>
-</div>
+</div><!-- /body -->
 
 <div id="tooltip"></div>
+
+<!-- ── NODE DETAIL MODAL ── -->
+<div id="node-modal-backdrop" onclick="closeNodeModal(event)">
+  <div class="node-modal" id="node-modal">
+    <div class="nm-header">
+      <div class="nm-title" id="nm-title">🧠 Node Name</div>
+      <button class="nm-close" onclick="closeNodeModal()">&#x2715;</button>
+    </div>
+    <div id="nm-lat"></div>
+    <div class="nm-desc" id="nm-desc"></div>
+    <div id="nm-body"></div>
+  </div>
+</div>
 <div class="status">
   <div class="dot" id="sdot"></div>
   <span id="stxt">Ready — Enter parameters to begin orchestrating trace events.</span>
+  <span class="elapsed" id="elapsed"></span>
 </div>
 
 <script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
 const API = '';
 let SID = localStorage.getItem('rag_sid') || crypto.randomUUID();
 localStorage.setItem('rag_sid', SID);
-document.getElementById('sid').textContent = 'Session ID: ' + SID.slice(0,8) + '…';
+document.getElementById('sid').textContent = 'SID: ' + SID.slice(0,8) + '…';
 
-// ── Authentication ──
-if(sessionStorage.getItem('dev_auth') === 'true') {
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+if (sessionStorage.getItem('dev_auth') === 'true') {
   document.getElementById('login-overlay').style.display = 'none';
 }
 function checkPass() {
   const p = document.getElementById('pass-input').value;
-  if(p === '2002') {
+  if (p === '2002') {
     sessionStorage.setItem('dev_auth', 'true');
-    document.getElementById('login-overlay').style.opacity = '0';
-    setTimeout(() => {
-      document.getElementById('login-overlay').style.display = 'none';
-    }, 300);
+    const ov = document.getElementById('login-overlay');
+    ov.style.opacity = '0';
+    setTimeout(() => ov.style.display = 'none', 300);
+    startHealthPolling();
   } else {
     document.getElementById('login-err').style.display = 'block';
     document.getElementById('pass-input').value = '';
   }
 }
+document.getElementById('pass-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPass(); });
 
-function toggleTheme() {
-  const body = document.body;
-  if(body.classList.contains('dark-mode')) {
-    body.classList.remove('dark-mode');
-    body.classList.add('light-mode');
-  } else {
-    body.classList.remove('light-mode');
-    body.classList.add('dark-mode');
+// ── PRESET QUERIES ───────────────────────────────────────────────────────────
+const PRESETS = [
+  'Compare Bronze and Gold plan copays for Metformin',
+  'Is Metformin covered and do I need prior authorization for it?',
+  'Which cardiologists are in-network in Chicago?',
+  'What are the prior authorization requirements for MRI scans?',
+  'What preventive care is covered at no cost on the Silver plan?',
+  'What is the out-of-pocket maximum on the Gold plan and which diabetes drugs are covered?',
+];
+function loadPreset(i) {
+  document.getElementById('qinput').value = PRESETS[i];
+  document.getElementById('preset-list').classList.remove('open');
+  document.getElementById('preset-arrow').textContent = '▾';
+  document.getElementById('qinput').focus();
+}
+function togglePresets() {
+  const list  = document.getElementById('preset-list');
+  const arrow = document.getElementById('preset-arrow');
+  const open  = list.classList.toggle('open');
+  arrow.textContent = open ? '▴' : '▾';
+}
+
+// ── CMD-K PALETTE ────────────────────────────────────────────────────────────
+function openPalette()  { document.getElementById('palette-overlay').classList.add('open'); }
+function closePalette() { document.getElementById('palette-overlay').classList.remove('open'); }
+
+// ── HEALTH POLLING ────────────────────────────────────────────────────────────
+function startHealthPolling() {
+  pollHealth();
+  setInterval(pollHealth, 12000);
+}
+async function pollHealth() {
+  try {
+    const res  = await fetch(`${API}/health`);
+    const data = await res.json();
+    const comp = data.components || {};
+    setChip('hc-openai',   comp.openai_api   === 'ok');
+    setChip('hc-vector',   comp.vector_store  === 'ok');
+    setChip('hc-graph',    comp.knowledge_graph=== 'ok');
+    const sc = document.getElementById('hc-sessions');
+    sc.querySelector('.dot').className = 'dot';
+    sc.className = 'hchip';
+    sc.innerHTML = `<span class="dot"></span>SESSIONS: ${data.active_sessions || 0}`;
+  } catch(_) { /* offline */ }
+}
+function setChip(id, ok) {
+  const el = document.getElementById(id);
+  el.className = 'hchip ' + (ok ? 'ok' : 'err');
+}
+if (sessionStorage.getItem('dev_auth') === 'true') startHealthPolling();
+
+// ── MEMORY INSPECTOR ──────────────────────────────────────────────────────────
+function toggleMemory() {
+  const panel = document.getElementById('memory-panel');
+  const isOpen = panel.classList.toggle('open');
+  if (isOpen) loadMemory();
+}
+async function loadMemory() {
+  const factsEl = document.getElementById('mem-facts');
+  factsEl.innerHTML = '<span class="mem-empty">Loading…</span>';
+  try {
+    const res  = await fetch(`${API}/memory/${SID}`);
+    const data = await res.json();
+    if (!data.facts || data.facts.length === 0) {
+      factsEl.innerHTML = '<span class="mem-empty">No facts stored yet for this session.</span>';
+      return;
+    }
+    factsEl.innerHTML = data.facts.map(f =>
+      `<div class="mem-fact">${escHtml(f.memory)}</div>`
+    ).join('');
+  } catch(e) {
+    factsEl.innerHTML = '<span class="mem-empty">Could not load memory (backend offline?).</span>';
   }
 }
-document.getElementById('pass-input').addEventListener('keydown', e => { if(e.key === 'Enter') checkPass(); });
+async function wipeMemory() {
+  if (!confirm('Wipe all Mem0 facts for this session?')) return;
+  await fetch(`${API}/memory/${SID}`, { method: 'DELETE' });
+  loadMemory();
+  addLog('🗑️', 'SYSTEM', 'tag-system', 'Session memory wiped');
+}
 
-let multiQueryVariants = [];
-const tt = document.getElementById('tooltip');
+// ── LOG FILTER ────────────────────────────────────────────────────────────────
+let activeFilter = 'ALL';
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('fb-' + (f === 'SYNTH' ? 'SYNTH' : f)).classList.add('active');
+  filterLogs();
+}
+function filterLogs() {
+  const search = document.getElementById('log-search').value.toLowerCase();
+  document.querySelectorAll('.log-entry').forEach(el => {
+    const text = el.textContent.toLowerCase();
+    const tag  = el.dataset.tag || 'SYSTEM';
+    const matchFilter = (activeFilter === 'ALL') ||
+      (activeFilter === 'CLASSIFY' && (tag.includes('CLASSIFY') || tag.includes('GUARD') || tag.includes('DECOMP'))) ||
+      (activeFilter === 'RETRIEVE' && tag.includes('RETRIEVE')) ||
+      (activeFilter === 'SYNTH'   && (tag.includes('SYNTH') || tag.includes('CRITIQUE') || tag.includes('CONFIDENCE'))) ||
+      (activeFilter === 'ERROR'   && tag.includes('ERROR'));
+    const matchSearch = !search || text.includes(search);
+    el.classList.toggle('hidden', !(matchFilter && matchSearch));
+  });
+}
 
-// ──────────────────────────────────────────────
-// GRAPH LAYOUT & D3 VARIABLES
-// ──────────────────────────────────────────────
-const NW = 170, NH = 56;
+// ── COPY ANSWER ───────────────────────────────────────────────────────────────
+function copyAnswer() {
+  const text = document.getElementById('answer-text').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy', 1800);
+  });
+}
+
+// ── DOWNLOAD TRACE ────────────────────────────────────────────────────────────
+let traceStore = [];
+function downloadTrace() {
+  if (!traceStore.length) { alert('Run a query first to generate a trace.'); return; }
+  const blob = new Blob([JSON.stringify(traceStore, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `rag_trace_${Date.now()}.json`;
+  a.click();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── D3 DIAGRAM ────────────────────────────────────────────────────────────────
+const NW = 172, NH = 60;
+const VW = 1500, VH = 760;
 
 const NODES = [
-  {id:'user',        icon:'👤', title:'User Query',          sub:'pipeline entry',           x:20,   y:30},
-  {id:'fastapi',     icon:'⚡', title:'FastAPI Host',        sub:'/chat/stream',             x:220,  y:30},
-  {id:'orchestrator',icon:'🧠', title:'Orchestrator',        sub:'LangGraph core',           x:420,  y:30},
-  {id:'mem_search',  icon:'🧠', title:'Memory Search',       sub:'Mem0 retrieval',           x:620,  y:30},
-  {id:'intent_node', icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini classify',     x:820,  y:30},
-
-  {id:'langsmith',   icon:'📡', title:'LangSmith Tracing',   sub:'Observability & traces',   x:420,  y:632},
-
-  {id:'retrieve_agent', icon:'📂', title:'Retrieval Agent',  sub:'Task distributor',         x:820,  y:116},
-  {id:'multiquery',     icon:'🔮', title:'Multi-Query',      sub:'Query variation model',    x:220,  y:202},
-
-  {id:'graphdb',     icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:20,   y:374},
-  {id:'vectordb',    icon:'🗃️', title:'Vector Store',        sub:'ChromaDB cosine sim',      x:220,  y:374},
-  {id:'bm25',        icon:'🔤', title:'BM25 Search',          sub:'Sparse lex search',        x:420,  y:374},
-  {id:'priorauth',   icon:'📋', title:'Prior Auth Rules',    sub:'Policy lookups',           x:620,  y:202},
-  {id:'bronze',      icon:'🥉', title:'Bronze Tier',         sub:'Benefit parameters',       x:820,  y:202},
-  {id:'silver',      icon:'🥈', title:'Silver Tier',         sub:'Benefit parameters',       x:820,  y:288},
-  {id:'gold',        icon:'🥇', title:'Gold Tier',           sub:'Benefit parameters',       x:820,  y:374},
-
-  {id:'ensemble',    icon:'🤝', title:'Ensemble Fusion',     sub:'Rank weight fusion',       x:420,  y:460},
-  {id:'reranker',    icon:'⚖️', title:'BGE Reranker',         sub:'Cross-Encoder model',      x:220,  y:546},
-  {id:'merger',      icon:'🔀', title:'Context Merger',       sub:'Clean & deduplicate',      x:620,  y:546},
-
-  {id:'synthesis',   icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o generator',         x:620,  y:632},
-  {id:'mem_add',     icon:'💾', title:'Memory Commit',       sub:'Mem0 fact extractor',      x:820,  y:632},
-  {id:'answer',      icon:'💬', title:'Response Output',     sub:'Client socket stream',     x:1020, y:632},
+  // ── Main pipeline top row ──
+  {id:'user',            icon:'👤', title:'User Query',         sub:'pipeline entry',           x:20,   y:30},
+  {id:'fastapi',         icon:'⚡', title:'FastAPI Host',        sub:'/chat/stream',             x:200,  y:30},
+  {id:'orchestrator',    icon:'🧠', title:'Orchestrator',        sub:'LangGraph core',           x:380,  y:30},
+  {id:'query_guard',     icon:'🛡️', title:'Query Guard',         sub:'PII & safety check',       x:560,  y:30},   // NEW
+  {id:'mem_search',      icon:'💭', title:'Memory Search',       sub:'Mem0 retrieval',           x:740,  y:30},
+  {id:'intent_node',     icon:'🔍', title:'Intent Classifier',   sub:'GPT-4o-mini classify',     x:920,  y:30},
+  // ── Sub-pipeline ──
+  {id:'langsmith',       icon:'📡', title:'LangSmith Tracing',   sub:'Observability & traces',   x:200,  y:670},
+  {id:'query_decomposer',icon:'✂️', title:'Query Decomposer',    sub:'MULTI_HOP splitter',       x:920,  y:130},  // NEW
+  {id:'retrieve_agent',  icon:'📂', title:'Retrieval Agent',     sub:'Task distributor',         x:1100, y:225},
+  // ── Retrieval internals ──
+  {id:'multiquery',      icon:'🔮', title:'Multi-Query',         sub:'Query variation model',    x:200,  y:225},
+  {id:'graphdb',         icon:'🕸️', title:'Knowledge Graph',     sub:'NetworkX entity lookup',   x:20,   y:390},
+  {id:'vectordb',        icon:'🗃️', title:'Vector Store',        sub:'ChromaDB cosine sim',      x:200,  y:390},
+  {id:'bm25',            icon:'🔤', title:'BM25 Search',         sub:'Sparse lex search',        x:380,  y:390},
+  {id:'priorauth',       icon:'📋', title:'Prior Auth Rules',    sub:'Policy lookups',           x:560,  y:225},
+  {id:'bronze',          icon:'🥉', title:'Bronze Tier',         sub:'Benefit parameters',       x:1100, y:315},
+  {id:'silver',          icon:'🥈', title:'Silver Tier',         sub:'Benefit parameters',       x:1100, y:405},
+  {id:'gold',            icon:'🥇', title:'Gold Tier',           sub:'Benefit parameters',       x:1100, y:495},
+  {id:'ensemble',        icon:'🤝', title:'Ensemble Fusion',     sub:'Rank weight fusion',       x:380,  y:475},
+  {id:'reranker',        icon:'⚖️', title:'BGE Reranker',        sub:'Cross-Encoder model',      x:200,  y:558},
+  {id:'context_check',   icon:'🔬', title:'Context Quality',     sub:'Relevance validator',      x:380,  y:558},  // NEW
+  {id:'merger',          icon:'🔀', title:'Context Merger',      sub:'Clean & deduplicate',      x:560,  y:558},
+  // ── Output section ──
+  {id:'synthesis',       icon:'✍️', title:'Synthesis Agent',     sub:'GPT-4o generator',         x:560,  y:670},
+  {id:'self_critique',   icon:'🔄', title:'Self-Critique',       sub:'Answer reflection',        x:740,  y:670},  // NEW
+  {id:'confidence',      icon:'📊', title:'Confidence Scorer',   sub:'HIGH/MED/LOW rating',      x:920,  y:670},  // NEW
+  {id:'mem_add',         icon:'💾', title:'Memory Commit',       sub:'Mem0 fact extractor',      x:1100, y:670},
+  {id:'answer',          icon:'💬', title:'Response Output',     sub:'Client socket stream',     x:1300, y:670},
+  {id:'redis',           icon:'🔴', title:'Redis Cache',         sub:'Semantic Vector Cache',    x:290,  y:150},
 ];
 
 const INTENT_PILLS = [
-  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:1020, y:30,  w:140, h:24},
-  {id:'i_policy',     label:'POLICY_QUESTION', x:1020, y:60,  w:140, h:24},
-  {id:'i_multihop',   label:'MULTI_HOP',       x:1020, y:90,  w:140, h:24},
-  {id:'i_comparison', label:'COMPARISON',      x:1020, y:120, w:140, h:24},
+  {id:'i_simple',     label:'SIMPLE_LOOKUP',   x:1120, y:30,  w:148, h:22},
+  {id:'i_policy',     label:'POLICY_QUESTION', x:1120, y:58,  w:148, h:22},
+  {id:'i_multihop',   label:'MULTI_HOP',       x:1120, y:86,  w:148, h:22},
+  {id:'i_comparison', label:'COMPARISON',      x:1120, y:114, w:148, h:22},
 ];
 
 const EDGES = [
-  ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','mem_search'],['mem_search','intent_node'],
+  ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','query_guard'],
+  ['query_guard','mem_search'],['mem_search','intent_node'],
   ['orchestrator','langsmith'],
-  ['intent_node','retrieve_agent'],
+  ['intent_node','query_decomposer'],['query_decomposer','retrieve_agent'],
   ['retrieve_agent','multiquery'],
   ['multiquery','graphdb'],['multiquery','vectordb'],['multiquery','bm25'],
   ['retrieve_agent','priorauth'],
@@ -779,65 +917,104 @@ const EDGES = [
   ['vectordb','ensemble'],['bm25','ensemble'],
   ['graphdb','reranker'],['ensemble','reranker'],
   ['priorauth','merger'],['bronze','merger'],['silver','merger'],['gold','merger'],
-  ['reranker','merger'],
-  ['merger','synthesis'],['synthesis','langsmith'],['synthesis','mem_add'],['mem_add','answer'],
+  ['reranker','context_check'],['context_check','merger'],
+  ['merger','synthesis'],['synthesis','langsmith'],
+  ['synthesis','self_critique'],
+  ['self_critique','confidence'],['confidence','mem_add'],['mem_add','answer'],
+  ['fastapi','redis'],['redis','answer'],
 ];
 
+// Self-critique retry edge (back to retrieve — special styling)
+const RETRY_EDGES = [['self_critique','retrieve_agent']];
+
 const STEP_MAP = [
-  // ── Intent patterns from orchestrator steps_log ──
-  {pat:/SIMPLE_LOOKUP/i,              nodes:['graphdb','vectordb','bm25','ensemble','multiquery']},
-  {pat:/POLICY_QUESTION/i,            nodes:['vectordb','bm25','ensemble','multiquery']},
-  {pat:/MULTI_HOP.*Graph.*Policy.*Prior/i, nodes:['graphdb','vectordb','bm25','ensemble','multiquery','priorauth']},
-  {pat:/MULTI_HOP/i,                  nodes:['graphdb','vectordb','bm25','ensemble','multiquery','priorauth']},
-  {pat:/COMPARISON/i,                 nodes:['bronze','silver','gold','vectordb','bm25','ensemble','multiquery']},
-  // ── Per-tier retrieval patterns (from COMPARISON) ──
-  {pat:/Bronze Tier/i,                nodes:['bronze']},
-  {pat:/Silver Tier/i,                nodes:['silver']},
-  {pat:/Gold Tier/i,                  nodes:['gold']},
-  // ── Individual retrieval component patterns ──
-  {pat:/Graph entity lookup/i,        nodes:['graphdb','vectordb','bm25','ensemble']},
-  {pat:/Hybrid document retrieval/i,  nodes:['vectordb','bm25','ensemble']},
-  {pat:/Hybrid policy retrieval/i,    nodes:['vectordb','bm25','ensemble']},
-  {pat:/Multi-Query Variant/i,        nodes:['multiquery','vectordb','bm25','ensemble','graphdb']},
-  {pat:/Multi-Query/i,                nodes:['multiquery']},
-  {pat:/Prior.?auth/i,                nodes:['priorauth']},
-  {pat:/Bronze/i,                     nodes:['bronze']},
-  {pat:/Silver/i,                     nodes:['silver']},
-  {pat:/Gold/i,                       nodes:['gold']},
-  {pat:/Intent classified/i,          nodes:['intent_node']},
-  {pat:/Retrieved \d+/i,              nodes:['reranker','merger']},
-  {pat:/Answer synthesized/i,         nodes:['synthesis','langsmith']},
-  {pat:/LangSmith|langsmith|trace/i,  nodes:['langsmith']},
-  {pat:/Mem0 stored|Mem0: no new/i,   nodes:['mem_add']},
+  // ── Cache nodes ──
+  {pat:/Semantic Cache/i,                                    nodes:['redis']},
+  {pat:/Cache HIT/i,                                         nodes:['redis']},
+  // ── New nodes ──
+  {pat:/Guard.*validated|Guard.*passed|Guard.*checks/i,      nodes:['query_guard']},
+  {pat:/Guard BLOCKED.*PII|PII detected/i,                   nodes:['query_guard']},
+  {pat:/Guard BLOCKED/i,                                     nodes:['query_guard']},
+  {pat:/Decomposer.*split|sub-question/i,                    nodes:['query_decomposer']},
+  {pat:/Decomposer.*skipped/i,                               nodes:['query_decomposer']},
+  {pat:/Context Quality.*section|Context Quality.*sufficient/i, nodes:['context_check','merger']},
+  {pat:/Context Quality.*insufficient/i,                     nodes:['context_check']},
+  {pat:/Self-Critique.*GOOD|Self-Critique.*verified/i,       nodes:['self_critique']},
+  {pat:/Self-Critique.*retry|Retry.*retrieval/i,             nodes:['self_critique','retrieve_agent']},
+  {pat:/Confidence: HIGH/i,                                  nodes:['confidence']},
+  {pat:/Confidence: MEDIUM/i,                                nodes:['confidence']},
+  {pat:/Confidence: LOW/i,                                   nodes:['confidence']},
+  // ── Existing patterns ──
+  {pat:/SIMPLE_LOOKUP/i,             nodes:['graphdb','vectordb','bm25','ensemble','multiquery']},
+  {pat:/POLICY_QUESTION/i,           nodes:['vectordb','bm25','ensemble','multiquery']},
+  {pat:/MULTI_HOP.*Graph.*Policy/i,  nodes:['graphdb','vectordb','bm25','ensemble','multiquery','priorauth']},
+  {pat:/MULTI_HOP/i,                 nodes:['graphdb','vectordb','bm25','ensemble','multiquery','priorauth']},
+  {pat:/COMPARISON/i,                nodes:['bronze','silver','gold','vectordb','bm25','ensemble','multiquery']},
+  {pat:/Bronze Tier/i,               nodes:['bronze']},
+  {pat:/Silver Tier/i,               nodes:['silver']},
+  {pat:/Gold Tier/i,                 nodes:['gold']},
+  {pat:/Graph entity lookup/i,       nodes:['graphdb','vectordb','bm25','ensemble']},
+  {pat:/Hybrid document retrieval/i, nodes:['vectordb','bm25','ensemble']},
+  {pat:/Hybrid policy retrieval/i,   nodes:['vectordb','bm25','ensemble']},
+  {pat:/Multi-Query Variant/i,       nodes:['multiquery','vectordb','bm25','ensemble','graphdb']},
+  {pat:/Multi-Query/i,               nodes:['multiquery']},
+  {pat:/Prior.?auth/i,               nodes:['priorauth']},
+  {pat:/SBC_BRONZE|Bronze SBC|Bronze Tier benefits|Bronze deductible|Bronze copay/i, nodes:['bronze']},
+  {pat:/SBC_SILVER|Silver SBC|Silver Tier benefits|Silver deductible|Silver copay/i, nodes:['silver']},
+  {pat:/SBC_GOLD|Gold SBC|Gold Tier benefits|Gold deductible|Gold copay/i,     nodes:['gold']},
+  {pat:/Intent classified/i,         nodes:['intent_node']},
+  {pat:/Retrieved \d+/i,             nodes:['reranker','merger']},
+  {pat:/Answer synthesized/i,        nodes:['synthesis','langsmith']},
+  {pat:/LangSmith|langsmith|trace/i, nodes:['langsmith']},
+  {pat:/Mem0 stored|Mem0: no new/i,  nodes:['mem_add']},
   {pat:/Searching Mem0|Mem0 recalled|Mem0: no relevant/i, nodes:['mem_search']},
 ];
 
 const LG_START = {
-  memory_search:   ['mem_search'],
-  classify_intent: ['intent_node'],
-  retrieve:        ['retrieve_agent'],
-  synthesize:      ['synthesis'],
-  memory_add:      ['mem_add'],
+  semantic_cache:       ['redis'],
+  query_guard:          ['query_guard'],
+  memory_search:        ['mem_search'],
+  classify_intent:      ['intent_node'],
+  query_decomposer:     ['query_decomposer'],
+  retrieve:             ['retrieve_agent'],
+  context_quality_check:['context_check'],
+  synthesize:           ['synthesis'],
+  self_critique:        ['self_critique'],
+  confidence_scorer:    ['confidence'],
+  memory_add:           ['mem_add'],
 };
 
-// ── BUILD D3 INTERACTIVE SVG ──
+// ── Build SVG ─────────────────────────────────────────────────
 const svg = d3.select('#diagram');
-const VW = 1250, VH = 720;
 svg.attr('viewBox', `0 0 ${VW} ${VH}`);
+const zoomG = svg.append('g');
 
+// Zoom behavior
+const zoomBehavior = d3.zoom().scaleExtent([0.3, 2.5]).on('zoom', e => {
+  zoomG.attr('transform', e.transform);
+});
+svg.call(zoomBehavior);
+function resetZoom() {
+  svg.transition().duration(500).call(zoomBehavior.transform, d3.zoomIdentity.scale(0.72).translate(10, 10));
+}
+setTimeout(resetZoom, 100);
+
+// Arrow marker
 svg.append('defs').append('marker')
   .attr('id','arr').attr('viewBox','0 -6 12 12')
   .attr('refX',12).attr('refY',0).attr('markerWidth',7).attr('markerHeight',7)
   .attr('orient','auto')
-  .append('path').attr('d','M0,-5L10,0L0,5').attr('fill','rgba(148,163,184,0.3)');
+  .append('path').attr('d','M0,-5L10,0L0,5').attr('fill','rgba(148,163,184,0.25)');
 
 const cx = n => n.x + NW/2;
 const cy = n => n.y + NH/2;
-const nm = {}; NODES.forEach(n=>nm[n.id]=n);
+const nm = {}; NODES.forEach(n => nm[n.id] = n);
 
-const edgeG = svg.append('g');
+// Edges
+const edgeG = zoomG.append('g');
 const edgeSel = {};
-EDGES.forEach(([f,t],i)=>{
+
+EDGES.forEach(([f,t], i) => {
   const fn=nm[f], tn=nm[t]; if(!fn||!tn) return;
   const x1=cx(fn), y1=cy(fn), x2=cx(tn), y2=cy(tn);
   const mx=(x1+x2)/2;
@@ -845,260 +1022,1077 @@ EDGES.forEach(([f,t],i)=>{
     .attr('id',`e${i}`).attr('class','edge')
     .attr('d',`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`)
     .attr('marker-end','url(#arr)');
-  edgeSel[`${f}→${t}`]=p;
+  edgeSel[`${f}→${t}`] = p;
 });
 
-const pillG = svg.append('g');
-const pillSel={};
-INTENT_PILLS.forEach(p=>{
-  const g=pillG.append('g').attr('id',`pill-${p.id}`);
+// Retry edges (dashed amber)
+RETRY_EDGES.forEach(([f,t]) => {
+  const fn=nm[f], tn=nm[t]; if(!fn||!tn) return;
+  const x1=cx(fn), y1=cy(fn), x2=cx(tn), y2=cy(tn);
+  const p = edgeG.append('path')
+    .attr('class','edge retry-edge')
+    .attr('d',`M${x1},${y1} C${x1},${y1+80} ${x2},${y2-80} ${x2},${y2}`)
+    .attr('marker-end','url(#arr)');
+  edgeSel[`${f}→${t}_retry`] = p;
+});
+
+// Intent pills
+const pillG = zoomG.append('g');
+const pillSel = {};
+INTENT_PILLS.forEach(p => {
+  const g = pillG.append('g').attr('id',`pill-${p.id}`);
   g.append('rect').attr('x',p.x).attr('y',p.y).attr('width',p.w).attr('height',p.h)
    .attr('class','intent-tag inactive-intent');
   g.append('text').attr('x',p.x+p.w/2).attr('y',p.y+p.h/2+4)
    .attr('text-anchor','middle').attr('fill','#475569')
-   .attr('font-family','\'Plus Jakarta Sans\',sans-serif').attr('font-size',10).attr('font-weight',700)
+   .attr('font-family',"'Plus Jakarta Sans',sans-serif").attr('font-size',9).attr('font-weight',700)
    .text(p.label);
-  pillSel[p.id]=g;
+  pillSel[p.id] = g;
 });
 
-const nodeG = svg.append('g');
+// Nodes
+const nodeG = zoomG.append('g');
 const nodeSel = {};
-NODES.forEach(n=>{
-  const g=nodeG.append('g').attr('id',`nd-${n.id}`).attr('class','n idle');
+const nodeTimers = {};       // track start times per node
+const nodeLatencies = {};    // completed latencies
+
+const tt = document.getElementById('tooltip');
+
+// Node descriptions for tooltip
+const NODE_DESC = {
+  query_guard:     'NEW — Validates incoming queries. Detects PII (SSN, DOB), off-topic requests, and sanitizes input before the pipeline starts.',
+  mem_search:      'Searches Mem0 in-memory vector store for facts from previous turns in this session.',
+  intent_node:     'Uses GPT-4o-mini to classify the query into: SIMPLE_LOOKUP, POLICY_QUESTION, MULTI_HOP, or COMPARISON.',
+  query_decomposer:'NEW — For MULTI_HOP queries, decomposes the question into atomic sub-questions for targeted per-hop retrieval.',
+  retrieve_agent:  'Routes retrieval tasks based on intent. Dispatches to Graph, Hybrid, Prior-Auth, or Tier-specific tools in parallel.',
+  multiquery:      'Generates 3 query rephrases via GPT-4o-mini to improve document recall before vector search.',
+  graphdb:         'Queries the NetworkX knowledge graph for structured entity facts (providers, drugs, specialties).',
+  vectordb:        'ChromaDB cosine similarity search across all ingested policy documents using text-embedding-3-small.',
+  bm25:            'BM25 sparse lexical retrieval — excellent for exact term matches and plan-specific terminology.',
+  priorauth:       'Specialized search targeting prior authorization documents using PA keyword filtering.',
+  ensemble:        'Weighted fusion of BM25 (40%) and Vector (60%) results using Reciprocal Rank Fusion.',
+  reranker:        'BGE cross-encoder reranker scores (query, chunk) pairs and filters to top-N by relevance.',
+  context_check:   'NEW — Validates retrieved context before synthesis. Skips GPT-4o if context is empty to prevent hallucination.',
+  merger:          'Deduplicates and formats all retrieved context sections into a structured prompt payload.',
+  synthesis:       'GPT-4o generates a cited, safety-compliant answer from the merged context.',
+  self_critique:   'NEW — Self-RAG reflection: GPT-4o-mini evaluates answer quality. Triggers a single retry if answer is vague.',
+  confidence:      'NEW — Heuristic confidence scorer: counts citations, checks context richness, penalizes hedging language.',
+  langsmith:       'LangSmith observability: records full traces with latency, token usage, and intermediate states.',
+  mem_add:         'Mem0 fact extractor: persists key Q&A facts to session memory for future context personalization.',
+  answer:          'Final answer streamed back to the client via Server-Sent Events (SSE).',
+  redis:           'Cognitive Semantic Vector Cache: checks incoming queries against previously answered queries using GPT-4o-mini normalization and vector embeddings to bypass the orchestrator and LLM on cache hits.',
+};
+
+NODES.forEach(n => {
+  const g = nodeG.append('g').attr('id',`nd-${n.id}`).attr('class','n idle');
   g.append('rect').attr('x',n.x).attr('y',n.y).attr('width',NW).attr('height',NH);
   g.append('circle').attr('cx',n.x+NW/2).attr('cy',n.y+NH/2).attr('class','pulse');
-  g.append('text').attr('class','icon').attr('x',n.x+12).attr('y',n.y+NH/2+5).text(n.icon);
-  g.append('text').attr('class','title').attr('x',n.x+36).attr('y',n.y+NH/2-5).text(n.title);
-  g.append('text').attr('class','sub').attr('x',n.x+36).attr('y',n.y+NH/2+10).text(n.sub);
-  nodeSel[n.id]=g;
+  g.append('text').attr('class','icon').attr('x',n.x+10).attr('y',n.y+NH/2+5).text(n.icon);
+  g.append('text').attr('class','title').attr('x',n.x+30).attr('y',n.y+NH/2-5).text(n.title);
+  g.append('text').attr('class','sub').attr('x',n.x+30).attr('y',n.y+NH/2+9).text(n.sub);
+  // Latency badge placeholder (will be filled on node_done)
+  g.append('text').attr('class','lat-badge').attr('id',`lat-${n.id}`)
+   .attr('x',n.x+NW-5).attr('y',n.y+12).attr('text-anchor','end').attr('fill','#10b981').text('');
+  nodeSel[n.id] = g;
 
-  if(n.id==='multiquery'){
-    g.style('cursor','help');
-    g.on('mouseover', (e)=>{
-      if(multiQueryVariants.length===0) return;
-      tt.style.display='block';
-      const unique = [...new Set(multiQueryVariants)];
-      tt.innerHTML = `<b>Generated Multi-Query Variants</b>` + 
-        unique.map(v => `<div>${v}</div>`).join('');
-      tt.style.left = (e.pageX + 15) + 'px';
-      tt.style.top = (e.pageY + 15) + 'px';
-    })
-    .on('mousemove', (e)=>{
-      tt.style.left = (e.pageX + 15) + 'px';
-      tt.style.top = (e.pageY + 15) + 'px';
-    })
-    .on('mouseout', ()=> tt.style.display='none');
-  }
+  // Quick tooltip on hover
+  g.style('cursor','pointer');
+  g.on('mouseover', (e) => {
+    const lat = nodeLatencies[n.id] ? `${nodeLatencies[n.id]}ms` : null;
+    tt.style.display = 'block';
+    tt.innerHTML = `<b>${n.icon} ${n.title}</b>
+      ${lat ? `<div class="lat-info">⏱ Latency: ${lat}</div>` : ''}
+      <div>${NODE_DESC[n.id] || n.sub}</div>
+      <div style="font-size:0.63rem;color:#475569;margin-top:6px">🖱 Click for runtime details</div>`;
+    tt.style.left = (e.pageX + 14) + 'px';
+    tt.style.top  = (e.pageY + 14) + 'px';
+  })
+  .on('mousemove', (e) => {
+    tt.style.left = (e.pageX + 14) + 'px';
+    tt.style.top  = (e.pageY + 14) + 'px';
+  })
+  .on('mouseout', () => tt.style.display = 'none')
+  .on('click', () => { tt.style.display = 'none'; openNodeModal(n.id, n.icon, n.title); });
 });
 
-// ── ORCHESTRATION EVENT RUNNERS ──
-function setNode(id, state){
-  const g=nodeSel[id]; if(!g) return;
-  g.attr('class',`n ${state}`);
+// ── STATE HELPERS ──────────────────────────────────────────────
+let multiQueryVariants = [];
+let nodeData = {};   // runtime data collected per-node during streaming
+let newNodesVisible = true;
+const NEW_NODE_IDS = ['query_guard','query_decomposer','context_check','self_critique','confidence'];
+
+function toggleNewNodes() {
+  newNodesVisible = !newNodesVisible;
+  NEW_NODE_IDS.forEach(id => {
+    nodeSel[id]?.style('opacity', newNodesVisible ? 1 : 0.2);
+  });
+  document.getElementById('toggle-new').textContent = newNodesVisible ? '✦ New Nodes' : '◇ New Nodes';
 }
-function activateEdge(f,t){
-  const k=`${f}→${t}`;
-  if(edgeSel[k]) edgeSel[k].attr('class','edge active-edge');
+
+function setNode(id, state) {
+  const g = nodeSel[id]; if(!g) return;
+  g.attr('class', `n ${state}`);
 }
-function doneEdge(f,t){
-  const k=`${f}→${t}`;
-  if(edgeSel[k]) edgeSel[k].attr('class','edge done-edge');
+function activateEdge(f, t) {
+  const k = `${f}→${t}`;
+  if (edgeSel[k]) edgeSel[k].attr('class','edge active-edge');
 }
-function setIntent(intentStr){
-  const map={SIMPLE_LOOKUP:'i_simple',POLICY_QUESTION:'i_policy',MULTI_HOP:'i_multihop',COMPARISON:'i_comparison'};
-  INTENT_PILLS.forEach(p=>{
-    const g=pillSel[p.id]; if(!g) return;
-    const active=map[intentStr]===p.id;
+function doneEdge(f, t) {
+  const k = `${f}→${t}`;
+  if (edgeSel[k]) edgeSel[k].attr('class','edge done-edge');
+}
+function setIntent(intentStr) {
+  const map = {SIMPLE_LOOKUP:'i_simple',POLICY_QUESTION:'i_policy',MULTI_HOP:'i_multihop',COMPARISON:'i_comparison'};
+  INTENT_PILLS.forEach(p => {
+    const g = pillSel[p.id]; if(!g) return;
+    const active = map[intentStr] === p.id;
     g.select('rect').attr('class',`intent-tag ${active?'active-intent':'inactive-intent'}`);
     g.select('text').attr('fill', active?'#a5b4fc':'#475569');
   });
-  document.getElementById('intent-display').style.display='block';
-  const colors={SIMPLE_LOOKUP:'#818cf8',POLICY_QUESTION:'#10b981',MULTI_HOP:'#a78bfa',COMPARISON:'#f59e0b'};
-  const pill=document.getElementById('intent-pill');
-  pill.textContent=intentStr.replace('_', ' ');
-  pill.style.background=`${colors[intentStr]||'#6366f1'}20`;
-  pill.style.color=colors[intentStr]||'#a5b4fc';
-  pill.style.borderColor=`${colors[intentStr]||'#6366f1'}40`;
+  const colors = {SIMPLE_LOOKUP:'#818cf8',POLICY_QUESTION:'#10b981',MULTI_HOP:'#a78bfa',COMPARISON:'#f59e0b'};
+  const pill = document.getElementById('intent-pill');
+  pill.textContent = intentStr.replace(/_/g,' ');
+  pill.style.background = `${colors[intentStr]||'#6366f1'}20`;
+  pill.style.color = colors[intentStr] || '#a5b4fc';
+  pill.style.borderColor = `${colors[intentStr]||'#6366f1'}40`;
+}
+function setConfidence(conf, reason) {
+  const badge = document.getElementById('conf-badge');
+  if (!conf) return;
+  badge.textContent = conf;
+  badge.className = `conf-badge ${conf}`;
+  badge.title = reason || '';
+  document.getElementById('meta-row').classList.add('visible');
 }
 
-function resetAll(){
-  NODES.forEach(n=>setNode(n.id,'idle'));
-  EDGES.forEach(([f,t])=>{const k=`${f}→${t}`;if(edgeSel[k])edgeSel[k].attr('class','edge')});
-  INTENT_PILLS.forEach(p=>{
+function clearAll() {
+  NODES.forEach(n => { setNode(n.id,'idle'); document.getElementById(`lat-${n.id}`)?.setAttribute('text-content',''); d3.select(`#lat-${n.id}`).text(''); });
+  EDGES.forEach(([f,t]) => { const k=`${f}→${t}`; if(edgeSel[k]) edgeSel[k].attr('class','edge'); });
+  RETRY_EDGES.forEach(([f,t]) => { const k=`${f}→${t}_retry`; if(edgeSel[k]) edgeSel[k].attr('class','edge retry-edge'); });
+  INTENT_PILLS.forEach(p => {
     pillSel[p.id].select('rect').attr('class','intent-tag inactive-intent');
     pillSel[p.id].select('text').attr('fill','#475569');
   });
-  document.getElementById('loglist').innerHTML='';
-  document.getElementById('answer-card').style.display='none';
-  document.getElementById('answer-text').textContent='';
-  document.getElementById('intent-display').style.display='none';
+  document.getElementById('loglist').innerHTML = '';
+  document.getElementById('answer-card').style.display = 'none';
+  document.getElementById('answer-text').innerHTML = '';
+  document.getElementById('meta-row').classList.remove('visible');
+  document.getElementById('conf-badge').className = 'conf-badge';
+  document.getElementById('conf-badge').textContent = '—';
+  document.getElementById('intent-pill').textContent = '—';
+  Object.keys(nodeTimers).forEach(k => delete nodeTimers[k]);
+  Object.keys(nodeLatencies).forEach(k => delete nodeLatencies[k]);
+  multiQueryVariants = [];
+  nodeData = {};
+  traceStore = [];
 }
 
-function addLog(icon, tag, tagClass, text){
-  const d=document.createElement('div');
-  d.className='log-entry';
-  d.innerHTML=`<span class="log-icon">${icon}</span><div class="log-text"><span class="log-tag ${tagClass}">${tag}</span>${text}</div>`;
-  const ll=document.getElementById('loglist');
+function addLog(icon, tag, tagClass, text) {
+  const d = document.createElement('div');
+  d.className = 'log-entry';
+  d.dataset.tag = tag;
+  d.innerHTML = `<span class="log-icon">${icon}</span><div class="log-text"><span class="log-tag ${tagClass}">${tag}</span>${escHtml(String(text))}</div>`;
+  const ll = document.getElementById('loglist');
   ll.appendChild(d);
-  ll.scrollTop=ll.scrollHeight;
+  ll.scrollTop = ll.scrollHeight;
+  filterLogs(); // apply current filter
+}
+function setStatus(txt, state='') {
+  document.getElementById('stxt').textContent = txt;
+  document.getElementById('sdot').className = `dot ${state}`;
+}
+function updateElapsed(ms) {
+  document.getElementById('elapsed').textContent = ms ? `${(ms/1000).toFixed(1)}s elapsed` : '';
 }
 
-function setStatus(txt,state=''){
-  document.getElementById('stxt').textContent=txt;
-  document.getElementById('sdot').className=`dot ${state}`;
-}
-
-function activateFromStep(step, lgNode){
-  let matched = false;
-  for(const m of STEP_MAP){
-    if(m.pat.test(step)){
-      m.nodes.forEach(id=>{
-        setNode(id,'active');
-        // Activate edge from retrieve_agent for retrieval nodes, or from the current lgNode
-        const fromNode = lgNode==='retrieve' ? 'retrieve_agent' : lgNode;
+function activateFromStep(step, lgNode) {
+  for (const m of STEP_MAP) {
+    if (m.pat.test(step)) {
+      m.nodes.forEach(id => {
+        setNode(id, 'active');
+        const fromNode = lgNode === 'retrieve' ? 'retrieve_agent' : lgNode;
         activateEdge(fromNode, id);
-        // Activate internal edges between retrieval pipeline components
-        if(id==='ensemble')    { activateEdge('vectordb','ensemble'); activateEdge('bm25','ensemble'); }
-        if(id==='multiquery')  { activateEdge('retrieve_agent','multiquery'); }
-        if(id==='graphdb')     { activateEdge('multiquery','graphdb'); }
-        if(id==='vectordb')    { activateEdge('multiquery','vectordb'); }
-        if(id==='bm25')        { activateEdge('multiquery','bm25'); }
-        // Activate tier/priorauth → merger edges
-        if(id==='bronze')      { activateEdge('retrieve_agent','bronze');  activateEdge('bronze','merger'); }
-        if(id==='silver')      { activateEdge('retrieve_agent','silver');  activateEdge('silver','merger'); }
-        if(id==='gold')        { activateEdge('retrieve_agent','gold');    activateEdge('gold','merger'); }
-        if(id==='priorauth')   { activateEdge('retrieve_agent','priorauth'); activateEdge('priorauth','merger'); }
-        if(id==='reranker')    { activateEdge('ensemble','reranker'); activateEdge('graphdb','reranker'); }
-        if(id==='merger')      { activateEdge('reranker','merger'); }
+        if(id==='ensemble')   { activateEdge('vectordb','ensemble'); activateEdge('bm25','ensemble'); }
+        if(id==='multiquery') { activateEdge('retrieve_agent','multiquery'); }
+        if(id==='graphdb')    { activateEdge('multiquery','graphdb'); }
+        if(id==='vectordb')   { activateEdge('multiquery','vectordb'); }
+        if(id==='bm25')       { activateEdge('multiquery','bm25'); }
+        if(id==='bronze')     { activateEdge('retrieve_agent','bronze'); activateEdge('bronze','merger'); }
+        if(id==='silver')     { activateEdge('retrieve_agent','silver'); activateEdge('silver','merger'); }
+        if(id==='gold')       { activateEdge('retrieve_agent','gold');   activateEdge('gold','merger'); }
+        if(id==='priorauth')  { activateEdge('retrieve_agent','priorauth'); activateEdge('priorauth','merger'); }
+        if(id==='reranker')   { activateEdge('ensemble','reranker'); activateEdge('graphdb','reranker'); }
+        if(id==='context_check'){ activateEdge('reranker','context_check'); }
+        if(id==='merger')     { activateEdge('context_check','merger'); activateEdge('reranker','context_check'); }
+        if(id==='confidence') { activateEdge('self_critique','confidence'); }
       });
-      matched = true;
-      break;  // break on first match to use the most specific pattern
+      break;
     }
   }
 }
 
-async function run(){
-  const q=document.getElementById('qinput').value.trim();
-  if(!q){alert('Enter a query first!');return;}
-  resetAll();
-  multiQueryVariants = [];
-  const btn=document.getElementById('runbtn');
-  btn.disabled=true;
-  setStatus('Connecting to local agent websocket…','running');
+// ── TYPEWRITER EFFECT ─────────────────────────────────────────
+function typewriterMarkdown(rawText, el, onDone) {
+  el.innerHTML = '';
+  // Render markdown first, then animate
+  const rendered = marked.parse(rawText || '');
+  const temp = document.createElement('div');
+  temp.innerHTML = rendered;
+  // We'll fade-in paragraphs one by one
+  const children = Array.from(temp.childNodes);
+  let i = 0;
+  function next() {
+    if (i >= children.length) { onDone && onDone(); return; }
+    const node = children[i++];
+    el.appendChild(node.cloneNode(true));
+    setTimeout(next, 80);
+  }
+  next();
+}
 
-  let activeNodeIds=[];
-  let currentIntent='';
+// ── MAIN RUN ─────────────────────────────────────────────────
+async function run() {
+  const q = document.getElementById('qinput').value.trim();
+  if (!q) { alert('Enter a query first!'); return; }
+  clearAll();
+  traceStore = [];
+  const btn = document.getElementById('runbtn');
+  btn.disabled = true;
+  setStatus('Connecting to pipeline…', 'running');
+  const startMs = performance.now();
+  let elapsedTimer = setInterval(() => updateElapsed(performance.now()-startMs), 500);
 
-  try{
-    const url=`${API}/chat/stream?session_id=${encodeURIComponent(SID)}&query=${encodeURIComponent(q)}`;
-    const resp=await fetch(url);
-    const reader=resp.body.getReader();
-    const dec=new TextDecoder();
-    let buf='';
+  let activeNodeIds = [];
+  let currentIntent = '';
+  let currentConfidence = '';
 
-    while(true){
-      const {value,done}=await reader.read();
-      if(done) break;
-      buf+=dec.decode(value,{stream:true});
-      const lines=buf.split('\n');
-      buf=lines.pop();
-      for(const line of lines){
-        if(!line.startsWith('data: ')) continue;
-        const raw=line.slice(6).trim();
-        if(raw==='[DONE]'){
-          activeNodeIds.forEach(id=>setNode(id,'done'));
-          setNode('answer','done');
-          setStatus('✅ Execution stream completed successfully.','done');
+  try {
+    const url = `${API}/chat/stream?session_id=${encodeURIComponent(SID)}&query=${encodeURIComponent(q)}`;
+    const resp = await fetch(url);
+    const reader = resp.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') {
+          activeNodeIds.forEach(id => setNode(id, 'done'));
+          setNode('answer', 'done');
+          doneEdge('mem_add', 'answer');
+          clearInterval(elapsedTimer);
+          const totalMs = Math.round(performance.now() - startMs);
+          updateElapsed(totalMs);
+          setStatus(`✅ Pipeline completed in ${(totalMs/1000).toFixed(2)}s`, 'done');
           break;
         }
-        try{
-          const ev=JSON.parse(raw);
+        try {
+          const ev = JSON.parse(raw);
+          traceStore.push(ev);
           handleEvent(ev);
-          if(ev.intent) currentIntent=ev.intent;
-        }catch(_){}
+          if (ev.intent) currentIntent = ev.intent;
+          if (ev.confidence) currentConfidence = ev.confidence;
+        } catch(_) {}
       }
     }
-  }catch(err){
-    setStatus('❌ Process crashed: '+err.message,'');
-    addLog('❌','ERROR','tag-error',err.message);
-  }finally{
-    btn.disabled=false;
+  } catch(err) {
+    clearInterval(elapsedTimer);
+    setStatus('❌ Connection error: ' + err.message, 'error');
+    addLog('❌', 'ERROR', 'tag-error', err.message);
+  } finally {
+    btn.disabled = false;
   }
 
-  function handleEvent(ev){
-    const {type,node,intent,step,msg,answer}=ev;
+  function handleEvent(ev) {
+    const { type, node, intent, step, msg, answer, confidence, confidence_reason, blocked, sub_questions } = ev;
 
-    if(intent && intent!==currentIntent){
-      currentIntent=intent;
-      setIntent(intent);
-    }
+    if (intent && intent !== currentIntent) { currentIntent = intent; setIntent(intent); document.getElementById('meta-row').classList.add('visible'); }
+    if (confidence) setConfidence(confidence, confidence_reason);
 
-    if(type==='node_start'){
-      const diagramNodes=LG_START[node]||[];
-      activeNodeIds.forEach(id=>setNode(id,'done'));
-      
-      if(node==='user'){setNode('user','active');activeNodeIds=['user'];activateEdge('user','fastapi');}
-      else if(node==='fastapi'){setNode('fastapi','active');activeNodeIds=['fastapi'];activateEdge('fastapi','orchestrator');}
-      else if(node==='orchestrator'){setNode('orchestrator','active');activeNodeIds=['orchestrator'];activateEdge('orchestrator','mem_search');}
-      else{
-        diagramNodes.forEach(id=>{setNode(id,'active');activateEdge('orchestrator',id);});
-        activeNodeIds=diagramNodes;
+    if (type === 'node_start') {
+      // Record latency start
+      nodeTimers[node] = performance.now();
+
+      const diagramNodes = LG_START[node] || [];
+      activeNodeIds.forEach(id => setNode(id, 'done'));
+
+      if (node === 'user')         { setNode('user','active');        activeNodeIds=['user'];        activateEdge('user','fastapi'); }
+      else if (node === 'fastapi') { setNode('fastapi','active');     activeNodeIds=['fastapi'];     activateEdge('fastapi','orchestrator'); }
+      else if (node === 'orchestrator') { setNode('orchestrator','active'); activeNodeIds=['orchestrator']; activateEdge('orchestrator','query_guard'); }
+      else {
+        diagramNodes.forEach(id => { setNode(id,'active'); });
+        activeNodeIds = diagramNodes;
       }
-      const tagClass=node==='classify_intent'?'tag-classify':node==='retrieve'?'tag-retrieve':node==='synthesize'?'tag-synthesize':'tag-system';
-      addLog('▶','START',tagClass,node+(msg?' — '+msg:''));
-      setStatus(`Executing node: [${node}]…`,'running');
+
+      const tagMap = {
+        query_guard:'tag-guard', classify_intent:'tag-classify',
+        query_decomposer:'tag-classify', retrieve:'tag-retrieve',
+        context_quality_check:'tag-critique', synthesize:'tag-synthesize',
+        self_critique:'tag-critique', confidence_scorer:'tag-critique',
+        memory_add:'tag-system', memory_search:'tag-system',
+      };
+      const tagClass = tagMap[node] || 'tag-system';
+      addLog('▶', 'START', tagClass, node + (msg ? ' — ' + msg : ''));
+      setStatus(`Executing node: [${node}]…`, 'running');
     }
 
-    if(type==='substep'){
-      activateFromStep(step||'',node||'');
-      const tagClass=node==='retrieve'?'tag-retrieve':node==='synthesize'?'tag-synthesize':'tag-classify';
-      addLog('→','STEP',tagClass,step||'');
-      
-      if(step && step.includes('🧠 Multi-Query Variant')){
+    if (type === 'substep') {
+      activateFromStep(step||'', node||'');
+      const tagMap = {
+        retrieve:'tag-retrieve', synthesize:'tag-synthesize',
+        query_guard:'tag-guard', query_decomposer:'tag-classify',
+        context_quality_check:'tag-critique', self_critique:'tag-critique',
+        confidence_scorer:'tag-critique',
+      };
+      const tagClass = tagMap[node] || 'tag-classify';
+      addLog('→', 'STEP', tagClass, step||'');
+
+      if (step && step.includes('🧠 Multi-Query Variant')) {
         const variantText = step.split(':').slice(1).join(':').trim();
         multiQueryVariants.push(variantText);
+        nodeData.multiquery = nodeData.multiquery || { variants: [] };
+        if (!nodeData.multiquery.variants.includes(variantText)) nodeData.multiquery.variants.push(variantText);
+      }
+      // Collect per-node runtime data from log messages
+      collectNodeData(step || '', node || '', ev);
+      // Show sub-questions in log
+      if (sub_questions && sub_questions.length) {
+        sub_questions.forEach((sq, i) => addLog('✂️','DECOMP','tag-classify',`Sub-Q ${i+1}: ${sq}`));
+        nodeData.query_decomposer = nodeData.query_decomposer || { sub_questions: [] };
+        nodeData.query_decomposer.sub_questions = sub_questions;
       }
     }
 
-    if(type==='node_done'){
-      if(node==='retrieve'){
-        const allRetrieval=['graphdb','vectordb','bm25','ensemble','multiquery','priorauth','bronze','silver','gold'];
-        allRetrieval.forEach(id=>{
-          const el=document.getElementById(`nd-${id}`);
-          if(el && el.getAttribute('class')==='n idle') setNode(id,'skip');
-          else if(el) setNode(id,'done');
+    if (type === 'node_done') {
+      // Record latency
+      if (nodeTimers[node]) {
+        const ms = Math.round(performance.now() - nodeTimers[node]);
+        nodeLatencies[node] = ms;
+        // Draw latency badge on the corresponding D3 node(s)
+        const diagramNodes = LG_START[node] || [];
+        diagramNodes.forEach(id => {
+          d3.select(`#lat-${id}`).text(`${ms}ms`);
         });
+      }
 
-        // Activate reranker to show scoring phase, then transition edges
+      if (node === 'query_guard' && blocked) {
+        // Blocked — mark guard as error-like
+        setNode('query_guard', 'done');
+        d3.select('#nd-query_guard rect').style('fill','rgba(239,68,68,0.15)').style('stroke','#ef4444');
+      }
+
+      if (node === 'retrieve') {
+        const allRetrieval = ['graphdb','vectordb','bm25','ensemble','multiquery','priorauth','bronze','silver','gold'];
+        allRetrieval.forEach(id => {
+          const el = document.getElementById(`nd-${id}`);
+          if (el && el.getAttribute('class') === 'n idle') setNode(id, 'skip');
+          else if (el) setNode(id, 'done');
+        });
         activateEdge('ensemble','reranker'); activateEdge('graphdb','reranker');
         setNode('reranker','active');
       }
-      if(node==='synthesize'){
-        setNode('reranker','done');setNode('merger','done');doneEdge('merger','synthesis');
-        setNode('langsmith','active');activateEdge('synthesis','langsmith');
-        setTimeout(()=>setNode('langsmith','done'), 600);
+
+      if (node === 'context_quality_check') {
+        setNode('context_check','done');
+        setNode('reranker','done');
+        doneEdge('reranker','context_check');
       }
-      if(node==='memory_add'){
-        doneEdge('synthesis','mem_add');doneEdge('mem_add','answer');
-        setNode('mem_add','done');setNode('answer','active');
-        if(answer){
-          document.getElementById('answer-text').textContent=answer;
-          document.getElementById('answer-card').style.display='block';
+
+      if (node === 'synthesize') {
+        setNode('reranker','done'); setNode('merger','done');
+        doneEdge('merger','synthesis');
+        setNode('langsmith','active'); activateEdge('synthesis','langsmith');
+        setTimeout(() => setNode('langsmith','done'), 600);
+      }
+
+      if (node === 'self_critique') {
+        // If retry, show the retry edge as active
+        if (ev.needs_retry) {
+          const rk = `self_critique→retrieve_agent_retry`;
+          if (edgeSel[rk]) edgeSel[rk].attr('class','edge retry-edge active-edge');
+          setTimeout(() => { if (edgeSel[rk]) edgeSel[rk].attr('class','edge retry-edge'); }, 3000);
         }
       }
-      if(node==='classify_intent') setNode('retrieve_agent','active');
-      const tagClass=node==='synthesize'?'tag-synthesize':node==='retrieve'?'tag-retrieve':'tag-classify';
-      addLog('✅','DONE',tagClass,`${node} execution complete`);
+
+      if (node === 'confidence_scorer') {
+        setNode('confidence','done');
+        if (confidence) setConfidence(confidence, confidence_reason);
+        activateEdge('self_critique','confidence');
+        doneEdge('self_critique','confidence');
+      }
+
+      if (node === 'memory_add') {
+        doneEdge('synthesis','self_critique'); doneEdge('self_critique','confidence');
+        doneEdge('confidence','mem_add'); doneEdge('mem_add','answer');
+        setNode('mem_add','done'); setNode('answer','active');
+        if (answer) {
+          const ansEl = document.getElementById('answer-text');
+          document.getElementById('answer-card').style.display = 'block';
+          typewriterMarkdown(answer, ansEl);
+        }
+      }
+
+      const tagMap = { synthesize:'tag-synthesize', retrieve:'tag-retrieve', self_critique:'tag-critique', confidence_scorer:'tag-critique' };
+      const tagClass = tagMap[node] || 'tag-classify';
+      addLog('✅', 'DONE', tagClass, `${node} execution complete`);
     }
 
-    if(type==='error'){
-      addLog('❌','ERROR','tag-error',msg);
-      setStatus('❌ Node Error: '+msg,'');
+    if (type === 'error') {
+      addLog('❌', 'ERROR', 'tag-error', msg);
+      setStatus('❌ Node error: ' + msg, 'error');
     }
   }
 }
 
-document.getElementById('qinput').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))run();});
+// ── COLLECT NODE DATA (from substep log messages) ─────────────────────────
+function collectNodeData(step, node, ev) {
+  // Guard checks
+  if (/Guard.*validated|Guard.*passed/i.test(step)) {
+    nodeData.query_guard = nodeData.query_guard || { checks: [] };
+    nodeData.query_guard.checks.push({ type: 'ok', msg: step.replace(/^[\S]+\s/, '') });
+  }
+  if (/Guard BLOCKED/i.test(step)) {
+    nodeData.query_guard = nodeData.query_guard || { checks: [] };
+    nodeData.query_guard.checks.push({ type: 'blocked', msg: step });
+    nodeData.query_guard.blocked = true;
+  }
+  if (/Guard.*PII detected/i.test(step)) {
+    nodeData.query_guard = nodeData.query_guard || { checks: [] };
+    nodeData.query_guard.checks.push({ type: 'warn', msg: step });
+    nodeData.query_guard.pii = true;
+  }
+  // Intent
+  const intentMatch = step.match(/Intent classified → (\w+)/);
+  if (intentMatch) {
+    nodeData.intent_node = { intent: intentMatch[1] };
+  }
+  // Memory search
+  if (/Mem0 recalled/i.test(step)) {
+    const m = step.match(/(\d+) fact/);
+    nodeData.mem_search = { message: step, count: m ? parseInt(m[1]) : 0 };
+  } else if (/Mem0: no relevant/i.test(step)) {
+    nodeData.mem_search = { message: step, count: 0 };
+  }
+  // Context quality
+  if (/Context Quality/i.test(step)) {
+    const secM  = step.match(/(\d+) section/);
+    const charM = step.match(/([\d,]+) chars/);
+    const skipped = /insufficient/i.test(step);
+    nodeData.context_check = { message: step, sections: secM ? parseInt(secM[1]) : 0,
+      chars: charM ? charM[1] : '0', skipped };
+  }
+  // Retrieval summary
+  if (/Retrieved (\d+) context section/i.test(step)) {
+    const m = step.match(/Retrieved (\d+)/);
+    nodeData.retrieve_agent = nodeData.retrieve_agent || {};
+    nodeData.retrieve_agent.sections = m ? parseInt(m[1]) : 0;
+  }
+  // Self-critique
+  if (/Self-Critique/i.test(step)) {
+    nodeData.self_critique = nodeData.self_critique || { verdicts: [] };
+    nodeData.self_critique.verdicts.push(step);
+    if (/GOOD|verified/i.test(step)) nodeData.self_critique.final = 'GOOD';
+    if (/retry|INSUFFICIENT/i.test(step)) nodeData.self_critique.final = 'RETRY';
+  }
+  // Confidence
+  const confMatch = step.match(/Confidence: (\w+) \(score=(\d+) — (.+)\)/);
+  if (confMatch) {
+    nodeData.confidence = { level: confMatch[1], score: confMatch[2], reasons: confMatch[3].split(' | ') };
+  }
+  // Memory add
+  if (/Mem0 stored (\d+)/i.test(step)) {
+    const m = step.match(/stored (\d+)/);
+    nodeData.mem_add = { count: m ? parseInt(m[1]) : 0, message: step };
+  } else if (/Mem0: no new/i.test(step)) {
+    nodeData.mem_add = { count: 0, message: step };
+  }
+  // LangSmith run ID from event
+  if (ev && ev.run_id && !nodeData.langsmith) {
+    nodeData.langsmith = { run_id: ev.run_id };
+  }
+  // Retrieved chunks for Vector and BM25
+  const chunkMatch = step.match(/\[(VectorDB|BM25)\] Retrieved: (.+?)(?:\|([-\.\d]+)\|(.+))?$/i);
+  if (chunkMatch) {
+    const nodeKey = chunkMatch[1].toUpperCase() === 'BM25' ? 'bm25' : 'vectordb';
+    nodeData[nodeKey] = nodeData[nodeKey] || { retrieved_chunks: [] };
+    if (chunkMatch[3] !== undefined && chunkMatch[4] !== undefined) {
+      nodeData[nodeKey].retrieved_chunks.push({
+        source: chunkMatch[2].trim(),
+        score: parseFloat(chunkMatch[3]),
+        content: chunkMatch[4].trim()
+      });
+    } else {
+      nodeData[nodeKey].retrieved_chunks.push({
+        source: 'Unknown',
+        score: 0,
+        content: chunkMatch[2].trim()
+      });
+    }
+  }
+  // GraphDB retrieved entities
+  const graphMatch = step.match(/\[GraphDB\] Retrieved entities: (.+)/i);
+  if (graphMatch) {
+    nodeData['graphdb'] = nodeData['graphdb'] || { entities: [] };
+    nodeData['graphdb'].entities = graphMatch[1].split(',').map(s => s.trim());
+  }
+  if (/\[GraphDB\] No entities matched./i.test(step)) {
+    nodeData['graphdb'] = nodeData['graphdb'] || { entities: [] };
+  }
+  const graphEdgeMatch = step.match(/\[GraphDB-Edge\] (.+)\|\|\|(.+)\|\|\|(.+)/i);
+  if (graphEdgeMatch) {
+    nodeData['graphdb'] = nodeData['graphdb'] || { entities: [], edges: [] };
+    nodeData['graphdb'].edges = nodeData['graphdb'].edges || [];
+    nodeData['graphdb'].edges.push({
+      source: graphEdgeMatch[1].trim(),
+      relation: graphEdgeMatch[2].trim(),
+      target: graphEdgeMatch[3].trim()
+    });
+  }
+  // Redis Cache match info
+  if (/Matched cached query: '(.+)'/i.test(step) || /Matched query: '(.+)'/i.test(step)) {
+    const m = step.match(/Matched (?:cached )?query: '(.+?)'/i);
+    nodeData.redis = nodeData.redis || {};
+    nodeData.redis.matched_query = m ? m[1] : '';
+    nodeData.redis.hit = true;
+  }
+  if (/Similarity Score: ([\d\.]+)%/i.test(step)) {
+    const m = step.match(/Similarity Score: ([\d\.]+)%/i);
+    nodeData.redis = nodeData.redis || {};
+    nodeData.redis.similarity = m ? parseFloat(m[1]) : 0;
+    nodeData.redis.hit = true;
+  }
+}
+
+// ── NODE DETAIL MODAL ──────────────────────────────────────────────
+const NEW_NODES_SET = new Set(['query_guard','query_decomposer','context_check','self_critique','confidence']);
+
+function openNodeModal(nodeId, icon, title) {
+  const data = nodeData[nodeId] || {};
+  const lat  = nodeLatencies[nodeId];
+  const desc = NODE_DESC[nodeId] || '';
+  const isNew = NEW_NODES_SET.has(nodeId);
+
+  document.getElementById('nm-title').innerHTML =
+    `${icon} ${title} ${isNew ? '<span class="nm-badge new">NEW</span>' : '<span class="nm-badge">NODE</span>'}`;
+  document.getElementById('nm-desc').textContent = desc;
+  document.getElementById('nm-lat').innerHTML = lat
+    ? `<div class="nm-lat">⏱ Latency: ${lat}ms</div>`
+    : '';
+
+  let body = '';
+  const noData = '<p class="nm-empty">No runtime data yet — run a query first.</p>';
+
+  if (nodeId === 'multiquery') {
+    const variants = data.variants || [];
+    body += `<div class="nm-section"><div class="nm-section-title">🔄 Generated Query Variants</div>`;
+    body += variants.length
+      ? variants.map((v, i) => `<div class="nm-card variant"><strong>Variant ${i+1}:</strong> ${escHtml(v)}</div>`).join('')
+      : noData;
+    body += '</div>';
+  }
+
+  else if (nodeId === 'query_decomposer') {
+    const sqs = data.sub_questions || [];
+    body += `<div class="nm-section"><div class="nm-section-title">✂️ Decomposed Sub-Questions</div>`;
+    body += sqs.length
+      ? sqs.map((q, i) => `<div class="nm-card subq"><strong>Sub-Q ${i+1}:</strong> ${escHtml(q)}</div>`).join('')
+      : noData;
+    body += '</div>';
+    if (sqs.length) {
+      body += `<div class="nm-stat-row"><div class="nm-stat">Sub-questions generated: <span>${sqs.length}</span></div></div>`;
+    }
+  }
+
+  else if (nodeId === 'query_guard') {
+    const checks = data.checks || [];
+    body += `<div class="nm-section"><div class="nm-section-title">🛡️ Security Check Results</div>`;
+    if (checks.length) {
+      body += checks.map(c => {
+        const cls = c.type === 'ok' ? 'check' : c.type === 'warn' ? 'warning' : 'bad';
+        const icon = c.type === 'ok' ? '✅' : c.type === 'warn' ? '⚠️' : '🚫';
+        return `<div class="nm-card ${cls}">${icon} ${escHtml(c.msg)}</div>`;
+      }).join('');
+    } else { body += noData; }
+    body += '</div>';
+    if (data.pii)     body += `<div class="nm-stat-row"><div class="nm-stat" style="border-color:rgba(245,158,11,0.3);color:#fbbf24">⚠️ PII detected and redacted from query</div></div>`;
+    if (data.blocked) body += `<div class="nm-stat-row"><div class="nm-stat" style="border-color:rgba(239,68,68,0.3);color:#f87171">🚫 Query was blocked — pipeline short-circuited</div></div>`;
+  }
+
+  else if (nodeId === 'intent_node') {
+    const INTENT_COLORS = {SIMPLE_LOOKUP:'#818cf8',POLICY_QUESTION:'#10b981',MULTI_HOP:'#a78bfa',COMPARISON:'#f59e0b'};
+    const intent = data.intent || '';
+    body += `<div class="nm-section"><div class="nm-section-title">🔍 Classification Result</div>`;
+    if (intent) {
+      const c = INTENT_COLORS[intent] || '#818cf8';
+      body += `<div class="nm-card info" style="border-left-color:${c};font-size:0.85rem;font-weight:700;color:${c}">${intent}</div>`;
+      const INTENT_DESCRIPTIONS = {
+        SIMPLE_LOOKUP:   'Quick single-fact lookup (drug copay, provider lookup, coverage check)',
+        POLICY_QUESTION: 'General policy or procedure question (claims, referrals, preventive care)',
+        MULTI_HOP:       'Multi-step question requiring several document lookups. Query was decomposed into sub-questions.',
+        COMPARISON:      'Plan comparison query — retrieves Bronze, Silver, and Gold contexts in parallel.',
+      };
+      body += `<div class="nm-card info" style="margin-top:6px;font-family:inherit;font-size:0.73rem">${INTENT_DESCRIPTIONS[intent]||''}</div>`;
+    } else { body += noData; }
+    body += '</div>';
+  }
+
+  else if (nodeId === 'mem_search') {
+    body += `<div class="nm-section"><div class="nm-section-title">🧠 Mem0 Recall Result</div>`;
+    if (data.message) {
+      const cls = data.count > 0 ? 'memory' : 'info';
+      body += `<div class="nm-card ${cls}">${escHtml(data.message)}</div>`;
+      body += `<div class="nm-stat-row"><div class="nm-stat">Facts recalled: <span>${data.count}</span></div></div>`;
+    } else { body += noData; }
+    body += '</div>';
+  }
+
+  else if (nodeId === 'context_check') {
+    body += `<div class="nm-section"><div class="nm-section-title">🔬 Context Validation Result</div>`;
+    if (data.message) {
+      const cls = data.skipped ? 'bad' : 'good';
+      body += `<div class="nm-card ${cls}">${escHtml(data.message)}</div>`;
+      if (!data.skipped) {
+        body += `<div class="nm-stat-row">
+          <div class="nm-stat">Sections: <span>${data.sections}</span></div>
+          <div class="nm-stat">Total chars: <span>${data.chars}</span></div>
+          <div class="nm-stat">Synthesis: <span style="color:#34d399">✓ Proceeding</span></div>
+        </div>`;
+      } else {
+        body += `<div class="nm-stat-row"><div class="nm-stat" style="color:#f87171">Synthesis was skipped — fallback answer returned</div></div>`;
+      }
+    } else { body += noData; }
+    body += '</div>';
+  }
+
+  else if (nodeId === 'retrieve_agent') {
+    body += `<div class="nm-section"><div class="nm-section-title">📂 Retrieval Summary</div>`;
+    if (data.sections !== undefined) {
+      body += `<div class="nm-stat-row"><div class="nm-stat">Context sections returned: <span>${data.sections}</span></div></div>`;
+    } else { body += noData; }
+    body += '</div>';
+    body += `<div class="nm-section"><div class="nm-section-title">🔧 Tools Invoked (by intent)</div>
+      <div class="nm-card info" style="font-family:inherit">
+        <strong>SIMPLE_LOOKUP</strong> → Knowledge Graph + Hybrid Search<br>
+        <strong>POLICY_QUESTION</strong> → Full Hybrid Pipeline<br>
+        <strong>MULTI_HOP</strong> → Graph + Hybrid + Prior Auth + Sub-question retrieval<br>
+        <strong>COMPARISON</strong> → Bronze + Silver + Gold tier-scoped searches
+      </div></div>`;
+  }
+
+  else if (nodeId === 'self_critique') {
+    body += `<div class="nm-section"><div class="nm-section-title">🔄 Self-RAG Reflection</div>`;
+    const verdicts = data.verdicts || [];
+    if (verdicts.length) {
+      body += verdicts.map(v => {
+        const cls = /GOOD|verified/i.test(v) ? 'good' : 'bad';
+        const ico = /GOOD|verified/i.test(v) ? '✅' : '🔄';
+        return `<div class="nm-card ${cls}">${ico} ${escHtml(v)}</div>`;
+      }).join('');
+    } else { body += noData; }
+    if (data.final) {
+      const cls = data.final === 'GOOD' ? 'good' : 'bad';
+      body += `<div class="nm-stat-row"><div class="nm-stat nm-card ${cls}" style="padding:5px 12px">Final verdict: <span style="color:inherit">${data.final}</span></div></div>`;
+    }
+    body += '</div>';
+  }
+
+  else if (nodeId === 'confidence') {
+    body += `<div class="nm-section"><div class="nm-section-title">📊 Confidence Score Breakdown</div>`;
+    if (data.level) {
+      const colors = { HIGH:'#34d399', MEDIUM:'#fbbf24', LOW:'#f87171', BLOCKED:'#94a3b8' };
+      const c = colors[data.level] || '#818cf8';
+      body += `<div class="nm-stat-row">
+        <div class="nm-stat" style="border-color:${c}40;color:${c};font-size:0.9rem;font-weight:800">
+          ${data.level} confidence
+        </div>
+        <div class="nm-stat">Score: <span>${data.score}</span></div>
+      </div>`;
+      if (data.reasons && data.reasons.length) {
+        body += `<div class="nm-section-title" style="margin-top:10px">📌 Scoring Signals</div>`;
+        body += data.reasons.map(r =>
+          `<div class="nm-card info">${escHtml(r)}</div>`
+        ).join('');
+      }
+    } else { body += noData; }
+    body += '</div>';
+  }
+
+  else if (nodeId === 'mem_add') {
+    body += `<div class="nm-section"><div class="nm-section-title">💾 Mem0 Storage Result</div>`;
+    if (data.message) {
+      body += `<div class="nm-card memory">${escHtml(data.message)}</div>`;
+      body += `<div class="nm-stat-row"><div class="nm-stat">Facts stored this turn: <span>${data.count}</span></div></div>`;
+    } else { body += noData; }
+    body += '</div>';
+  }
+
+  else if (nodeId === 'langsmith') {
+    body += `<div class="nm-section"><div class="nm-section-title">📡 LangSmith Trace</div>`;
+    if (data.run_id) {
+      body += `<div class="nm-card info">Run ID: <code>${escHtml(data.run_id)}</code></div>`;
+      body += `<div class="nm-stat-row"><a href="https://smith.langchain.com" target="_blank" style="color:#22d3ee;font-size:0.74rem">🔗 Open LangSmith Dashboard ↗</a></div>`;
+    } else {
+      body += `<div class="nm-card info">Tracing enabled — all nodes are being recorded with latency and token usage.</div>`;
+    }
+    body += '</div>';
+  }
+
+  else if (nodeId === 'redis') {
+    body += `<div class="nm-section"><div class="nm-section-title">🔴 Redis Semantic Cache Details</div>`;
+    if (data.hit) {
+      body += `<div class="nm-card good">⚡ Semantic Cache HIT!</div>`;
+      body += `<div class="nm-card info"><strong>Matched Query in Cache:</strong><br>${escHtml(data.matched_query)}</div>`;
+      body += `<div class="nm-stat-row">
+        <div class="nm-stat">Similarity Score: <span style="color:#10b981">${data.similarity}%</span></div>
+        <div class="nm-stat">Bypass Status: <span style="color:#10b981">Active (LLM Bypassed)</span></div>
+      </div>`;
+    } else {
+      body += `<div class="nm-card info">The semantic cache was checked but resulted in a cache MISS. The query was forwarded to the orchestrator pipeline for standard processing.</div>`;
+    }
+    body += `</div>`;
+  }
+
+  else if (nodeId === 'bm25') {
+    body += `<div class="nm-section"><div class="nm-section-title">🔤 BM25 Scoring Formula</div>`;
+    body += `<div class="nm-card info" style="font-family:monospace; font-size: 0.8rem; overflow-x: auto; white-space: nowrap;">
+      score(D,Q) = ∑ IDF(q_i) × [ f(q_i,D) × (k_1 + 1) ] / [ f(q_i,D) + k_1 × (1 - b + b × |D|/avgdl) ]
+    </div>`;
+    if (data.retrieved_chunks && data.retrieved_chunks.length) {
+      body += `<div class="nm-section-title" style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+        <span>📊 BM25 Scores</span>
+        <button onclick="toggleScoreFullscreen()" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-size:0.8rem;padding:0;">⛶ Fullscreen</button>
+      </div>`;
+      body += `<svg id="nm-score-viz" width="100%" height="250" style="background:#1e293b; border-radius:8px; margin-top:5px; border:1px solid #334155; transition: height 0.3s ease;"></svg>`;
+      body += `<div class="nm-section-title" style="margin-top:10px">📄 Top Retrieved Chunks</div>`;
+      body += data.retrieved_chunks.map(c => {
+        const text = typeof c === 'string' ? c : `[Score: ${c.score.toFixed(4)}] ${c.content}`;
+        return `<div class="nm-card info" style="font-size: 0.8rem;">${escHtml(text)}</div>`;
+      }).join('');
+    } else {
+      body += noData;
+    }
+    body += `</div>`;
+  }
+
+  else if (nodeId === 'vectordb') {
+    body += `<div class="nm-section"><div class="nm-section-title">🗃️ Vector Store Retrieval</div>`;
+    if (data.retrieved_chunks && data.retrieved_chunks.length) {
+      body += `<div class="nm-section-title" style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+        <span>📊 Cosine Similarity Scores</span>
+        <button onclick="toggleScoreFullscreen()" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-size:0.8rem;padding:0;">⛶ Fullscreen</button>
+      </div>`;
+      body += `<svg id="nm-score-viz" width="100%" height="250" style="background:#1e293b; border-radius:8px; margin-top:5px; border:1px solid #334155; transition: height 0.3s ease;"></svg>`;
+      body += `<div class="nm-section-title" style="margin-top:10px">📄 Top Retrieved Chunks</div>`;
+      body += data.retrieved_chunks.map(c => {
+        const text = typeof c === 'string' ? c : `[Score: ${c.score.toFixed(4)}] ${c.content}`;
+        return `<div class="nm-card info" style="font-size: 0.8rem;">${escHtml(text)}</div>`;
+      }).join('');
+    } else {
+      body += noData;
+    }
+    body += `</div>`;
+  }
+
+  else if (nodeId === 'graphdb') {
+    body += `<div class="nm-section"><div class="nm-section-title">🕸️ Knowledge Graph Lookups</div>`;
+    if (data.entities && data.entities.length) {
+      body += `<div class="nm-stat-row"><div class="nm-stat">Entities resolved: <span>${data.entities.length}</span></div></div>`;
+      
+      if (data.edges && data.edges.length > 0) {
+        body += `<div class="nm-section-title" style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+          <span>📈 Local Graph Explorer</span>
+          <button onclick="toggleGraphFullscreen()" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-size:0.8rem;padding:0;">⛶ Fullscreen</button>
+        </div>`;
+        body += `<svg id="nm-graph-viz" width="100%" height="250" style="background:#1e293b; border-radius:8px; margin-top:5px; border:1px solid #334155; transition: height 0.3s ease;"></svg>`;
+      }
+
+      body += `<div class="nm-section-title" style="margin-top:10px">📌 Fetched Nodes</div>`;
+      body += data.entities.map(e => `<div class="nm-card info" style="font-size: 0.8rem;">${escHtml(e)}</div>`).join('');
+    } else if (data.entities && data.entities.length === 0) {
+      body += `<div class="nm-card info">No matching entities found in the knowledge graph.</div>`;
+    } else {
+      body += noData;
+    }
+    body += `</div>`;
+  }
+
+  else {
+    // Generic fallback: show description + static info
+    body += `<div class="nm-section"><div class="nm-section-title">📋 Node Information</div>
+      <div class="nm-card info" style="font-family:inherit;line-height:1.6">${escHtml(desc)}</div>
+    </div>`;
+  }
+
+  document.getElementById('nm-body').innerHTML = body;
+  document.getElementById('node-modal-backdrop').classList.add('open');
+
+  if (nodeId === 'graphdb' && data.edges && data.edges.length > 0) {
+    setTimeout(() => {
+      const container = document.getElementById('nm-graph-viz');
+      if (!container) return;
+      const width = container.clientWidth || 400;
+      const height = 250;
+      const svg = d3.select('#nm-graph-viz');
+      svg.selectAll('*').remove();
+      
+      const nodesMap = {};
+      data.edges.forEach(e => {
+        nodesMap[e.source] = { id: e.source };
+        nodesMap[e.target] = { id: e.target };
+      });
+      const nodes = Object.values(nodesMap);
+      const links = data.edges.map(e => ({ source: e.source, target: e.target, label: e.relation }));
+
+      const simulation = d3.forceSimulation(nodes)
+          .force("link", d3.forceLink(links).id(d => d.id).distance(120))
+          .force("charge", d3.forceManyBody().strength(-200))
+          .force("center", d3.forceCenter(width / 2, height / 2));
+      
+      window.graphSimulation = simulation; // Save for resize
+
+      svg.append("defs").selectAll("marker")
+          .data(["arrow"])
+          .join("marker")
+          .attr("id", String)
+          .attr("viewBox", "0 -5 10 10")
+          .attr("refX", 18)
+          .attr("refY", 0)
+          .attr("markerWidth", 6)
+          .attr("markerHeight", 6)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("fill", "#64748b")
+          .attr("d", "M0,-5L10,0L0,5");
+
+      const link = svg.append("g")
+          .selectAll("line")
+          .data(links)
+          .join("line")
+          .attr("stroke", "#64748b")
+          .attr("stroke-opacity", 0.6)
+          .attr("stroke-width", 1.5)
+          .attr("marker-end", "url(#arrow)");
+
+      const linkLabel = svg.append("g")
+          .selectAll("text")
+          .data(links)
+          .join("text")
+          .text(d => d.label)
+          .attr("font-size", "9px")
+          .attr("fill", "#cbd5e1")
+          .attr("dy", "-4")
+          .attr("text-anchor", "middle");
+
+      const node = svg.append("g")
+          .selectAll("circle")
+          .data(nodes)
+          .join("circle")
+          .attr("r", 7)
+          .attr("fill", "#22d3ee")
+          .attr("stroke", "#0f172a")
+          .attr("stroke-width", 1.5)
+          .call(d3.drag()
+              .on("start", e => { if (!e.active) simulation.alphaTarget(0.3).restart(); e.subject.fx = e.subject.x; e.subject.fy = e.subject.y; })
+              .on("drag", e => { e.subject.fx = e.x; e.subject.fy = e.y; })
+              .on("end", e => { if (!e.active) simulation.alphaTarget(0); e.subject.fx = null; e.subject.fy = null; }));
+
+      const label = svg.append("g")
+          .selectAll("text")
+          .data(nodes)
+          .join("text")
+          .text(d => d.id)
+          .attr("font-size", "10px")
+          .attr("fill", "#f8fafc")
+          .attr("dx", 12)
+          .attr("dy", 4)
+          .style("pointer-events", "none");
+
+      simulation.on("tick", () => {
+          link
+              .attr("x1", d => d.source.x)
+              .attr("y1", d => d.source.y)
+              .attr("x2", d => d.target.x)
+              .attr("y2", d => d.target.y);
+          linkLabel
+              .attr("x", d => (d.source.x + d.target.x) / 2)
+              .attr("y", d => (d.source.y + d.target.y) / 2);
+          node
+              .attr("cx", d => d.x = Math.max(10, Math.min(width - 10, d.x)))
+              .attr("cy", d => d.y = Math.max(10, Math.min(height - 10, d.y)));
+          label
+              .attr("x", d => d.x)
+              .attr("y", d => d.y);
+      });
+    }, 100);
+  }
+
+  if ((nodeId === 'vectordb' || nodeId === 'bm25') && data.retrieved_chunks && data.retrieved_chunks.length > 0) {
+    setTimeout(() => {
+      renderScoreGraph(data.retrieved_chunks);
+    }, 100);
+  }
+}
+
+window.renderScoreGraph = function(chunks) {
+  const container = document.getElementById('nm-score-viz');
+  if (!container) return;
+  const width = container.clientWidth || 400;
+  const height = container.clientHeight || 250;
+  const svg = d3.select('#nm-score-viz');
+  svg.selectAll('*').remove();
+  
+  const data = chunks.filter(c => typeof c !== 'string').sort((a,b) => b.score - a.score);
+  if (data.length === 0) return;
+  
+  const margin = {top: 20, right: 30, bottom: 40, left: 160};
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
+  
+  // Use absolute value for max to handle both positive similarity (VectorDB) and negative ranks/bm25
+  const maxScore = d3.max(data, d => Math.abs(d.score)) || 1;
+  const minScore = d3.min(data, d => Math.min(0, d.score)) || 0;
+  
+  const x = d3.scaleLinear()
+      .domain([minScore, maxScore * 1.1])
+      .range([0, innerWidth]);
+      
+  const y = d3.scaleBand()
+      .domain(data.map((d, i) => `#${i+1} ${d.source}`))
+      .range([0, innerHeight])
+      .padding(0.2);
+      
+  const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  
+  g.selectAll("rect")
+      .data(data)
+      .join("rect")
+      .attr("y", (d, i) => y(`#${i+1} ${d.source}`))
+      .attr("height", y.bandwidth())
+      .attr("x", d => x(Math.min(0, d.score)))
+      .attr("width", d => Math.max(1, Math.abs(x(d.score) - x(0))))
+      .attr("fill", "#38bdf8")
+      .attr("rx", 4);
+      
+  g.append("g")
+      .call(d3.axisLeft(y).tickSize(0))
+      .selectAll("text")
+      .attr("fill", "#f8fafc")
+      .style("font-size", "10px");
+      
+  g.append("g")
+      .attr("transform", `translate(0,${innerHeight})`)
+      .call(d3.axisBottom(x).ticks(5))
+      .selectAll("text")
+      .attr("fill", "#94a3b8");
+      
+  window.currentScoreData = chunks; // save for resize
+}
+
+window.toggleScoreFullscreen = function() {
+  const modal = document.getElementById('node-modal');
+  const svg = document.getElementById('nm-score-viz');
+  if (!modal || !svg) return;
+  
+  if (modal.style.maxWidth === '95vw') {
+    modal.style.maxWidth = '600px';
+    modal.style.width = '90%';
+    modal.style.height = 'auto';
+    svg.style.height = '250px';
+  } else {
+    modal.style.maxWidth = '95vw';
+    modal.style.width = '95vw';
+    modal.style.height = '90vh';
+    svg.style.height = 'calc(100vh - 200px)';
+  }
+  
+  if (window.currentScoreData) {
+    setTimeout(() => {
+      renderScoreGraph(window.currentScoreData);
+    }, 350);
+  }
+}
+
+window.toggleGraphFullscreen = function() {
+  const modal = document.getElementById('node-modal');
+  const svg = document.getElementById('nm-graph-viz');
+  if (!modal || !svg) return;
+  
+  if (modal.style.maxWidth === '95vw') {
+    modal.style.maxWidth = '600px';
+    modal.style.width = '90%';
+    modal.style.height = 'auto';
+    svg.style.height = '250px';
+  } else {
+    modal.style.maxWidth = '95vw';
+    modal.style.width = '95vw';
+    modal.style.height = '90vh';
+    svg.style.height = 'calc(100vh - 200px)';
+  }
+  
+  // Recenter simulation
+  if (window.graphSimulation) {
+    setTimeout(() => {
+      const width = svg.clientWidth;
+      const height = svg.clientHeight;
+      window.graphSimulation.force("center", d3.forceCenter(width / 2, height / 2));
+      window.graphSimulation.alpha(0.3).restart();
+    }, 350); // wait for CSS transition
+  }
+};
+
+function closeNodeModal(e) {
+  if (!e || e.target === document.getElementById('node-modal-backdrop')) {
+    document.getElementById('node-modal-backdrop').classList.remove('open');
+    const modal = document.getElementById('node-modal');
+    if (modal) {
+      modal.style.maxWidth = '600px';
+      modal.style.width = '90%';
+      modal.style.height = 'auto';
+    }
+  }
+}
+
+// ── KEYBOARD SHORTCUTS ────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (document.getElementById('login-overlay').style.display !== 'none') return;
+
+  // Cmd+K / Ctrl+K → palette
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openPalette(); return; }
+  // Escape → close palette or node modal
+  if (e.key === 'Escape') { 
+    if (document.getElementById('node-modal-backdrop').classList.contains('open')) {
+      closeNodeModal();
+    } else {
+      closePalette(); 
+    }
+    return; 
+  }
+
+  // Only trigger shortcuts when NOT typing in textarea/input
+  if (['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
+
+  if (e.key === 'r' || e.key === 'R') run();
+  if (e.key === 'c' || e.key === 'C') clearAll();
+  if (e.key === 'm' || e.key === 'M') toggleMemory();
+  if (e.key === 'e' || e.key === 'E') downloadTrace();
+  if (e.key === 'p' || e.key === 'P') togglePresets();
+});
+
+// Ctrl+Enter in textarea = run
+document.getElementById('qinput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) run();
+});
+
+// Click outside palette to close
+document.getElementById('palette-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('palette-overlay')) closePalette();
+});
 </script>
 </body>
 </html>

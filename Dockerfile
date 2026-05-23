@@ -11,13 +11,14 @@ ENV USE_NGINX=true
 # Disable Mem0 telemetry
 ENV MEM0_TELEMETRY=false
 
-# Install system dependencies (Graphviz for diagrams, Nginx for reverse proxy)
+# Install system dependencies (Graphviz for diagrams, Nginx for reverse proxy, Redis for caching)
 RUN apt-get update && apt-get install -y \
     graphviz \
     libgraphviz-dev \
     pkg-config \
     build-essential \
     nginx \
+    redis-server \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -36,9 +37,10 @@ RUN mkdir -p logs storage && chmod -R 777 /app
 # Expose the port Hugging Face expects (7860)
 EXPOSE 7860
 
-# Run uvicorn backend + nginx reverse proxy
+# Run uvicorn backend + nginx reverse proxy + redis server
 # Streamlit frontend is launched as a sidecar by FastAPI startup event
 CMD ["sh", "-c", "\
   mkdir -p /tmp/nginx_client_body /tmp/nginx_proxy /tmp/nginx_fastcgi /tmp/nginx_uwsgi /tmp/nginx_scgi && \
+  redis-server --port 6379 --daemonize yes --protected-mode no --dir /app/storage & \
   python3 -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 & \
   nginx -c /app/nginx.conf -g 'daemon off;'"]
