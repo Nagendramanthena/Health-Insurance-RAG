@@ -250,7 +250,16 @@ def load_and_chunk_documents() -> list[Document]:
 
                         dl_meta = chunk.metadata.get("dl_meta", {})
                         if dl_meta:
-                            chunk.metadata["page_no"] = dl_meta.get("page_no")
+                            page_no = None
+                            if "doc_items" in dl_meta and dl_meta["doc_items"]:
+                                prov = dl_meta["doc_items"][0].get("prov", [])
+                                if prov:
+                                    page_no = prov[0].get("page_no")
+                            
+                            if page_no is not None:
+                                chunk.metadata["page"] = page_no - 1  # 0-indexed for internal consistency
+                                chunk.metadata["page_no"] = page_no
+                            
                             chunk.metadata["heading"] = (
                                 dl_meta.get("headings", [""])[0]
                                 if dl_meta.get("headings") else ""

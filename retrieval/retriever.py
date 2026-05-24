@@ -235,7 +235,37 @@ def get_hybrid_retriever(
     console.print(f"    ✅ BM25 retriever ready (k={k}, {len(all_docs)} documents indexed)")
 
     # ── Stage 3: Ensemble Retriever ─────────────────────────────
-    ensemble_retriever = EnsembleRetriever(
+    class LoggingEnsembleRetriever(EnsembleRetriever):
+        def weighted_reciprocal_rank(self, doc_lists: list[list[Document]]) -> list[Document]:
+            from collections import defaultdict
+            rrf_score = defaultdict(float)
+            for doc_list, weight in zip(doc_lists, self.weights):
+                for rank, doc in enumerate(doc_list, start=1):
+                    key = (
+                        doc.page_content
+                        if self.id_key is None
+                        else doc.metadata.get(self.id_key)
+                    )
+                    rrf_score[key] += weight / (rank + self.c)
+            
+            merged_docs = super().weighted_reciprocal_rank(doc_lists)
+            for doc in merged_docs:
+                key = (
+                    doc.page_content
+                    if self.id_key is None
+                    else doc.metadata.get(self.id_key)
+                )
+                doc.metadata["score"] = rrf_score.get(key, 0.0)
+
+            for i, d in enumerate(merged_docs[:4]):
+                source = d.metadata.get("source_file", "unknown")
+                page = d.metadata.get("page", "?")
+                score = d.metadata.get("score", 0.0)
+                log_event(f"[Ensemble] Retrieved: {source} (Page: {page})|{score:.4f}|{d.page_content[:40]}...")
+                
+            return merged_docs
+
+    ensemble_retriever = LoggingEnsembleRetriever(
         retrievers=[logging_bm25_retriever, logging_vector_retriever],
         weights=weights,
     )
@@ -281,7 +311,16 @@ def get_hybrid_retriever(
         def compress_documents(self, documents, query, callbacks=None):
             if not documents:
                 return []
-            scores = self.model.score([(query, d.page_content) for d in documents])
+            
+            # Prepend display_header (which contains plan tier, source file, etc.)
+            # so that the Cross-Encoder is aware of metadata context during scoring.
+            texts_to_score = []
+            for d in documents:
+                header = d.metadata.get("display_header", "")
+                content = f"{header}\n{d.page_content}" if header else d.page_content
+                texts_to_score.append((query, content))
+                
+            scores = self.model.score(texts_to_score)
             for d, s in zip(documents, scores):
                 d.metadata["relevance_score"] = float(s)
 
@@ -291,6 +330,11 @@ def get_hybrid_retriever(
                 if d.metadata.get("doc_type") == "knowledge_graph" 
                 or d.metadata.get("relevance_score", 0) >= MIN_RELEVANCE_SCORE
             ]
+            for i, d in enumerate(filtered[:4]):
+                source = d.metadata.get("source_file", "unknown")
+                page = d.metadata.get("page", "?")
+                score = d.metadata.get("relevance_score", 0.0)
+                log_event(f"[Reranker] Retrieved: {source} (Page: {page})|{score:.4f}|{d.page_content[:40]}...")
             return filtered[:self.top_n]
 
     compressor = ScoredReranker(model=cross_encoder, top_n=top_n)

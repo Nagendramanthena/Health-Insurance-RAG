@@ -157,6 +157,11 @@ body {
 }
 .preset-item:hover { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3); color: #a5b4fc; }
 .preset-icon { flex-shrink: 0; margin-top: 1px; }
+.preset-header {
+  font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: #64748b;
+  margin-top: 10px; margin-bottom: 2px; padding-left: 4px; letter-spacing: 0.05em;
+}
+.preset-header:first-child { margin-top: 2px; }
 
 .run-btn {
   width: 100%; margin-top: 10px; padding: 11px; border: none; border-radius: 9px;
@@ -351,6 +356,8 @@ svg { width:100%; height:100%; overflow:visible; }
 .n.active rect { fill:rgba(124,58,237,0.25); stroke:#a78bfa; stroke-width:2; filter:drop-shadow(0 0 10px rgba(139,92,246,0.5)); }
 .n.done rect { fill:rgba(16,185,129,0.13); stroke:#10b981; stroke-width:1.8; }
 .n.skip rect { fill:#050811; stroke:rgba(255,255,255,0.03); opacity:0.3; }
+.n.hit rect { fill:rgba(16,185,129,0.22) !important; stroke:#10b981 !important; stroke-width:2.5px !important; filter:drop-shadow(0 0 10px rgba(16,185,129,0.6)) !important; }
+.n.miss rect { fill:rgba(249,115,22,0.18) !important; stroke:#f97316 !important; stroke-width:2.2px !important; filter:drop-shadow(0 0 8px rgba(249,115,22,0.4)) !important; }
 .n .icon { font-size:14px; }
 .n .title { font-family:'Plus Jakarta Sans',sans-serif; font-size:10px; font-weight:700; fill:#e2e8f0; }
 .n .sub   { font-family:'Plus Jakarta Sans',sans-serif; font-size:8px; fill:#64748b; font-weight:500; }
@@ -613,24 +620,27 @@ svg { width:100%; height:100%; overflow:visible; }
           📌 Load demo query <span id="preset-arrow">▾</span>
         </button>
         <div class="preset-list" id="preset-list">
-          <div class="preset-item" onclick="loadPreset(0)"><span class="preset-icon">⚖️</span>Compare Bronze and Gold plan copays for Metformin</div>
-          <div class="preset-item" onclick="loadPreset(1)"><span class="preset-icon">🔗</span>Is Metformin covered and do I need prior authorization for it?</div>
-          <div class="preset-item" onclick="loadPreset(2)"><span class="preset-icon">👨‍⚕️</span>Which cardiologists are in-network in Chicago?</div>
-          <div class="preset-item" onclick="loadPreset(3)"><span class="preset-icon">📋</span>What are the prior authorization requirements for MRI scans?</div>
-          <div class="preset-item" onclick="loadPreset(4)"><span class="preset-icon">🏥</span>What preventive care is covered at no cost on the Silver plan?</div>
-          <div class="preset-item" onclick="loadPreset(5)"><span class="preset-icon">💊</span>What is the out-of-pocket maximum on the Gold plan and which diabetes drugs are covered?</div>
+          <div class="preset-header">🔍 RAG Benchmark Queries</div>
+          <div class="preset-item" onclick="loadPreset(0)"><span class="preset-icon">🟢</span>Easy: What is a deductible?</div>
+          <div class="preset-item" onclick="loadPreset(1)"><span class="preset-icon">🟡</span>Medium: What is the copay for Metformin on the Silver plan?</div>
+          <div class="preset-item" onclick="loadPreset(2)"><span class="preset-icon">🟠</span>Hard: Compare the specialist copays and out-of-pocket maximums between the Silver and Gold plans.</div>
+          <div class="preset-item" onclick="loadPreset(3)"><span class="preset-icon">🔴</span>Very Hard: Compare the overall deductibles, specialist copays, and drug formulary tier copays between the Bronze, Silver, and Gold plans.</div>
+          
+          <div class="preset-header">⚡ Redis Semantic Cache Testing (Run Base, then Variation)</div>
+          <div class="preset-item" onclick="loadPreset(4)"><span class="preset-icon">💊</span>Simple Base: Is Metformin covered on the Bronze plan?</div>
+          <div class="preset-item" onclick="loadPreset(5)"><span class="preset-icon">🌀</span>Simple Variation: Does the Bronze plan cover Metformin?</div>
+          <div class="preset-item" onclick="loadPreset(6)"><span class="preset-icon">📋</span>Complex Base: What is the policy regarding waiting periods for chronic, pre-existing conditions before the plan starts paying for specialist visits and maintenance medications?</div>
+          <div class="preset-item" onclick="loadPreset(7)"><span class="preset-icon">🌀</span>Complex Variation: I was diagnosed with asthma last year and just signed up for this insurance. Do I have to wait a certain number of months before you guys will cover my inhalers and pulmonologist appointments, or am I good to go right now?</div>
         </div>
       </div>
 
       <button class="run-btn" id="runbtn" onclick="run()">🚀 Execute Live Trace</button>
     </div>
 
-    <!-- Intent + Confidence row -->
+    <!-- Intent row -->
     <div class="meta-row" id="meta-row">
       <span class="intent-label">Intent</span>
       <div class="intent-pill" id="intent-pill">—</div>
-      <span class="conf-label" style="margin-left:8px">Confidence</span>
-      <div class="conf-badge" id="conf-badge">—</div>
     </div>
 
     <!-- Memory inspector -->
@@ -651,8 +661,6 @@ svg { width:100%; height:100%; overflow:visible; }
         <label>⚡ System Event Stream</label>
         <div class="log-controls">
           <input class="log-search" id="log-search" placeholder="filter…" oninput="filterLogs()">
-          <button class="filter-btn ALL active" id="fb-ALL"      onclick="setFilter('ALL')">ALL</button>
-          <button class="filter-btn CLASSIFY"   id="fb-CLASSIFY" onclick="setFilter('CLASSIFY')">CLS</button>
           <button class="filter-btn RETRIEVE"   id="fb-RETRIEVE" onclick="setFilter('RETRIEVE')">RET</button>
           <button class="filter-btn SYNTH"      id="fb-SYNTH"    onclick="setFilter('SYNTH')">SYN</button>
           <button class="filter-btn ERROR"      id="fb-ERROR"    onclick="setFilter('ERROR')">ERR</button>
@@ -734,12 +742,14 @@ document.getElementById('pass-input').addEventListener('keydown', e => { if (e.k
 
 // ── PRESET QUERIES ───────────────────────────────────────────────────────────
 const PRESETS = [
-  'Compare Bronze and Gold plan copays for Metformin',
-  'Is Metformin covered and do I need prior authorization for it?',
-  'Which cardiologists are in-network in Chicago?',
-  'What are the prior authorization requirements for MRI scans?',
-  'What preventive care is covered at no cost on the Silver plan?',
-  'What is the out-of-pocket maximum on the Gold plan and which diabetes drugs are covered?',
+  'What is a deductible?',
+  'What is the copay for Metformin on the Silver plan?',
+  'Compare the specialist copays and out-of-pocket maximums between the Silver and Gold plans.',
+  'Compare the overall deductibles, specialist copays, and drug formulary tier copays between the Bronze, Silver, and Gold plans.',
+  'Is Metformin covered on the Bronze plan?',
+  'Does the Bronze plan cover Metformin?',
+  'What is the policy regarding waiting periods for chronic, pre-existing conditions before the plan starts paying for specialist visits and maintenance medications?',
+  'I was diagnosed with asthma last year and just signed up for this insurance. Do I have to wait a certain number of months before you guys will cover my inhalers and pulmonologist appointments, or am I good to go right now?',
 ];
 function loadPreset(i) {
   document.getElementById('qinput').value = PRESETS[i];
@@ -818,7 +828,8 @@ let activeFilter = 'ALL';
 function setFilter(f) {
   activeFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('fb-' + (f === 'SYNTH' ? 'SYNTH' : f)).classList.add('active');
+  const btn = document.getElementById('fb-' + (f === 'SYNTH' ? 'SYNTH' : f));
+  if (btn) btn.classList.add('active');
   filterLogs();
 }
 function filterLogs() {
@@ -848,6 +859,9 @@ function copyAnswer() {
 
 // ── DOWNLOAD TRACE ────────────────────────────────────────────────────────────
 let traceStore = [];
+let currentIntent = '';
+let currentConfidence = '';
+let finalResponseText = '';
 function downloadTrace() {
   if (!traceStore.length) { alert('Run a query first to generate a trace.'); return; }
   const blob = new Blob([JSON.stringify(traceStore, null, 2)], { type: 'application/json' });
@@ -895,7 +909,8 @@ const NODES = [
   {id:'confidence',      icon:'📊', title:'Confidence Scorer',   sub:'HIGH/MED/LOW rating',      x:920,  y:670},  // NEW
   {id:'mem_add',         icon:'💾', title:'Memory Commit',       sub:'Mem0 fact extractor',      x:1100, y:670},
   {id:'answer',          icon:'💬', title:'Response Output',     sub:'Client socket stream',     x:1300, y:670},
-  {id:'redis',           icon:'🔴', title:'Redis Cache',         sub:'Semantic Vector Cache',    x:290,  y:150},
+  {id:'query_analyzer',  icon:'🔍', title:'Query Analyzer',      sub:'phrasing normalizer',      x:200,  y:150},
+  {id:'redis',           icon:'🔴', title:'Redis Cache',         sub:'Semantic Vector Cache',    x:380,  y:150},
 ];
 
 const INTENT_PILLS = [
@@ -906,7 +921,7 @@ const INTENT_PILLS = [
 ];
 
 const EDGES = [
-  ['user','fastapi'],['fastapi','orchestrator'],['orchestrator','query_guard'],
+  ['user','fastapi'],['redis','orchestrator'],['orchestrator','query_guard'],
   ['query_guard','mem_search'],['mem_search','intent_node'],
   ['orchestrator','langsmith'],
   ['intent_node','query_decomposer'],['query_decomposer','retrieve_agent'],
@@ -921,7 +936,7 @@ const EDGES = [
   ['merger','synthesis'],['synthesis','langsmith'],
   ['synthesis','self_critique'],
   ['self_critique','confidence'],['confidence','mem_add'],['mem_add','answer'],
-  ['fastapi','redis'],['redis','answer'],
+  ['fastapi','query_analyzer'],['query_analyzer','redis'],['redis','answer'],
 ];
 
 // Self-critique retry edge (back to retrieve — special styling)
@@ -971,6 +986,7 @@ const STEP_MAP = [
 ];
 
 const LG_START = {
+  query_analyzer:       ['query_analyzer'],
   semantic_cache:       ['redis'],
   query_guard:          ['query_guard'],
   memory_search:        ['mem_search'],
@@ -1080,6 +1096,7 @@ const NODE_DESC = {
   langsmith:       'LangSmith observability: records full traces with latency, token usage, and intermediate states.',
   mem_add:         'Mem0 fact extractor: persists key Q&A facts to session memory for future context personalization.',
   answer:          'Final answer streamed back to the client via Server-Sent Events (SSE).',
+  query_analyzer:  'Translates conversational user queries into standardized third-person insurance policy search terms using GPT-4o-mini.',
   redis:           'Cognitive Semantic Vector Cache: checks incoming queries against previously answered queries using GPT-4o-mini normalization and vector embeddings to bypass the orchestrator and LLM on cache hits.',
 };
 
@@ -1177,14 +1194,21 @@ function clearAll() {
   document.getElementById('answer-card').style.display = 'none';
   document.getElementById('answer-text').innerHTML = '';
   document.getElementById('meta-row').classList.remove('visible');
-  document.getElementById('conf-badge').className = 'conf-badge';
-  document.getElementById('conf-badge').textContent = '—';
-  document.getElementById('intent-pill').textContent = '—';
+  const confBadge = document.getElementById('conf-badge');
+  if (confBadge) {
+    confBadge.className = 'conf-badge';
+    confBadge.textContent = '—';
+  }
+  const intentPill = document.getElementById('intent-pill');
+  if (intentPill) {
+    intentPill.textContent = '—';
+  }
   Object.keys(nodeTimers).forEach(k => delete nodeTimers[k]);
   Object.keys(nodeLatencies).forEach(k => delete nodeLatencies[k]);
   multiQueryVariants = [];
   nodeData = {};
   traceStore = [];
+  setFilter('ALL');
 }
 
 function addLog(icon, tag, tagClass, text) {
@@ -1209,6 +1233,7 @@ function activateFromStep(step, lgNode) {
   for (const m of STEP_MAP) {
     if (m.pat.test(step)) {
       m.nodes.forEach(id => {
+        if (id === 'graphdb' && currentIntent === 'POLICY_QUESTION') return;
         setNode(id, 'active');
         const fromNode = lgNode === 'retrieve' ? 'retrieve_agent' : lgNode;
         activateEdge(fromNode, id);
@@ -1263,8 +1288,9 @@ async function run() {
   let elapsedTimer = setInterval(() => updateElapsed(performance.now()-startMs), 500);
 
   let activeNodeIds = [];
-  let currentIntent = '';
-  let currentConfidence = '';
+  currentIntent = '';
+  currentConfidence = '';
+  finalResponseText = '';
 
   try {
     const url = `${API}/chat/stream?session_id=${encodeURIComponent(SID)}&query=${encodeURIComponent(q)}`;
@@ -1290,6 +1316,11 @@ async function run() {
           const totalMs = Math.round(performance.now() - startMs);
           updateElapsed(totalMs);
           setStatus(`✅ Pipeline completed in ${(totalMs/1000).toFixed(2)}s`, 'done');
+          const ansEl = document.getElementById('answer-text');
+          if (finalResponseText && (!ansEl.innerHTML || ansEl.innerHTML.trim() === '')) {
+            document.getElementById('answer-card').style.display = 'block';
+            typewriterMarkdown(finalResponseText, ansEl);
+          }
           break;
         }
         try {
@@ -1311,6 +1342,9 @@ async function run() {
 
   function handleEvent(ev) {
     const { type, node, intent, step, msg, answer, confidence, confidence_reason, blocked, sub_questions } = ev;
+    if (answer) {
+      finalResponseText = answer;
+    }
 
     if (intent && intent !== currentIntent) { currentIntent = intent; setIntent(intent); document.getElementById('meta-row').classList.add('visible'); }
     if (confidence) setConfidence(confidence, confidence_reason);
@@ -1323,8 +1357,14 @@ async function run() {
       activeNodeIds.forEach(id => setNode(id, 'done'));
 
       if (node === 'user')         { setNode('user','active');        activeNodeIds=['user'];        activateEdge('user','fastapi'); }
-      else if (node === 'fastapi') { setNode('fastapi','active');     activeNodeIds=['fastapi'];     activateEdge('fastapi','orchestrator'); }
-      else if (node === 'orchestrator') { setNode('orchestrator','active'); activeNodeIds=['orchestrator']; activateEdge('orchestrator','query_guard'); }
+      else if (node === 'fastapi')      { setNode('fastapi','active');     activeNodeIds=['fastapi'];     activateEdge('fastapi','query_analyzer'); }
+      else if (node === 'query_analyzer'){ setNode('query_analyzer','active'); activeNodeIds=['query_analyzer']; activateEdge('fastapi','query_analyzer'); }
+      else if (node === 'semantic_cache') {
+        setNode('redis','active');
+        activeNodeIds=['redis'];
+        activateEdge('query_analyzer','redis');
+      }
+      else if (node === 'orchestrator') { setNode('orchestrator','active'); activeNodeIds=['orchestrator']; activateEdge('redis','orchestrator'); }
       else {
         diagramNodes.forEach(id => { setNode(id,'active'); });
         activeNodeIds = diagramNodes;
@@ -1427,6 +1467,28 @@ async function run() {
         doneEdge('self_critique','confidence');
       }
 
+      if (node === 'query_analyzer') {
+        doneEdge('fastapi', 'query_analyzer');
+        setNode('query_analyzer', 'done');
+        nodeData.query_analyzer = nodeData.query_analyzer || {};
+        nodeData.query_analyzer.normalized_query = ev.normalized_query || '';
+      }
+
+      if (node === 'semantic_cache') {
+        doneEdge('query_analyzer', 'redis');
+        if (answer) {
+          setNode('redis', 'hit');
+          doneEdge('redis', 'answer');
+          setNode('answer', 'active');
+          const ansEl = document.getElementById('answer-text');
+          document.getElementById('answer-card').style.display = 'block';
+          typewriterMarkdown(answer, ansEl);
+        } else {
+          setNode('redis', 'miss');
+          doneEdge('redis', 'orchestrator');
+        }
+      }
+
       if (node === 'memory_add') {
         doneEdge('synthesis','self_critique'); doneEdge('self_critique','confidence');
         doneEdge('confidence','mem_add'); doneEdge('mem_add','answer');
@@ -1516,10 +1578,10 @@ function collectNodeData(step, node, ev) {
   if (ev && ev.run_id && !nodeData.langsmith) {
     nodeData.langsmith = { run_id: ev.run_id };
   }
-  // Retrieved chunks for Vector and BM25
-  const chunkMatch = step.match(/\[(VectorDB|BM25)\] Retrieved: (.+?)(?:\|([-\.\d]+)\|(.+))?$/i);
+  // Retrieved chunks for Vector, BM25, Ensemble, and Reranker
+  const chunkMatch = step.match(/\[(VectorDB|BM25|Ensemble|Reranker)\] Retrieved: (.+?)(?:\|([-\.\d]+)\|(.+))?$/i);
   if (chunkMatch) {
-    const nodeKey = chunkMatch[1].toUpperCase() === 'BM25' ? 'bm25' : 'vectordb';
+    const nodeKey = chunkMatch[1].toLowerCase();
     nodeData[nodeKey] = nodeData[nodeKey] || { retrieved_chunks: [] };
     if (chunkMatch[3] !== undefined && chunkMatch[4] !== undefined) {
       nodeData[nodeKey].retrieved_chunks.push({
@@ -1567,6 +1629,10 @@ function collectNodeData(step, node, ev) {
     nodeData.redis.similarity = m ? parseFloat(m[1]) : 0;
     nodeData.redis.hit = true;
   }
+  if (/Cache MISS/i.test(step)) {
+    nodeData.redis = nodeData.redis || {};
+    nodeData.redis.hit = false;
+  }
 }
 
 // ── NODE DETAIL MODAL ──────────────────────────────────────────────
@@ -1599,14 +1665,31 @@ function openNodeModal(nodeId, icon, title) {
 
   else if (nodeId === 'query_decomposer') {
     const sqs = data.sub_questions || [];
-    body += `<div class="nm-section"><div class="nm-section-title">✂️ Decomposed Sub-Questions</div>`;
-    body += sqs.length
-      ? sqs.map((q, i) => `<div class="nm-card subq"><strong>Sub-Q ${i+1}:</strong> ${escHtml(q)}</div>`).join('')
-      : noData;
-    body += '</div>';
-    if (sqs.length) {
-      body += `<div class="nm-stat-row"><div class="nm-stat">Sub-questions generated: <span>${sqs.length}</span></div></div>`;
+    const orig = data.original_query || document.getElementById('qinput').value || '';
+    const currentIntent = document.getElementById('intent-pill').textContent.trim();
+    
+    body += `<div class="nm-section"><div class="nm-section-title">✂️ Decomposing Complex Intent</div>`;
+    
+    if (currentIntent === 'MULTI_HOP' && sqs.length) {
+      body += `
+        <div class="nm-card info" style="margin-bottom:12px; border-left-color:#a78bfa">
+          <strong>Decomposer Logic:</strong> Since the query was classified as <strong>${currentIntent}</strong>, it is split into independent sub-queries to retrieve targeted facts from different documents (e.g. drug formularies, provider databases) which are later synthesized.
+        </div>
+        <div class="nm-card subq" style="background:rgba(255,255,255,0.03); border-left-color:rgba(167,139,250,0.5); margin-bottom:16px;">
+          <strong>Original Input Query:</strong> <em>"${escHtml(orig)}"</em>
+        </div>
+        <div class="nm-section-title" style="font-size:0.85rem; margin-top:8px;">Generated Atomic Sub-Questions:</div>
+      `;
+      body += sqs.map((q, i) => `<div class="nm-card subq" style="border-left-color:#a78bfa; margin-bottom:6px;"><strong>Sub-Q ${i+1}:</strong> ${escHtml(q)}</div>`).join('');
+      body += `<div class="nm-stat-row" style="margin-top:12px;"><div class="nm-stat">Sub-questions generated: <span>${sqs.length}</span></div></div>`;
+    } else {
+      body += `
+        <div class="nm-card warning" style="border-left-color:#fbbf24">
+          <strong>Decomposer Skipped:</strong> The query intent was classified as <strong>${currentIntent || 'non-MULTI_HOP'}</strong>. Only queries with <strong>MULTI_HOP</strong> intent are decomposed. Other intents retrieve results in a single hop.
+        </div>
+      `;
     }
+    body += '</div>';
   }
 
   else if (nodeId === 'query_guard') {
@@ -1799,27 +1882,187 @@ function openNodeModal(nodeId, icon, title) {
     body += `</div>`;
   }
 
+  else if (nodeId === 'ensemble') {
+    body += `<div class="nm-section"><div class="nm-section-title">⚖️ Reciprocal Rank Fusion (RRF) Formula</div>`;
+    body += `<div class="nm-card info" style="font-family:monospace; font-size: 0.8rem; overflow-x: auto; white-space: nowrap;">
+      RRF_Score(d ∈ D) = ∑_{m ∈ M} w_m / (r_m(d) + k)
+    </div>`;
+    body += `<div class="nm-card info" style="font-size:0.75rem; line-height:1.4;">
+      Melds Vector search similarity results with BM25 keyword rankings. w_m represents retriever weights, and k is the constant rank smoothing parameter (default c=60).
+    </div>`;
+    if (data.retrieved_chunks && data.retrieved_chunks.length) {
+      body += `<div class="nm-section-title" style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+        <span>📊 RRF Merged Scores</span>
+        <button onclick="toggleScoreFullscreen()" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-size:0.8rem;padding:0;">⛶ Fullscreen</button>
+      </div>`;
+      body += `<svg id="nm-score-viz" width="100%" height="250" style="background:#1e293b; border-radius:8px; margin-top:5px; border:1px solid #334155; transition: height 0.3s ease;"></svg>`;
+      body += `<div class="nm-section-title" style="margin-top:10px">📄 Merged Documents (RRF Order)</div>`;
+      body += data.retrieved_chunks.map(c => {
+        const text = typeof c === 'string' ? c : `[Score/RRF: ${c.score.toFixed(4)}] ${c.content}`;
+        return `<div class="nm-card info" style="font-size: 0.8rem;">${escHtml(text)}</div>`;
+      }).join('');
+    } else {
+      body += noData;
+    }
+    body += `</div>`;
+  }
+
+  else if (nodeId === 'reranker') {
+    body += `<div class="nm-section"><div class="nm-section-title">⚖️ Cross-Encoder Relevance Scoring</div>`;
+    body += `<div class="nm-card info" style="font-size:0.75rem; line-height:1.4;">
+      Uses the BGE Cross-Encoder model to score the raw relevance of each retrieved chunk against the query. Chunks scoring below the minimum relevance threshold are filtered out.
+    </div>`;
+    if (data.retrieved_chunks && data.retrieved_chunks.length) {
+      body += `<div class="nm-section-title" style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+        <span>📊 Reranker Relevance Scores</span>
+        <button onclick="toggleScoreFullscreen()" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-size:0.8rem;padding:0;">⛶ Fullscreen</button>
+      </div>`;
+      body += `<svg id="nm-score-viz" width="100%" height="250" style="background:#1e293b; border-radius:8px; margin-top:5px; border:1px solid #334155; transition: height 0.3s ease;"></svg>`;
+      body += `<div class="nm-section-title" style="margin-top:10px">📄 Top Reranked Chunks</div>`;
+      body += data.retrieved_chunks.map(c => {
+        const text = typeof c === 'string' ? c : `[Score: ${c.score.toFixed(4)}] ${c.content}`;
+        return `<div class="nm-card info" style="font-size: 0.8rem;">${escHtml(text)}</div>`;
+      }).join('');
+    } else {
+      body += noData;
+    }
+    body += `</div>`;
+  }
+
+  else if (nodeId === 'query_analyzer') {
+    body += `<div class="nm-section"><div class="nm-section-title">🔍 Query Analyzer & Normalizer</div>`;
+    body += `<div class="nm-card info" style="font-size:0.75rem; line-height:1.4;">
+      Translates conversational, user-specific phrasing (first-person details, questions) into standard, formal third-person search terminology using GPT-4o-mini. This bridges the vocabulary gap and enables accurate semantic cache matching.
+    </div>`;
+    if (data.normalized_query) {
+      body += `<div class="nm-section-title" style="margin-top:10px;">📌 Normalization Output</div>`;
+      body += `<div class="nm-card good" style="font-size:0.85rem; font-weight:700;">
+        "${escHtml(data.normalized_query)}"
+      </div>`;
+    } else {
+      body += noData;
+    }
+    body += `</div>`;
+  }
+
+  else if (nodeId === 'redis') {
+    body += `<div class="nm-section"><div class="nm-section-title">🔴 Redis Semantic Cache Details</div>`;
+    body += `<div class="nm-card info" style="font-size:0.75rem; line-height:1.4;">
+      Checks the Redis vector cache (or fallback local cache) for semantically equivalent queries. Bypasses the LangGraph orchestrator and LLM generation completely on cache hits.
+    </div>`;
+    if (data.matched_query) {
+      body += `<div class="nm-card good" style="font-size: 0.8rem; border-left: 3px solid #10b981;">
+        <strong>⚡ Cache HIT!</strong><br>
+        <strong>Matched Cached Query:</strong> "${escHtml(data.matched_query)}"<br>
+        <strong>Similarity Score:</strong> ${data.similarity}%
+      </div>`;
+    } else if (data.hit === false) {
+      body += `<div class="nm-card bad" style="font-size: 0.8rem; border-left: 3px solid #ef4444;">
+        <strong>❌ Cache MISS</strong><br>
+        No semantically matching query was found in the cache. Proceeding to standard RAG pipeline.
+      </div>`;
+    } else {
+      body += noData;
+    }
+    body += `</div>`;
+  }
+
   else if (nodeId === 'graphdb') {
+    // Edge Filtering Logic for Neater Visualisation
+    let filteredEdges = [];
+    let filteredEntities = data.entities || [];
+    
+    if (data.edges && data.edges.length > 0) {
+      const HUBS = new Set(['bronze', 'silver', 'gold', 'all']);
+      const queryTokens = (document.getElementById('qinput').value || '').toLowerCase();
+      
+      const directlyRelevant = new Set();
+      data.edges.forEach(e => {
+        [e.source, e.target].forEach(nodeName => {
+          const nLower = nodeName.toLowerCase();
+          if (queryTokens.includes(nLower) && nLower.length > 2) {
+            directlyRelevant.add(nodeName);
+          }
+          if (nLower === 'cardiology' && (queryTokens.includes('cardiologist') || queryTokens.includes('cardio'))) {
+            directlyRelevant.add(nodeName);
+          }
+          if (nLower === 'dermatology' && (queryTokens.includes('dermatologist') || queryTokens.includes('derm'))) {
+            directlyRelevant.add(nodeName);
+          }
+          if (nLower === 'pediatrics' && (queryTokens.includes('pediatrician') || queryTokens.includes('ped'))) {
+            directlyRelevant.add(nodeName);
+          }
+          if (nLower === 'chicago, il' && queryTokens.includes('chicago')) {
+            directlyRelevant.add(nodeName);
+          }
+        });
+      });
+      
+      const secondaryRelevant = new Set();
+      data.edges.forEach(e => {
+        const sHub = HUBS.has(e.source.toLowerCase());
+        const tHub = HUBS.has(e.target.toLowerCase());
+        if (directlyRelevant.has(e.source) && !sHub) secondaryRelevant.add(e.target);
+        if (directlyRelevant.has(e.target) && !tHub) secondaryRelevant.add(e.source);
+      });
+      
+      filteredEdges = data.edges.filter(e => {
+        const sLower = e.source.toLowerCase();
+        const tLower = e.target.toLowerCase();
+        const sDirect = directlyRelevant.has(e.source);
+        const tDirect = directlyRelevant.has(e.target);
+        const sSec = secondaryRelevant.has(e.source);
+        const tSec = secondaryRelevant.has(e.target);
+        
+        if ((sDirect || sSec) && (tDirect || tSec)) {
+          if (HUBS.has(sLower) && !tDirect && !tSec) return false;
+          if (HUBS.has(tLower) && !sDirect && !sSec) return false;
+          return true;
+        }
+        return false;
+      });
+      
+      if (filteredEdges.length === 0) {
+        filteredEdges = data.edges.slice(0, 15);
+      }
+      
+      const visibleNodes = new Set();
+      filteredEdges.forEach(e => {
+        visibleNodes.add(e.source);
+        visibleNodes.add(e.target);
+      });
+      
+      if (data.entities) {
+        filteredEntities = data.entities.filter(ent => visibleNodes.has(ent) || directlyRelevant.has(ent));
+        if (filteredEntities.length === 0) {
+          filteredEntities = data.entities.slice(0, 10);
+        }
+      }
+    }
+
     body += `<div class="nm-section"><div class="nm-section-title">🕸️ Knowledge Graph Lookups</div>`;
     if (data.entities && data.entities.length) {
-      body += `<div class="nm-stat-row"><div class="nm-stat">Entities resolved: <span>${data.entities.length}</span></div></div>`;
+      body += `<div class="nm-stat-row"><div class="nm-stat">Entities resolved: <span>${data.entities.length}</span> (showing relevant: ${filteredEntities.length})</div></div>`;
       
-      if (data.edges && data.edges.length > 0) {
+      if (filteredEdges.length > 0) {
         body += `<div class="nm-section-title" style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-          <span>📈 Local Graph Explorer</span>
+          <span>📈 Local Graph Explorer (Relevant Nodes)</span>
           <button onclick="toggleGraphFullscreen()" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-size:0.8rem;padding:0;">⛶ Fullscreen</button>
         </div>`;
         body += `<svg id="nm-graph-viz" width="100%" height="250" style="background:#1e293b; border-radius:8px; margin-top:5px; border:1px solid #334155; transition: height 0.3s ease;"></svg>`;
       }
 
-      body += `<div class="nm-section-title" style="margin-top:10px">📌 Fetched Nodes</div>`;
-      body += data.entities.map(e => `<div class="nm-card info" style="font-size: 0.8rem;">${escHtml(e)}</div>`).join('');
+      body += `<div class="nm-section-title" style="margin-top:10px">📌 Fetched Entities</div>`;
+      body += filteredEntities.map(e => `<div class="nm-card info" style="font-size: 0.8rem;">${escHtml(e)}</div>`).join('');
     } else if (data.entities && data.entities.length === 0) {
       body += `<div class="nm-card info">No matching entities found in the knowledge graph.</div>`;
     } else {
       body += noData;
     }
     body += `</div>`;
+    
+    // Save filtered edges globally so we can retrieve them in the D3 rendering phase below
+    window.lastFilteredEdges = filteredEdges;
   }
 
   else {
@@ -1832,7 +2075,7 @@ function openNodeModal(nodeId, icon, title) {
   document.getElementById('nm-body').innerHTML = body;
   document.getElementById('node-modal-backdrop').classList.add('open');
 
-  if (nodeId === 'graphdb' && data.edges && data.edges.length > 0) {
+  if (nodeId === 'graphdb' && window.lastFilteredEdges && window.lastFilteredEdges.length > 0) {
     setTimeout(() => {
       const container = document.getElementById('nm-graph-viz');
       if (!container) return;
@@ -1842,12 +2085,12 @@ function openNodeModal(nodeId, icon, title) {
       svg.selectAll('*').remove();
       
       const nodesMap = {};
-      data.edges.forEach(e => {
+      window.lastFilteredEdges.forEach(e => {
         nodesMap[e.source] = { id: e.source };
         nodesMap[e.target] = { id: e.target };
       });
       const nodes = Object.values(nodesMap);
-      const links = data.edges.map(e => ({ source: e.source, target: e.target, label: e.relation }));
+      const links = window.lastFilteredEdges.map(e => ({ source: e.source, target: e.target, label: e.relation }));
 
       const simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d => d.id).distance(120))
@@ -1932,7 +2175,7 @@ function openNodeModal(nodeId, icon, title) {
     }, 100);
   }
 
-  if ((nodeId === 'vectordb' || nodeId === 'bm25') && data.retrieved_chunks && data.retrieved_chunks.length > 0) {
+  if ((nodeId === 'vectordb' || nodeId === 'bm25' || nodeId === 'ensemble' || nodeId === 'reranker') && data.retrieved_chunks && data.retrieved_chunks.length > 0) {
     setTimeout(() => {
       renderScoreGraph(data.retrieved_chunks);
     }, 100);

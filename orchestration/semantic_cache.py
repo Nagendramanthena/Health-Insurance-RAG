@@ -179,7 +179,7 @@ class SemanticCache:
             logger.warning(f"Failed to normalize query: {e}. Using original query.")
             return query
 
-    def check(self, query: str, plan_tier: str = "Unknown") -> Optional[dict]:
+    def check(self, query: str, plan_tier: str = "Unknown", normalized_query: Optional[str] = None) -> Optional[dict]:
         """
         Check the semantic cache for a match.
         
@@ -192,7 +192,7 @@ class SemanticCache:
         start_time = time.time()
         try:
             # 1. Normalize query to standard terminology
-            norm_query = self.normalize_query(query)
+            norm_query = normalized_query or self.normalize_query(query)
             
             # 2. Embed the normalized query
             query_vector = self.embeddings.embed_query(norm_query)
@@ -264,7 +264,7 @@ class SemanticCache:
             
         return None
 
-    def store(self, query: str, response: dict, plan_tier: str = "Unknown") -> None:
+    def store(self, query: str, response: dict, plan_tier: str = "Unknown", normalized_query: Optional[str] = None) -> None:
         """
         Store query response in the semantic cache.
         """
@@ -274,7 +274,7 @@ class SemanticCache:
             
         try:
             # 1. Normalize query to standard terminology
-            norm_query = self.normalize_query(query)
+            norm_query = normalized_query or self.normalize_query(query)
             
             # Generate deterministic cache ID based on normalized query
             cache_id = hashlib.sha256(norm_query.encode("utf-8")).hexdigest()

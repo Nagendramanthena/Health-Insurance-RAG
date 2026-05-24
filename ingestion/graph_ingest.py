@@ -83,7 +83,30 @@ def build_knowledge_graph():
             state     = str(row['state']).strip()
 
             # Provider Node
-            G.add_node(npi, type="Provider", name=name, specialty=specialty, city=city, state=state)
+            accepting = str(row['accepting_new_patients']).strip()
+            telehealth = str(row['telehealth_available']).strip()
+            languages = str(row['languages_spoken']).strip()
+            group = str(row['group_practice']).strip()
+            phone = str(row['phone']).strip()
+            address = str(row['street_address']).strip()
+            zip_code = str(row['zip']).strip()
+
+            G.add_node(
+                npi, 
+                type="Provider", 
+                name=name, 
+                specialty=specialty, 
+                city=city, 
+                state=state,
+                accepting_new_patients=accepting,
+                telehealth_available=telehealth,
+                languages_spoken=languages,
+                group_practice=group,
+                phone=phone,
+                street_address=address,
+                zip=zip_code,
+                hospital_affiliation=hospital
+            )
 
             # Specialty Node
             G.add_node(specialty, type="Specialty")

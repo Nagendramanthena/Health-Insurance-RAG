@@ -23,26 +23,26 @@ from orchestration.tracing import log_event
 # Maps colloquial / lay terms → canonical specialty names in the graph
 SYNONYM_MAP = {
     "brain doctor": "Neurology",    "brain doctors": "Neurology",
-    "brain specialist": "Neurology", "neurologist": "Neurology", "neuro": "Neurology",
+    "brain specialist": "Neurology", "neurologist": "Neurology", "neurologists": "Neurology", "neuro": "Neurology",
     "heart doctor": "Cardiology",   "heart doctors": "Cardiology",
-    "heart specialist": "Cardiology", "cardiologist": "Cardiology",
+    "heart specialist": "Cardiology", "cardiologist": "Cardiology", "cardiologists": "Cardiology",
     "eye doctor": "Ophthalmology",  "eye doctors": "Ophthalmology",
-    "eye specialist": "Ophthalmology", "optometrist": "Ophthalmology",
+    "eye specialist": "Ophthalmology", "optometrist": "Ophthalmology", "optometrists": "Ophthalmology", "ophthalmologist": "Ophthalmology", "ophthalmologists": "Ophthalmology",
     "skin doctor": "Dermatology",   "skin doctors": "Dermatology",
-    "dermatologist": "Dermatology",
-    "bone doctor": "Orthopedics",   "joint specialist": "Orthopedics",
-    "orthopedist": "Orthopedics",
-    "gut doctor": "Gastroenterology", "stomach doctor": "Gastroenterology",
-    "gastro": "Gastroenterology",
-    "kidney doctor": "Nephrology",  "kidney specialist": "Nephrology",
-    "lung doctor": "Pulmonology",   "lung specialist": "Pulmonology",
-    "kids doctor": "Pediatrics",    "child doctor": "Pediatrics",
-    "pediatrician": "Pediatrics",
-    "diabetes doctor": "Endocrinology", "endocrinologist": "Endocrinology",
-    "women doctor": "OB/GYN",       "gynecologist": "OB/GYN", "obgyn": "OB/GYN",
-    "blood doctor": "Hematology",
-    "cancer doctor": "Oncology",    "oncologist": "Oncology",
-    "psychiatrist": "Psychiatry",   "mental health": "Psychiatry",
+    "dermatologist": "Dermatology", "dermatologists": "Dermatology",
+    "bone doctor": "Orthopedics",   "joint specialist": "Orthopedics", "orthopedist": "Orthopedics", "orthopedists": "Orthopedics",
+    "gut doctor": "Gastroenterology", "stomach doctor": "Gastroenterology", "gastroenterologist": "Gastroenterology", "gastroenterologists": "Gastroenterology", "gastro": "Gastroenterology",
+    "kidney doctor": "Nephrology",  "kidney specialist": "Nephrology", "nephrologist": "Nephrology", "nephrologists": "Nephrology",
+    "lung doctor": "Pulmonology",   "lung specialist": "Pulmonology", "pulmonologist": "Pulmonology", "pulmonologists": "Pulmonology",
+    "kids doctor": "Pediatrics",    "child doctor": "Pediatrics", "pediatrician": "Pediatrics", "pediatricians": "Pediatrics",
+    "diabetes doctor": "Endocrinology", "endocrinologist": "Endocrinology", "endocrinologists": "Endocrinology",
+    "women doctor": "OB/GYN",       "gynecologist": "OB/GYN", "gynecologists": "OB/GYN", "obgyn": "OB/GYN",
+    "blood doctor": "Hematology",   "hematologist": "Hematology", "hematologists": "Hematology",
+    "cancer doctor": "Oncology",    "oncologist": "Oncology", "oncologists": "Oncology",
+    "psychiatrist": "Psychiatry",   "psychiatrists": "Psychiatry", "mental health": "Psychiatry",
+    "urologist": "Urology",         "urologists": "Urology",
+    "rheumatologist": "Rheumatology", "rheumatologists": "Rheumatology",
+    "plastic surgeon": "Plastic Surgery", "plastic surgeons": "Plastic Surgery",
 }
 
 console = Console()
@@ -237,6 +237,16 @@ class GraphRetriever:
             n for n in specialty_entities
             if self.G.nodes.get(n, {}).get("type") == "Specialty"
         ]
+
+        # Check if we have any providers in the requested city with matching specialty
+        in_city_providers = [
+            (n, d) for n, d in self.G.nodes(data=True)
+            if d.get("type") == "Provider"
+            and (not target_specs or d.get("specialty", "") in target_specs)
+            and d.get("city", "").lower() == city.lower()
+        ]
+        if in_city_providers:
+            return ""
 
         def _find_providers(state_filter=None):
             return [

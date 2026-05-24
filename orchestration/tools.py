@@ -44,13 +44,29 @@ def _format_docs(docs: list[Document], max_per_tool: int = 5) -> str:
     formatted = []
     for d in docs[:max_per_tool]:
         source = d.metadata.get("source_file", "Unknown")
-        page   = d.metadata.get("page", "")
-        row    = d.metadata.get("row_range", "")
-        cite   = f"(Source: {source}"
-        if page: cite += f", Page: {int(page)+1}"
+        # Support both 'page' (0-indexed) and 'page_no' (1-indexed) metadata fields
+        page = d.metadata.get("page")
+        page_no = d.metadata.get("page_no")
+        row = d.metadata.get("row_range", "")
+        cite = f"(Source: {source}"
+        if page is not None and str(page).strip() != "":
+            try:
+                # If page is stored, it's 0-indexed, display as 1-indexed
+                cite += f", Page: {int(page)+1}"
+            except ValueError:
+                cite += f", Page: {page}"
+        elif page_no is not None and str(page_no).strip() != "":
+            # page_no is 1-indexed directly from Docling
+            cite += f", Page: {page_no}"
+            
         if row:  cite += f", Rows: {row}"
         cite += ")"
-        formatted.append(f"{cite}\n{d.page_content}")
+        
+        # Prepend contextual display header (plan tier, document type, source)
+        header = d.metadata.get("display_header", "")
+        content = f"{header}\n{d.page_content}" if header else d.page_content
+        formatted.append(f"{cite}\n{content}")
+        
     return "\n\n---\n\n".join(formatted) if formatted else ""
 
 
@@ -185,7 +201,7 @@ def plan_comparison_search(query: str, tier: str) -> str:
         vs = _load_vectorstore()
 
         # Pre-filter by both plan_tier AND inferred doc_type for maximum precision
-        tier_specific_docs = vs.similarity_search(query, k=4, filter={"plan_tier": tier.capitalize()})
+        tier_specific_docs = vs.similarity_search(query, k=8, filter={"plan_tier": tier.capitalize()})
         docs = tier_specific_docs + docs
     except Exception:
         pass
@@ -200,7 +216,7 @@ def plan_comparison_search(query: str, tier: str) -> str:
     if not tier_docs:
         tier_docs = docs  # Fallback: use all results
 
-    result = _format_docs(tier_docs, max_per_tool=5)
+    result = _format_docs(tier_docs, max_per_tool=8)
     return result if result else f"No {tier} plan information found for this query."
 
 

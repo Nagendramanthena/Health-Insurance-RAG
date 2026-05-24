@@ -233,7 +233,8 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
         final_query = f"I am on the {plan_tier} plan. {query}"
 
     # Check Semantic Cache
-    cached_result = cache_manager.check(final_query, plan_tier=plan_tier)
+    norm_query = cache_manager.normalize_query(final_query)
+    cached_result = cache_manager.check(final_query, plan_tier=plan_tier, normalized_query=norm_query)
     if cached_result:
         # Sync orchestrator history & trace
         if len(orch.chat_history) == 0 or orch.chat_history[-1] != ("ai", cached_result["answer"]):
@@ -250,6 +251,20 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
             await asyncio.sleep(0.15)
             yield emit({"type": "node_start", "node": "fastapi",      "msg": "POST /chat/stream received"})
             await asyncio.sleep(0.15)
+            
+            # Query Analyzer
+            yield emit({"type": "node_start", "node": "query_analyzer", "msg": "Analyzing search intent & phrasing..."})
+            await asyncio.sleep(0.2)
+            yield emit({
+                "type": "substep",
+                "node": "query_analyzer",
+                "step": f"Normalized query: '{final_query[:40]}...' -> '{norm_query}'"
+            })
+            await asyncio.sleep(0.2)
+            yield emit({"type": "node_done", "node": "query_analyzer", "normalized_query": norm_query})
+            await asyncio.sleep(0.15)
+
+            # Redis Cache Check
             yield emit({"type": "node_start", "node": "semantic_cache", "msg": "Checking semantic cache…"})
             await asyncio.sleep(0.2)
             
@@ -312,11 +327,36 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
 
         # ── Startup handshake events ──────────────────────────────
         yield emit({"type": "node_start", "node": "user",         "msg": query})
-        await asyncio.sleep(0.25)
+        await asyncio.sleep(0.15)
         yield emit({"type": "node_start", "node": "fastapi",      "msg": "POST /chat/stream received"})
-        await asyncio.sleep(0.25)
+        await asyncio.sleep(0.15)
+        
+        # Query Analyzer
+        yield emit({"type": "node_start", "node": "query_analyzer", "msg": "Analyzing search intent & phrasing..."})
+        await asyncio.sleep(0.2)
+        yield emit({
+            "type": "substep",
+            "node": "query_analyzer",
+            "step": f"Normalized query: '{final_query[:40]}...' -> '{norm_query}'"
+        })
+        await asyncio.sleep(0.2)
+        yield emit({"type": "node_done", "node": "query_analyzer", "normalized_query": norm_query})
+        await asyncio.sleep(0.15)
+
+        # Redis Cache Check
+        yield emit({"type": "node_start", "node": "semantic_cache", "msg": "Checking semantic cache…"})
+        await asyncio.sleep(0.2)
+        yield emit({
+            "type": "substep",
+            "node": "semantic_cache",
+            "step": "Cache MISS. No matching normalized query found."
+        })
+        await asyncio.sleep(0.15)
+        yield emit({"type": "node_done", "node": "semantic_cache", "msg": "Proceeding to full RAG pipeline"})
+        await asyncio.sleep(0.15)
+
         yield emit({"type": "node_start", "node": "orchestrator",  "msg": "Building LangGraph state…"})
-        await asyncio.sleep(0.35)
+        await asyncio.sleep(0.2)
 
         prev_steps: list[str] = []
         final_answer = ""
@@ -396,7 +436,7 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
                     "confidence_reason": last_state.get("confidence_reason", ""),
                     "sub_questions":     last_state.get("sub_questions", []),
                 }
-                cache_manager.store(final_query, cache_payload, plan_tier=plan_tier)
+                cache_manager.store(final_query, cache_payload, plan_tier=plan_tier, normalized_query=norm_query)
                 
         except Exception as e:
             logger.error(f"Error in chat_stream: {str(e)}")
