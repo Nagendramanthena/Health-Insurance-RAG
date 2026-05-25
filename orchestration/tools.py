@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from langchain_core.tools import tool
 from langchain_core.documents import Document
 
-from retrieval.retriever import get_hybrid_retriever
+from retrieval.retriever import get_hybrid_retriever, get_base_ensemble_retriever
 from retrieval.graph_retriever import GraphRetriever
 
 # ── Lazy singletons ────────────────────────────────────────────────────────────
@@ -189,11 +189,13 @@ def plan_comparison_search(query: str, tier: str) -> str:
     prioritises documents whose metadata or content mentions that tier.
     Enhanced: uses ChromaDB metadata pre-filter for plan_tier before hybrid search.
     """
-    hybrid, _ = _get_retrievers()
+    # Use base ensemble retriever without multi-query and graph wrappers for plan comparison searches
+    # to avoid redundant graph lookups/GPT rephrasings and dramatically reduce latency.
+    base_ensemble = get_base_ensemble_retriever()
 
     # Tier-augmented query forces relevant docs up the ranking
     tier_query = f"{tier} plan {query}"
-    docs = hybrid.invoke(tier_query)
+    docs = base_ensemble.invoke(tier_query)
 
     # Guarantee tier-specific documents via metadata pre-filter (high precision boost)
     try:

@@ -148,6 +148,8 @@ def _get_all_documents(vectorstore: Chroma) -> list[Document]:
 # Main Pipeline Builder
 # ══════════════════════════════════════════════════════════════
 
+_base_ensemble_retriever = None
+
 def get_hybrid_retriever(
     ensemble_weights: list[float] | None = None,
     retriever_k: int | None = None,
@@ -265,10 +267,12 @@ def get_hybrid_retriever(
                 
             return merged_docs
 
+    global _base_ensemble_retriever
     ensemble_retriever = LoggingEnsembleRetriever(
         retrievers=[logging_bm25_retriever, logging_vector_retriever],
         weights=weights,
     )
+    _base_ensemble_retriever = ensemble_retriever
     console.print(f"    ✅ Ensemble retriever ready (weights: BM25={weights[0]}, Vector={weights[1]})")
 
     # ── Stage 4: Knowledge Graph Integration ────────────────────
@@ -366,3 +370,16 @@ def get_bm25_only_retriever(k: int | None = None):
     vectorstore = _load_vectorstore()
     all_docs    = _get_all_documents(vectorstore)
     return BM25Retriever.from_documents(all_docs, k=k or RERANKER_TOP_N)
+
+
+import threading
+_retriever_lock = threading.Lock()
+
+def get_base_ensemble_retriever():
+    """Get the cached base ensemble retriever without multi-query, graph, or reranking wrappers."""
+    global _base_ensemble_retriever
+    if _base_ensemble_retriever is None:
+        with _retriever_lock:
+            if _base_ensemble_retriever is None:
+                get_hybrid_retriever()
+    return _base_ensemble_retriever

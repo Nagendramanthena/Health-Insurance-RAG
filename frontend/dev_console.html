@@ -1242,6 +1242,7 @@ function activateFromStep(step, lgNode) {
           return;
         }
         if (id === 'graphdb' && currentIntent === 'POLICY_QUESTION') return;
+        if (['bronze', 'silver', 'gold'].includes(id) && currentIntent !== 'COMPARISON') return;
         setNode(id, 'active');
         const fromNode = lgNode === 'retrieve' ? 'retrieve_agent' : lgNode;
         activateEdge(fromNode, id);
@@ -1392,6 +1393,7 @@ async function run() {
 
     if (type === 'substep') {
       activateFromStep(step||'', node||'');
+      const isGraphEdge = step && step.startsWith('[GraphDB-Edge]');
       const tagMap = {
         retrieve:'tag-retrieve', synthesize:'tag-synthesize',
         query_guard:'tag-guard', query_decomposer:'tag-classify',
@@ -1399,7 +1401,9 @@ async function run() {
         confidence_scorer:'tag-critique',
       };
       const tagClass = tagMap[node] || 'tag-classify';
-      addLog('→', 'STEP', tagClass, step||'');
+      if (!isGraphEdge) {
+        addLog('→', 'STEP', tagClass, step||'');
+      }
 
       if (step && step.includes('🧠 Multi-Query Variant')) {
         const variantText = step.split(':').slice(1).join(':').trim();

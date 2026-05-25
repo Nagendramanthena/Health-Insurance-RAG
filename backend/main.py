@@ -391,7 +391,9 @@ async def chat_stream(session_id: str, query: str, plan_tier: str = "Unknown"):
 
                 for step in new_steps:
                     yield emit({"type": "substep", "node": node, "intent": intent, "step": step, "all_steps": current_steps})
-                    await asyncio.sleep(0.05)
+                    # Skip artificial delay for raw graph DB edge logs and entity listings to prevent stream lagging
+                    if not step.startswith(("[GraphDB-Edge]", "[GraphDB]")):
+                        await asyncio.sleep(0.05)
 
                 final_answer = state.get("answer", "")
                 yield emit({
