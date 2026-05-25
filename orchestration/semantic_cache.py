@@ -139,10 +139,12 @@ class SemanticCache:
         Calculate cosine similarity between two vectors.
         OpenAI text-embedding-3-small vectors are already normalized (L2 norm = 1.0).
         Thus, cosine similarity is exactly the dot product.
+        Capped between -1.0 and 1.0 to prevent float precision overflows.
         """
         if len(vec_a) != len(vec_b):
             return 0.0
-        return sum(a * b for a, b in zip(vec_a, vec_b))
+        val = sum(a * b for a, b in zip(vec_a, vec_b))
+        return min(1.0, max(-1.0, val))
 
     def normalize_query(self, query: str) -> str:
         """
@@ -282,7 +284,7 @@ class SemanticCache:
                 if results:
                     doc, distance = results[0]
                     # Convert distance to similarity score
-                    similarity = 1.0 - (distance / 2.0)
+                    similarity = min(1.0, max(-1.0, 1.0 - (distance / 2.0)))
                     
                     if similarity >= SEMANTIC_CACHE_THRESHOLD:
                         # Entity safeguard check
