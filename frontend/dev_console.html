@@ -1241,7 +1241,7 @@ function activateFromStep(step, lgNode) {
         if (earlyNodes.includes(lgNode) && ['bronze','silver','gold','vectordb','bm25','ensemble','graphdb','multiquery','priorauth','reranker','merger','synthesis','self_critique','confidence','mem_add'].includes(id)) {
           return;
         }
-        if (id === 'graphdb' && currentIntent === 'POLICY_QUESTION') return;
+        if (id === 'graphdb' && currentIntent !== 'SIMPLE_LOOKUP' && currentIntent !== 'MULTI_HOP') return;
         if (['bronze', 'silver', 'gold'].includes(id) && currentIntent !== 'COMPARISON') return;
         setNode(id, 'active');
         const fromNode = lgNode === 'retrieve' ? 'retrieve_agent' : lgNode;
