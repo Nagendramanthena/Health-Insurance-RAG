@@ -641,6 +641,8 @@ svg { width:100%; height:100%; overflow:visible; }
     <div class="meta-row" id="meta-row">
       <span class="intent-label">Intent</span>
       <div class="intent-pill" id="intent-pill">—</div>
+      <span class="intent-label" style="margin-left: 20px;">Confidence</span>
+      <div class="conf-badge" id="conf-badge">—</div>
     </div>
 
     <!-- Memory inspector -->
@@ -1452,6 +1454,7 @@ async function run() {
       }
 
       if (node === 'self_critique') {
+        setNode('self_critique', 'done');
         // If retry, show the retry edge as active
         if (ev.needs_retry) {
           const rk = `self_critique→retrieve_agent_retry`;
