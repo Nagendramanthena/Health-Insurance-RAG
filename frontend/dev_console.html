@@ -1178,8 +1178,9 @@ function setIntent(intentStr) {
 function setConfidence(conf, reason) {
   const badge = document.getElementById('conf-badge');
   if (!conf) return;
-  badge.textContent = conf;
-  badge.className = `conf-badge ${conf}`;
+  const confClean = conf.trim().toUpperCase();
+  badge.textContent = confClean;
+  badge.className = `conf-badge ${confClean}`;
   badge.title = reason || '';
   document.getElementById('meta-row').classList.add('visible');
 }
@@ -1232,9 +1233,14 @@ function updateElapsed(ms) {
 }
 
 function activateFromStep(step, lgNode) {
+  const earlyNodes = ['user', 'fastapi', 'query_analyzer', 'query_guard', 'semantic_cache', 'memory_search'];
   for (const m of STEP_MAP) {
     if (m.pat.test(step)) {
       m.nodes.forEach(id => {
+        // Prevent early false matches from query strings during initial parsing/guard rails/cache checks
+        if (earlyNodes.includes(lgNode) && ['bronze','silver','gold','vectordb','bm25','ensemble','graphdb','multiquery','priorauth','reranker','merger','synthesis','self_critique','confidence','mem_add'].includes(id)) {
+          return;
+        }
         if (id === 'graphdb' && currentIntent === 'POLICY_QUESTION') return;
         setNode(id, 'active');
         const fromNode = lgNode === 'retrieve' ? 'retrieve_agent' : lgNode;
@@ -1566,7 +1572,7 @@ function collectNodeData(step, node, ev) {
     if (/retry|INSUFFICIENT/i.test(step)) nodeData.self_critique.final = 'RETRY';
   }
   // Confidence
-  const confMatch = step.match(/Confidence: (\w+) \(score=(\d+) — (.+)\)/);
+  const confMatch = step.match(/Confidence: (\w+) \(score=(\d+)\s*[\u2013\u2014-]\s*(.+)\)/);
   if (confMatch) {
     nodeData.confidence = { level: confMatch[1], score: confMatch[2], reasons: confMatch[3].split(' | ') };
   }
