@@ -179,12 +179,41 @@ class SemanticCache:
             logger.warning(f"Failed to normalize query: {e}. Using original query.")
             return query
 
+    def _extract_entities(self, text: str) -> set:
+        """Extract key plan tiers, drugs, specialties, and locations from query to prevent false semantic matches."""
+        key_entities = {
+            # Tiers
+            "bronze", "silver", "gold",
+            # Drugs
+            "metformin", "lisinopril", "amlodipine", "atorvastatin", "lipitor", "omeprazole", 
+            "levothyroxine", "sertraline", "escitalopram", "fluoxetine", "alprazolam", 
+            "lorazepam", "metoprolol", "carvedilol", "furosemide", "hydrochlorothiazide", 
+            "tirzepatide", "etanercept", "spironolactone",
+            # Specialties
+            "pulmonology", "oncology", "pediatrics", "ophthalmology", "cardiology", 
+            "urology", "hematology", "rheumatology", "nephrology", "dermatology", "dermatologist",
+            # Cities
+            "chicago", "rockford", "miami", "joliet", "naperville", "brooklyn", 
+            "queens", "oakland", "springfield"
+        }
+        text_lower = text.lower()
+        found = set()
+        for ent in key_entities:
+            if ent in text_lower:
+                found.add(ent)
+        # Handle some common typos/synonyms
+        if "silbr" in text_lower:
+            found.add("silver")
+        if "dermatologist" in found:
+            found.add("dermatology")
+        return found
+
     def check(self, query: str, plan_tier: str = "Unknown", normalized_query: Optional[str] = None) -> Optional[dict]:
         """
         Check the semantic cache for a match.
         
         Returns:
-            dict containing the response data and hit metadata if found, else None.
+          dict containing the response data and hit metadata if found, else None.
         """
         if not query or len(query.strip()) < 4:
             return None
@@ -209,6 +238,13 @@ class SemanticCache:
                 for cid, item in self._cache_memory.items():
                     # Filter by plan_tier case-insensitively
                     if item.get("plan_tier", "Unknown").lower() != plan_tier.lower():
+                        continue
+                        
+                    # Entity safeguard check: ensure the key entities (tiers, drugs, specialties, locations)
+                    # mentioned in the user's query match the cached item's query.
+                    user_entities = self._extract_entities(norm_query)
+                    cached_entities = self._extract_entities(item["query"])
+                    if user_entities != cached_entities:
                         continue
                         
                     sim = self._cosine_similarity(query_vector, item["vector"])
@@ -249,15 +285,21 @@ class SemanticCache:
                     similarity = 1.0 - (distance / 2.0)
                     
                     if similarity >= SEMANTIC_CACHE_THRESHOLD:
-                        response_json = doc.metadata.get("response_json")
-                        if response_json:
-                            response = json.loads(response_json)
-                            response["cached"] = True
-                            response["cache_similarity"] = round(similarity * 100, 1)
-                            response["matched_query"] = doc.metadata.get("original_query", doc.page_content)
-                            
-                            logger.info(f"⚡ Local ChromaDB Cache HIT (Plan: {plan_tier}, Similarity: {response['cache_similarity']}%) in {time.time() - start_time:.3f}s")
-                            return response
+                        # Entity safeguard check
+                        user_entities = self._extract_entities(norm_query)
+                        cached_query = doc.metadata.get("original_query", doc.page_content)
+                        cached_entities = self._extract_entities(cached_query)
+                        
+                        if user_entities == cached_entities:
+                            response_json = doc.metadata.get("response_json")
+                            if response_json:
+                                response = json.loads(response_json)
+                                response["cached"] = True
+                                response["cache_similarity"] = round(similarity * 100, 1)
+                                response["matched_query"] = doc.metadata.get("original_query", doc.page_content)
+                                
+                                logger.info(f"⚡ Local ChromaDB Cache HIT (Plan: {plan_tier}, Similarity: {response['cache_similarity']}%) in {time.time() - start_time:.3f}s")
+                                return response
                             
         except Exception as e:
             logger.error(f"Error checking semantic cache: {e}")
