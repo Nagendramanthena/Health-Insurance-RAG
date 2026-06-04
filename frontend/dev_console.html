@@ -559,17 +559,7 @@ svg { width:100%; height:100%; overflow:visible; }
 </head>
 <body>
 
-<!-- ── LOGIN OVERLAY ── -->
-<div id="login-overlay">
-  <div class="login-box">
-    <div class="login-logo">🛡️</div>
-    <h2>HealthGuard Console</h2>
-    <p>Enter your developer passkey to proceed</p>
-    <input type="password" id="pass-input" placeholder="••••" maxlength="4" autocomplete="off">
-    <button onclick="checkPass()">Unlock Console ⚡</button>
-    <div id="login-err" class="login-error">🔒 Invalid authorization code.</div>
-  </div>
-</div>
+<!-- ── LOGIN OVERLAY REMOVED ── -->
 
 <!-- ── CMD-K PALETTE ── -->
 <div id="palette-overlay">
@@ -723,24 +713,7 @@ let SID = localStorage.getItem('rag_sid') || crypto.randomUUID();
 localStorage.setItem('rag_sid', SID);
 document.getElementById('sid').textContent = 'SID: ' + SID.slice(0,8) + '…';
 
-// ── AUTH ─────────────────────────────────────────────────────────────────────
-if (sessionStorage.getItem('dev_auth') === 'true') {
-  document.getElementById('login-overlay').style.display = 'none';
-}
-function checkPass() {
-  const p = document.getElementById('pass-input').value;
-  if (p === '2002') {
-    sessionStorage.setItem('dev_auth', 'true');
-    const ov = document.getElementById('login-overlay');
-    ov.style.opacity = '0';
-    setTimeout(() => ov.style.display = 'none', 300);
-    startHealthPolling();
-  } else {
-    document.getElementById('login-err').style.display = 'block';
-    document.getElementById('pass-input').value = '';
-  }
-}
-document.getElementById('pass-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPass(); });
+// ── AUTH BYPASSED ────────────────────────────────────────────────────────────
 
 // ── PRESET QUERIES ───────────────────────────────────────────────────────────
 const PRESETS = [
@@ -793,7 +766,7 @@ function setChip(id, ok) {
   const el = document.getElementById(id);
   el.className = 'hchip ' + (ok ? 'ok' : 'err');
 }
-if (sessionStorage.getItem('dev_auth') === 'true') startHealthPolling();
+startHealthPolling();
 
 // ── MEMORY INSPECTOR ──────────────────────────────────────────────────────────
 function toggleMemory() {
