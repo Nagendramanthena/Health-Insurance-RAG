@@ -1,12 +1,4 @@
----
-title: Health-Insurance-RAG
-emoji: 🏥
-colorFrom: indigo
-colorTo: purple
-sdk: docker
-app_port: 7860
-pinned: false
----
+
 
 # 🏥 Health Insurance AI Copilot & Graph RAG Pipeline
 
