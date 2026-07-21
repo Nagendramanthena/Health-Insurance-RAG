@@ -11,8 +11,62 @@ Explore the interactive demo and execute live queries directly here:
 ---
 
 ## 🧠 **Interactive Developer Console**
+
 To facilitate inspection and debugging, the **RAG Developer Console** is **completely unlocked (no password required)**. It visualizes the live LangGraph execution path, node latency, retrieved contexts, and retrieval scores in real time.
-* Access the console via the link on the Streamlit UI or directly at `/dev-console` when running the application.
+
+* **Open it directly at `/dev-console`** (e.g. [`/dev-console`](https://nagendravarma-health-insurance-rag.hf.space/dev-console) on the live Space), or via the link on the Streamlit UI.
+
+### ▶️ How to run a live trace (step by step)
+
+The console does **not** run anything until you give it a question. Follow these steps:
+
+1. **Enter a query.** You have two options:
+   * **Type your own** question into the **`RUN PIPELINE EXPERIMENT`** text box (e.g. *"What is the copay for Metformin on the Silver plan?"*), **or**
+   * Click **`📌 Load demo query`** to expand the preset list, then **click one of the queries** — this fills the text box for you.
+   * ⚠️ **You must have a query in the box.** Clicking *Execute Live Trace* with an empty box does nothing — the trace has no question to run.
+2. **Click `🚀 Execute Live Trace`.** This sends your query to the streaming backend and starts the run.
+3. **Watch it execute in real time:**
+   * The **`⚡ SYSTEM EVENT STREAM`** panel fills with node-by-node events (`user → fastapi → query_analyzer → semantic_cache → orchestrator → query_guard → … → synthesize → confidence_scorer → memory_add`), including each node's internal sub-steps.
+   * The **`INTERACTIVE ORCHESTRATOR WORKFLOW`** graph lights up nodes as they execute.
+   * The **`INTENT`** and **`CONFIDENCE`** badges update (e.g. `SIMPLE LOOKUP` / `HIGH`).
+   * The final **`✨ PIPELINE RESPONSE`** panel shows the synthesized, cited answer.
+4. **Reset and repeat.** Use **`↺ Reset`** to clear the stream and graph before the next query.
+
+### 🎛️ Console controls
+
+| Control | What it does |
+|---|---|
+| `📌 Load demo query` | Expands a curated list of benchmark queries; click one to load it into the query box. |
+| `🚀 Execute Live Trace` | Runs the query through the full pipeline and streams every node event live. |
+| `↺ Reset` | Clears the event stream and resets the workflow graph. |
+| `🧠 Memory` | Inspects the facts `Mem0` has stored for the current session. |
+| `filter…` + `RET` / `SYN` / `ERR` | Filters the event stream by text, or to **Ret**rieval / **Syn**thesis / **Err**or events. |
+| `⊞ Fit` / `✦ New Nodes` | Fit the workflow graph to view / reveal newly added nodes. |
+
+### 🧪 Built-in demo queries
+
+`📌 Load demo query` provides two sets:
+
+* **RAG Benchmark Queries** — increasing difficulty, to exercise each intent path:
+  * *Easy:* "What is a deductible?" → `SIMPLE_LOOKUP`
+  * *Medium:* "What is the copay for Metformin on the Silver plan?"
+  * *Hard:* "Compare the specialist copays and out-of-pocket maximums between the Silver and Gold plans." → `COMPARISON`
+  * *Very Hard:* "Compare the overall deductibles, specialist copays, and drug formulary tier copays between the Bronze, Silver, and Gold plans."
+* **Redis Semantic Cache Testing (run Base, then Variation)** — run the **Base** query first, then its **Variation**. The Variation is worded differently but semantically identical, so it triggers a **⚡ Semantic Cache HIT** — the console shows the pipeline bypassing intent classification, retrieval, and synthesis for a sub-millisecond response.
+  * *Simple Base:* "Is Metformin covered on the Bronze plan?" → *Simple Variation:* "Does the Bronze plan cover Metformin?"
+  * *Complex Base / Variation:* longer waiting-period questions phrased formally vs. conversationally.
+
+### 🔬 Under the hood
+
+`Execute Live Trace` calls the streaming endpoint:
+
+```
+GET /chat/stream?session_id=<session>&query=<your question>&plan_tier=<Bronze|Silver|Gold|Unknown>
+```
+
+It returns a **Server-Sent Events** stream of JSON chunks — `node_start`, `substep`, and `node_done` events — that the console renders into the event log and graph animation. The backend first checks the **semantic cache**; on a miss it runs the full 10-node LangGraph (see the workflow above) and streams each node's `steps_log` as it executes, ending with `data: [DONE]`.
+
+> **Related REST endpoints** (useful for scripting/debugging): `POST /chat` (non-streamed answer), `GET /session/{id}/trace` (structured trace of the last query), `GET /session/{id}/diagram` (Mermaid workflow), `GET /session/{id}/graph` (PNG workflow), `GET /memory/{id}` (inspect Mem0 facts), `GET /health`.
 
 ---
 
